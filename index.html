@@ -14,118 +14,141 @@ body {
   padding: 0;
 }
 h1 {
-  margin-top: 30px;
+  margin-top: 25px;
   color: #ffd700;
-  text-shadow: 0 0 20px gold;
-}
-select {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 16px;
+  text-shadow: 0 0 25px gold;
 }
 .container {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 button {
-  background: linear-gradient(145deg, #ffce3a, #d4a600);
+  width: 65px;
+  height: 55px;
+  margin: 7px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
+  font-size: 20px;
+  background: linear-gradient(145deg, #ffce3a, #d4a600);
   color: #000;
   font-weight: bold;
-  padding: 15px 25px;
-  font-size: 18px;
-  margin: 8px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 button:hover {
-  transform: scale(1.07);
+  transform: scale(1.1);
   box-shadow: 0 0 15px gold;
 }
-.result {
+#result {
   margin-top: 25px;
-  font-size: 22px;
+  font-size: 17px;
   color: #fff;
-  text-shadow: 0 0 10px gold;
 }
-.wallet {
-  margin-top: 30px;
-  background: #111;
-  display: inline-block;
-  padding: 15px 20px;
-  border-radius: 10px;
-  color: #ccc;
+select {
+  margin-top: 15px;
+  padding: 5px 10px;
   font-size: 14px;
+  border-radius: 5px;
 }
 footer {
-  margin-top: 80px;
+  margin-top: 40px;
   font-size: 13px;
   color: #888;
 }
 </style>
 </head>
 <body>
-  <h1>🎯 <span id="title">T21 Play Zone</span></h1>
 
-  <select id="lang" onchange="changeLang()">
-    <option value="ru">🇷🇺 Русский</option>
-    <option value="en">🇬🇧 English</option>
-    <option value="zh">🇨🇳 中文</option>
-    <option value="hi">🇮🇳 हिन्दी</option>
-  </select>
+<h1>🎯 T21 Play Zone</h1>
 
-  <div class="container">
-    <p id="desc">Угадай число от 1 до 6 и выиграй 💎</p>
-    <p id="choose">Сделай выбор:</p>
-    <div id="buttons"></div>
-  </div>
+<select id="lang" onchange="setLang()">
+  <option value="ru">ru Русский</option>
+  <option value="en">en English</option>
+  <option value="zh">zh 中文</option>
+  <option value="hi">hi हिन्दी</option>
+</select>
 
-  <div class="result" id="result"></div>
+<p id="instruction">Угадай число от 1 до 6 и выиграй 💎</p>
+<div id="choose">Сделай выбор:</div>
 
-  <div class="wallet">
-    💎 Кошелёк для вывода: <br>
-    <b id="wallet">UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
-    <br><br>💰 Вход: 1 TON = 1 игра
-  </div>
+<div class="container">
+  <button onclick="play(1)">1</button>
+  <button onclick="play(2)">2</button>
+  <button onclick="play(3)">3</button><br>
+  <button onclick="play(4)">4</button>
+  <button onclick="play(5)">5</button>
+  <button onclick="play(6)">6</button>
+</div>
 
-  <footer>© 2025 Ton21 Project | All rights reserved</footer>
+<div id="result"></div>
+
+<footer>
+  💎 Кошелёк для вывода:  
+  <br><b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b><br>
+  <br>💰 Вход: 0.1 TON = 1 игра
+  <br><br>© 2025 Ton21 Project — All rights reserved
+</footer>
 
 <script>
+const prizes = [5,7,9,12,15,18,20];
+function randomPrize() {
+  const weights = [40,25,15,10,5,4,1];
+  const sum = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random()*sum;
+  for (let i=0;i<weights.length;i++){
+    if(r<weights[i]) return prizes[i];
+    r -= weights[i];
+  }
+  return 5;
+}
+
+function play(choice) {
+  const number = Math.floor(Math.random()*6)+1;
+  const resultDiv = document.getElementById("result");
+  if (choice === number) {
+    const win = randomPrize();
+    resultDiv.innerHTML = `🎉 ${texts[currentLang].youWon.replace("{n}", number)}<br>💎 ${texts[currentLang].prize}: ${win} Ton21`;
+  } else {
+    resultDiv.innerHTML = `😢 ${texts[currentLang].lose.replace("{n}", number)}`;
+  }
+}
+
 const texts = {
-  ru: {desc: "Угадай число от 1 до 6 и выиграй 💎", choose: "Сделай выбор:", win: "Ты угадал число", lose: "Неверно! Было число"},
-  en: {desc: "Guess a number from 1 to 6 and win 💎", choose: "Make your choice:", win: "You guessed number", lose: "Wrong! The number was"},
-  zh: {desc: "猜一个1到6之间的数字并赢得💎", choose: "请选择:", win: "你猜对了数字", lose: "错误! 数字是"},
-  hi: {desc: "1 से 6 के बीच संख्या चुनें और जीतें 💎", choose: "अपना चयन करें:", win: "आपने सही अनुमान लगाया", lose: "गलत! संख्या थी"}
+  ru: {
+    instruction: "Угадай число от 1 до 6 и выиграй 💎",
+    choose: "Сделай выбор:",
+    youWon: "Ты угадал число {n}!",
+    prize: "Приз",
+    lose: "Ты не угадал. Выпало число {n}"
+  },
+  en: {
+    instruction: "Guess a number from 1 to 6 and win 💎",
+    choose: "Make your choice:",
+    youWon: "You guessed number {n}!",
+    prize: "Prize",
+    lose: "Not this time! It was {n}"
+  },
+  zh: {
+    instruction: "猜一个1到6的数字并赢取💎",
+    choose: "请选择:",
+    youWon: "你猜中了数字 {n}!",
+    prize: "奖励",
+    lose: "没中，结果是 {n}"
+  },
+  hi: {
+    instruction: "1 से 6 तक की संख्या का अनुमान लगाएं और जीतें 💎",
+    choose: "अपना चयन करें:",
+    youWon: "आपने संख्या {n} सही बताई!",
+    prize: "इनाम",
+    lose: "गलत! यह था {n}"
+  }
 };
 
 let currentLang = "ru";
-
-function changeLang() {
-  currentLang = document.getElementById("lang").value;
-  document.getElementById("desc").innerText = texts[currentLang].desc;
-  document.getElementById("choose").innerText = texts[currentLang].choose;
-  document.getElementById("result").innerText = "";
-}
-
-const buttonsDiv = document.getElementById("buttons");
-for (let i = 1; i <= 6; i++) {
-  const btn = document.createElement('button');
-  btn.textContent = i;
-  btn.onclick = () => play(i);
-  buttonsDiv.appendChild(btn);
-}
-
-function play(userGuess) {
-  const random = Math.floor(Math.random() * 6) + 1;
-  const rewards = [5, 7, 9, 12, 15, 18, 20];
-  const prize = rewards[Math.floor(Math.random() * rewards.length)];
-  const t = texts[currentLang];
-  if (userGuess === random) {
-    document.getElementById("result").innerHTML = `🎉 ${t.win} ${random}!<br>🏆 Приз: ${prize} Ton21`;
-  } else {
-    document.getElementById("result").innerHTML = `😔 ${t.lose} ${random}`;
-  }
+function setLang() {
+  const lang = document.getElementById("lang").value;
+  currentLang = lang;
+  document.getElementById("instruction").innerText = texts[lang].instruction;
+  document.getElementById("choose").innerText = texts[lang].choose;
 }
 </script>
 </body>
