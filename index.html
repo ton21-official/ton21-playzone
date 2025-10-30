@@ -19,7 +19,7 @@ h1 {
   text-shadow: 0 0 25px gold;
 }
 .container {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 button {
   width: 65px;
@@ -38,19 +38,35 @@ button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 15px gold;
 }
+.action-btn {
+  display: inline-block;
+  margin: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #000;
+  background: linear-gradient(145deg, #ffce3a, #d4a600);
+  box-shadow: 0 0 8px #000;
+  font-size: 16px;
+  cursor: pointer;
+}
+.action-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px gold;
+}
 #result {
-  margin-top: 25px;
+  margin-top: 20px;
   font-size: 17px;
   color: #fff;
 }
 select {
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 5px 10px;
   font-size: 14px;
   border-radius: 5px;
 }
 footer {
-  margin-top: 40px;
+  margin-top: 35px;
   font-size: 13px;
   color: #888;
 }
@@ -70,7 +86,7 @@ footer {
 <p id="instruction">Угадай число от 1 до 6 и выиграй 💎</p>
 <div id="choose">Сделай выбор:</div>
 
-<div class="container">
+<div class="container" id="gameButtons" style="display:none;">
   <button onclick="play(1)">1</button>
   <button onclick="play(2)">2</button>
   <button onclick="play(3)">3</button><br>
@@ -80,6 +96,12 @@ footer {
 </div>
 
 <div id="result"></div>
+
+<div style="margin-top:25px;">
+  <button class="action-btn" onclick="startGame()">🎮 Начать игру</button>
+  <button class="action-btn" onclick="pay()">💰 Пополнить</button>
+  <button class="action-btn" onclick="withdraw()">💎 Получить</button>
+</div>
 
 <footer>
   💎 Кошелёк для вывода:  
@@ -112,34 +134,55 @@ function play(choice) {
   }
 }
 
+function startGame(){
+  document.getElementById("gameButtons").style.display = "block";
+  document.getElementById("result").innerText = "";
+}
+
+function pay(){
+  alert("💰 " + texts[currentLang].payMsg + "\\n\\nUQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2");
+}
+
+function withdraw(){
+  alert("💎 " + texts[currentLang].withdrawMsg);
+}
+
 const texts = {
   ru: {
     instruction: "Угадай число от 1 до 6 и выиграй 💎",
     choose: "Сделай выбор:",
     youWon: "Ты угадал число {n}!",
     prize: "Приз",
-    lose: "Ты не угадал. Выпало число {n}"
+    lose: "Ты не угадал. Выпало число {n}",
+    payMsg: "Отправь 0.1 TON для начала игры",
+    withdrawMsg: "Награды отправляются на твой Tonkeeper после подтверждения 🔹"
   },
   en: {
     instruction: "Guess a number from 1 to 6 and win 💎",
     choose: "Make your choice:",
     youWon: "You guessed number {n}!",
     prize: "Prize",
-    lose: "Not this time! It was {n}"
+    lose: "Not this time! It was {n}",
+    payMsg: "Send 0.1 TON to start the game",
+    withdrawMsg: "Rewards are sent to your Tonkeeper after confirmation 🔹"
   },
   zh: {
     instruction: "猜一个1到6的数字并赢取💎",
     choose: "请选择:",
     youWon: "你猜中了数字 {n}!",
     prize: "奖励",
-    lose: "没中，结果是 {n}"
+    lose: "没中，结果是 {n}",
+    payMsg: "发送 0.1 TON 以开始游戏",
+    withdrawMsg: "奖励将在确认后发送到你的Tonkeeper 🔹"
   },
   hi: {
     instruction: "1 से 6 तक की संख्या का अनुमान लगाएं और जीतें 💎",
     choose: "अपना चयन करें:",
     youWon: "आपने संख्या {n} सही बताई!",
     prize: "इनाम",
-    lose: "गलत! यह था {n}"
+    lose: "गलत! यह था {n}",
+    payMsg: "खेल शुरू करने के लिए 0.1 TON भेजें",
+    withdrawMsg: "इनाम पुष्टि के बाद आपके Tonkeeper पर भेजे जाएंगे 🔹"
   }
 };
 
