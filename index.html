@@ -1,198 +1,258 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T21 Play Zone 🎯</title>
-<style>
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #0b0b0e, #000);
-  color: gold;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
-h1 {
-  margin-top: 25px;
-  color: #ffd700;
-  text-shadow: 0 0 25px gold;
-}
-.container {
-  margin-top: 15px;
-}
-button {
-  width: 65px;
-  height: 55px;
-  margin: 7px;
-  border: none;
-  border-radius: 10px;
-  font-size: 20px;
-  background: linear-gradient(145deg, #ffce3a, #d4a600);
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-}
-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px gold;
-}
-.action-btn {
-  display: inline-block;
-  margin: 8px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
-  color: #000;
-  background: linear-gradient(145deg, #ffce3a, #d4a600);
-  box-shadow: 0 0 8px #000;
-  font-size: 16px;
-  cursor: pointer;
-}
-.action-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 20px gold;
-}
-#result {
-  margin-top: 20px;
-  font-size: 17px;
-  color: #fff;
-}
-select {
-  margin-top: 10px;
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 5px;
-}
-footer {
-  margin-top: 35px;
-  font-size: 13px;
-  color: #888;
-}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <title>Ton21 Portal</title>
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
+
+  <style>
+    :root{
+      --bg:#0b0f16;
+      --card:#121826;
+      --gold:#f0cf6d;
+      --gold-2:#ffdf88;
+      --text:#e8ecf7;
+      --muted:#9fb0c3;
+      --btn-shadow:0 10px 24px rgba(240,207,109,0.25);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
+      display:flex; align-items:center; justify-content:center; padding:28px;
+    }
+    .wrap{
+      width:min(820px, 100%);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:24px;
+      padding:32px 22px 18px;
+      box-shadow:0 12px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .center{ text-align:center }
+    .logo-wrap{
+      width:140px; height:140px; margin:0 auto 10px; position:relative;
+      border-radius:50%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,223,136,.45), rgba(255,223,136,0) 60%);
+      display:grid; place-items:center;
+    }
+    .logo{
+      width:108px; height:108px; border-radius:50%;
+      background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;
+      outline:3px solid rgba(255,223,136,.85);
+      box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05);
+    }
+    h1{
+      margin:6px 0 8px; font-size:34px; letter-spacing:.2px;
+      text-shadow:0 2px 0 rgba(0,0,0,.25);
+    }
+    .subtitle{
+      color:var(--muted); font-size:16px; margin:0 0 18px;
+    }
+    .grid{
+      display:grid; gap:14px;
+      grid-template-columns:1fr;
+      margin:18px auto 14px; max-width:600px;
+    }
+    @media (min-width:560px){
+      .grid{ grid-template-columns:1fr; }
+    }
+    .btn{
+      display:flex; align-items:center; justify-content:center; gap:12px;
+      width:100%;
+      padding:16px 18px;
+      border-radius:16px;
+      text-decoration:none;
+      background:linear-gradient(180deg, var(--gold-2), var(--gold));
+      color:#3a2a00; font-weight:800; font-size:20px;
+      box-shadow:var(--btn-shadow), inset 0 1px 0 rgba(255,255,255,.5);
+      border:0;
+      transition:transform .06s ease, filter .15s ease, box-shadow .15s ease;
+      cursor:pointer;
+    }
+    .btn:active{ transform:translateY(1px) scale(.99); filter:saturate(.95); }
+    .btn.secondary{
+      background:linear-gradient(180deg, #ffd86a, #f2c551);
+    }
+    .row{ display:flex; gap:12px; }
+    .col{ flex:1; }
+
+    .lang{
+      margin:14px auto 0; max-width:600px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;
+      color:var(--muted);
+    }
+    .pill{
+      min-width:54px; text-align:center;
+      border-radius:12px; padding:8px 12px; font-weight:700; border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03); color:var(--text); cursor:pointer;
+      transition:all .15s ease;
+    }
+    .pill.active{ outline:2px solid rgba(255,223,136,.75); background:rgba(255,223,136,.08) }
+    .footer{
+      text-align:center; color:var(--muted); font-size:13px; margin-top:10px;
+    }
+    .small{ font-size:14px; color:var(--muted); }
+    .sep{ height:1px; background:rgba(255,255,255,.06); margin:14px auto; width:min(600px, 92%); }
+  </style>
+  <script>
+    // ----- Telegram Mini App helper -----
+    function openSmart(url){
+      try{
+        if (window?.Telegram?.WebApp){
+          // Внутри мини-аппа — просто меняем location,
+          // чтобы открыть страницу прямо в веб-приложении
+          window.location.href = url;
+          return;
+        }
+      }catch(e){}
+      // Обычный браузер
+      window.open(url, "_blank", "noopener");
+    }
+
+    // ----- i18n -----
+    const TEXTS = {
+      ru: {
+        title: "Ton21 Portal",
+        subtitle: "Главные ворота в экосистему Ton21",
+        buy: "💰 Buy & Wallet",
+        play: "🎮 Play Zone",
+        airdrops: "🎁 Airdrops",
+        stats: "📊 Stats & Rewards",
+        partners: "🤝 Partners",
+        ai: "🧠 AI Tools",
+        language: "Язык:"
+      },
+      en: {
+        title: "Ton21 Portal",
+        subtitle: "The main gateway to the Ton21 Ecosystem",
+        buy: "💰 Buy & Wallet",
+        play: "🎮 Play Zone",
+        airdrops: "🎁 Airdrops",
+        stats: "📊 Stats & Rewards",
+        partners: "🤝 Partners",
+        ai: "🧠 AI Tools",
+        language: "Language:"
+      },
+      zh: {
+        title: "Ton21 门户",
+        subtitle: "通往 Ton21 生态的主入口",
+        buy: "💰 购买 & 钱包",
+        play: "🎮 游戏区",
+        airdrops: "🎁 空投",
+        stats: "📊 统计 & 奖励",
+        partners: "🤝 合作伙伴",
+        ai: "🧠 AI 工具",
+        language: "语言："
+      },
+      hi: {
+        title: "Ton21 पोर्टल",
+        subtitle: "Ton21 इकोसिस्टम का मुख्य द्वार",
+        buy: "💰 खरीदें & वॉलेट",
+        play: "🎮 प्ले ज़ोन",
+        airdrops: "🎁 एयरड्रॉप्स",
+        stats: "📊 आँकड़े & रिवार्ड्स",
+        partners: "🤝 पार्टनर्स",
+        ai: "🧠 AI टूल्स",
+        language: "भाषा:"
+      }
+    };
+
+    function getLang(){
+      const saved = localStorage.getItem("t21_portal_lang");
+      if (saved && TEXTS[saved]) return saved;
+      const sys = (navigator.language||"en").slice(0,2).toLowerCase();
+      if (["ru","en","zh","hi"].includes(sys)) return sys;
+      return "en";
+    }
+    let LANG = getLang();
+
+    function applyTexts(){
+      const t = TEXTS[LANG];
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("subtitle").textContent = t.subtitle;
+      document.getElementById("btn-buy").textContent = t.buy;
+      document.getElementById("btn-play").textContent = t.play;
+      document.getElementById("btn-airdrops").textContent = t.airdrops;
+      document.getElementById("btn-stats").textContent = t.stats;
+      document.getElementById("btn-partners").textContent = t.partners;
+      document.getElementById("btn-ai").textContent = t.ai;
+      document.getElementById("lang-label").textContent = t.language;
+
+      // highlight pill
+      document.querySelectorAll(".pill").forEach(p=>{
+        p.classList.toggle("active", p.dataset.lang === LANG);
+      });
+    }
+    function setLang(code){
+      if (!TEXTS[code]) return;
+      LANG = code;
+      localStorage.setItem("t21_portal_lang", LANG);
+      applyTexts();
+    }
+
+    // ----- Links (edit here if you change routes) -----
+    const LINKS = {
+      buy: "https://ton21-official.github.io/ton21-buy/",
+      play: "https://ton21-official.github.io/ton21-playzone/",
+      airdrops: "https://t.me/T21AirdropBot",
+      stats: "https://t.me/T21StatsBot",
+      partners: "https://t.me/T21PartnersBot",
+      ai: "https://t.me/Ton21PortalBot"
+    };
+
+    window.addEventListener("DOMContentLoaded", ()=>{
+      applyTexts();
+
+      document.getElementById("open-buy").addEventListener("click", ()=>openSmart(LINKS.buy));
+      document.getElementById("open-play").addEventListener("click", ()=>openSmart(LINKS.play));
+      document.getElementById("open-airdrops").addEventListener("click", ()=>openSmart(LINKS.airdrops));
+      document.getElementById("open-stats").addEventListener("click", ()=>openSmart(LINKS.stats));
+      document.getElementById("open-partners").addEventListener("click", ()=>openSmart(LINKS.partners));
+      document.getElementById("open-ai").addEventListener("click", ()=>openSmart(LINKS.ai));
+
+      document.querySelectorAll(".pill").forEach(p=>{
+        p.addEventListener("click", ()=>setLang(p.dataset.lang));
+      });
+
+      // Telegram WebApp theme fit
+      try{ window.Telegram?.WebApp?.expand(); }catch(e){}
+    });
+  </script>
 </head>
 <body>
+  <main class="wrap">
+    <div class="center">
+      <div class="logo-wrap"><div class="logo" aria-hidden="true"></div></div>
+      <h1 id="title">Ton21 Portal</h1>
+      <p id="subtitle" class="subtitle">The main gateway to the Ton21 Ecosystem</p>
+    </div>
 
-<h1>🎯 T21 Play Zone</h1>
+    <section class="grid" aria-label="Main actions">
+      <button id="open-buy" class="btn"><span id="btn-buy">💰 Buy & Wallet</span></button>
+      <button id="open-play" class="btn secondary"><span id="btn-play">🎮 Play Zone</span></button>
+      <button id="open-airdrops" class="btn"><span id="btn-airdrops">🎁 Airdrops</span></button>
+      <button id="open-stats" class="btn"><span id="btn-stats">📊 Stats & Rewards</span></button>
+      <button id="open-partners" class="btn"><span id="btn-partners">🤝 Partners</span></button>
+      <button id="open-ai" class="btn"><span id="btn-ai">🧠 AI Tools</span></button>
+    </section>
 
-<select id="lang" onchange="setLang()">
-  <option value="ru">ru Русский</option>
-  <option value="en">en English</option>
-  <option value="zh">zh 中文</option>
-  <option value="hi">hi हिन्दी</option>
-</select>
+    <div class="sep" role="separator" aria-hidden="true"></div>
 
-<p id="instruction">Угадай число от 1 до 6 и выиграй 💎</p>
-<div id="choose">Сделай выбор:</div>
+    <div class="lang" aria-label="Language switch">
+      <span id="lang-label" class="small">Language:</span>
+      <span class="pill" data-lang="ru">RU</span>
+      <span class="pill" data-lang="en">GB</span>
+      <span class="pill" data-lang="zh">CN</span>
+      <span class="pill" data-lang="hi">IN</span>
+    </div>
 
-<div class="container" id="gameButtons" style="display:none;">
-  <button onclick="play(1)">1</button>
-  <button onclick="play(2)">2</button>
-  <button onclick="play(3)">3</button><br>
-  <button onclick="play(4)">4</button>
-  <button onclick="play(5)">5</button>
-  <button onclick="play(6)">6</button>
-</div>
-
-<div id="result"></div>
-
-<div style="margin-top:25px;">
-  <button class="action-btn" onclick="startGame()">🎮 Начать игру</button>
-  <button class="action-btn" onclick="pay()">💰 Пополнить</button>
-  <button class="action-btn" onclick="withdraw()">💎 Получить</button>
-</div>
-
-<footer>
-  💎 Кошелёк для вывода:  
-  <br><b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b><br>
-  <br>💰 Вход: 0.1 TON = 1 игра
-  <br><br>© 2025 Ton21 Project — All rights reserved
-</footer>
-
-<script>
-const prizes = [5,7,9,12,15,18,20];
-function randomPrize() {
-  const weights = [40,25,15,10,5,4,1];
-  const sum = weights.reduce((a,b)=>a+b,0);
-  let r = Math.random()*sum;
-  for (let i=0;i<weights.length;i++){
-    if(r<weights[i]) return prizes[i];
-    r -= weights[i];
-  }
-  return 5;
-}
-
-function play(choice) {
-  const number = Math.floor(Math.random()*6)+1;
-  const resultDiv = document.getElementById("result");
-  if (choice === number) {
-    const win = randomPrize();
-    resultDiv.innerHTML = `🎉 ${texts[currentLang].youWon.replace("{n}", number)}<br>💎 ${texts[currentLang].prize}: ${win} Ton21`;
-  } else {
-    resultDiv.innerHTML = `😢 ${texts[currentLang].lose.replace("{n}", number)}`;
-  }
-}
-
-function startGame(){
-  document.getElementById("gameButtons").style.display = "block";
-  document.getElementById("result").innerText = "";
-}
-
-function pay(){
-  alert("💰 " + texts[currentLang].payMsg + "\\n\\nUQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2");
-}
-
-function withdraw(){
-  alert("💎 " + texts[currentLang].withdrawMsg);
-}
-
-const texts = {
-  ru: {
-    instruction: "Угадай число от 1 до 6 и выиграй 💎",
-    choose: "Сделай выбор:",
-    youWon: "Ты угадал число {n}!",
-    prize: "Приз",
-    lose: "Ты не угадал. Выпало число {n}",
-    payMsg: "Отправь 0.1 TON для начала игры",
-    withdrawMsg: "Награды отправляются на твой Tonkeeper после подтверждения 🔹"
-  },
-  en: {
-    instruction: "Guess a number from 1 to 6 and win 💎",
-    choose: "Make your choice:",
-    youWon: "You guessed number {n}!",
-    prize: "Prize",
-    lose: "Not this time! It was {n}",
-    payMsg: "Send 0.1 TON to start the game",
-    withdrawMsg: "Rewards are sent to your Tonkeeper after confirmation 🔹"
-  },
-  zh: {
-    instruction: "猜一个1到6的数字并赢取💎",
-    choose: "请选择:",
-    youWon: "你猜中了数字 {n}!",
-    prize: "奖励",
-    lose: "没中，结果是 {n}",
-    payMsg: "发送 0.1 TON 以开始游戏",
-    withdrawMsg: "奖励将在确认后发送到你的Tonkeeper 🔹"
-  },
-  hi: {
-    instruction: "1 से 6 तक की संख्या का अनुमान लगाएं और जीतें 💎",
-    choose: "अपना चयन करें:",
-    youWon: "आपने संख्या {n} सही बताई!",
-    prize: "इनाम",
-    lose: "गलत! यह था {n}",
-    payMsg: "खेल शुरू करने के लिए 0.1 TON भेजें",
-    withdrawMsg: "इनाम पुष्टि के बाद आपके Tonkeeper पर भेजे जाएंगे 🔹"
-  }
-};
-
-let currentLang = "ru";
-function setLang() {
-  const lang = document.getElementById("lang").value;
-  currentLang = lang;
-  document.getElementById("instruction").innerText = texts[lang].instruction;
-  document.getElementById("choose").innerText = texts[lang].choose;
-}
-</script>
+    <p class="footer">© 2025 Ton21 Project — All rights reserved</p>
+  </main>
 </body>
 </html>
