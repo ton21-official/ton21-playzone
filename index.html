@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T21 Play Zone 🎮</title>
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #0b0b0e, #000);
+  color: gold;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+h1 {
+  margin-top: 40px;
+  color: #ffd700;
+  text-shadow: 0 0 15px gold;
+}
+.container {
+  margin-top: 60px;
+}
+button {
+  background: linear-gradient(145deg, #ffce3a, #d4a600);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-weight: bold;
+  padding: 15px 25px;
+  font-size: 18px;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 15px gold;
+}
+.result {
+  margin-top: 25px;
+  font-size: 22px;
+  color: #fff;
+  text-shadow: 0 0 10px gold;
+}
+footer {
+  margin-top: 80px;
+  font-size: 13px;
+  color: #888;
+}
+</style>
+</head>
+<body>
+  <h1>🎯 T21 Play Zone</h1>
+  <p>Угадай число от 1 до 6 и выиграй 💎</p>
+
+  <div class="container" id="game">
+    <p id="message">Сделай выбор:</p>
+    <div id="buttons"></div>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <footer>© 2025 Ton21 Project | All rights reserved</footer>
+
+  <script>
+  const message = document.getElementById('message');
+  const result = document.getElementById('result');
+  const buttonsDiv = document.getElementById('buttons');
+
+  for (let i = 1; i <= 6; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.onclick = () => play(i);
+    buttonsDiv.appendChild(btn);
+  }
+
+  function play(userGuess) {
+    const random = Math.floor(Math.random() * 6) + 1;
+    if (userGuess === random) {
+      const rewards = [500, 700, 1000, 1500, 3000, 10000];
+      const prize = rewards[Math.floor(Math.random() * rewards.length)];
+      result.innerHTML = `🎉 Ты угадал число ${random}!<br>🏆 Приз: ${prize} Ton21`;
+    } else {
+      result.innerHTML = `😔 Неверно! Загаданное число: ${random}`;
+    }
+  }
+  </script>
+</body>
+</html>
