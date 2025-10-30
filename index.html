@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T21 Play Zone 🎮</title>
+<title>T21 Play Zone 🎯</title>
 <style>
 body {
   font-family: "Segoe UI", sans-serif;
@@ -14,12 +14,18 @@ body {
   padding: 0;
 }
 h1 {
-  margin-top: 40px;
+  margin-top: 30px;
   color: #ffd700;
-  text-shadow: 0 0 15px gold;
+  text-shadow: 0 0 20px gold;
+}
+select {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
 }
 .container {
-  margin-top: 60px;
+  margin-top: 40px;
 }
 button {
   background: linear-gradient(145deg, #ffce3a, #d4a600);
@@ -29,7 +35,7 @@ button {
   font-weight: bold;
   padding: 15px 25px;
   font-size: 18px;
-  margin: 10px;
+  margin: 8px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
@@ -43,6 +49,15 @@ button:hover {
   color: #fff;
   text-shadow: 0 0 10px gold;
 }
+.wallet {
+  margin-top: 30px;
+  background: #111;
+  display: inline-block;
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: #ccc;
+  font-size: 14px;
+}
 footer {
   margin-top: 80px;
   font-size: 13px;
@@ -51,40 +66,67 @@ footer {
 </style>
 </head>
 <body>
-  <h1>🎯 T21 Play Zone</h1>
-  <p>Угадай число от 1 до 6 и выиграй 💎</p>
+  <h1>🎯 <span id="title">T21 Play Zone</span></h1>
 
-  <div class="container" id="game">
-    <p id="message">Сделай выбор:</p>
+  <select id="lang" onchange="changeLang()">
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="zh">🇨🇳 中文</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+  </select>
+
+  <div class="container">
+    <p id="desc">Угадай число от 1 до 6 и выиграй 💎</p>
+    <p id="choose">Сделай выбор:</p>
     <div id="buttons"></div>
   </div>
 
   <div class="result" id="result"></div>
 
+  <div class="wallet">
+    💎 Кошелёк для вывода: <br>
+    <b id="wallet">UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
+    <br><br>💰 Вход: 1 TON = 1 игра
+  </div>
+
   <footer>© 2025 Ton21 Project | All rights reserved</footer>
 
-  <script>
-  const message = document.getElementById('message');
-  const result = document.getElementById('result');
-  const buttonsDiv = document.getElementById('buttons');
+<script>
+const texts = {
+  ru: {desc: "Угадай число от 1 до 6 и выиграй 💎", choose: "Сделай выбор:", win: "Ты угадал число", lose: "Неверно! Было число"},
+  en: {desc: "Guess a number from 1 to 6 and win 💎", choose: "Make your choice:", win: "You guessed number", lose: "Wrong! The number was"},
+  zh: {desc: "猜一个1到6之间的数字并赢得💎", choose: "请选择:", win: "你猜对了数字", lose: "错误! 数字是"},
+  hi: {desc: "1 से 6 के बीच संख्या चुनें और जीतें 💎", choose: "अपना चयन करें:", win: "आपने सही अनुमान लगाया", lose: "गलत! संख्या थी"}
+};
 
-  for (let i = 1; i <= 6; i++) {
-    const btn = document.createElement('button');
-    btn.textContent = i;
-    btn.onclick = () => play(i);
-    buttonsDiv.appendChild(btn);
-  }
+let currentLang = "ru";
 
-  function play(userGuess) {
-    const random = Math.floor(Math.random() * 6) + 1;
-    if (userGuess === random) {
-      const rewards = [500, 700, 1000, 1500, 3000, 10000];
-      const prize = rewards[Math.floor(Math.random() * rewards.length)];
-      result.innerHTML = `🎉 Ты угадал число ${random}!<br>🏆 Приз: ${prize} Ton21`;
-    } else {
-      result.innerHTML = `😔 Неверно! Загаданное число: ${random}`;
-    }
+function changeLang() {
+  currentLang = document.getElementById("lang").value;
+  document.getElementById("desc").innerText = texts[currentLang].desc;
+  document.getElementById("choose").innerText = texts[currentLang].choose;
+  document.getElementById("result").innerText = "";
+}
+
+const buttonsDiv = document.getElementById("buttons");
+for (let i = 1; i <= 6; i++) {
+  const btn = document.createElement('button');
+  btn.textContent = i;
+  btn.onclick = () => play(i);
+  buttonsDiv.appendChild(btn);
+}
+
+function play(userGuess) {
+  const random = Math.floor(Math.random() * 6) + 1;
+  const rewards = [5, 7, 9, 12, 15, 18, 20];
+  const prize = rewards[Math.floor(Math.random() * rewards.length)];
+  const t = texts[currentLang];
+  if (userGuess === random) {
+    document.getElementById("result").innerHTML = `🎉 ${t.win} ${random}!<br>🏆 Приз: ${prize} Ton21`;
+  } else {
+    document.getElementById("result").innerHTML = `😔 ${t.lose} ${random}`;
   }
-  </script>
+}
+</script>
 </body>
 </html>
