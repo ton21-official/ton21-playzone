@@ -1,31 +1,71 @@
+# app.py — Ton21 PlayZone Backend
+import os
+import json
+import requests
 from flask import Flask, request, jsonify
-import os, requests
 
+# ─────────────────────────────
+# Flask app init
+# ─────────────────────────────
 app = Flask(__name__)
 
-TONCENTER_API_KEY = os.getenv("TONCENTER_API_KEY")
-T21_WALLET_SEED = os.getenv("T21_WALLET_SEED")
+# ─────────────────────────────
+# Load ENV variables
+# ─────────────────────────────
+TONCENTER_API_KEY = os.environ.get("TONCENTER_API_KEY")
+T21_WALLET_SEED = os.environ.get("T21_WALLET_SEED")
+T21_JETTON = "EQBLgiPMly982IMGqauqdX0Fe_N01arD-LhlKSfxBd8rzYRG"  # твой Ton21 Jetton
+OWNER_WALLET = "UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2"  # твой основной кошелёк
 
-# 🔹 Твой Jetton (Ton21)
-JETTON_WALLET = "EQBLgiPMly982IMGqauqdX0Fe_N01arD-LhlKSfxBd8rzYRG"
-
+# ─────────────────────────────
+# Simple home route
+# ─────────────────────────────
 @app.route("/")
 def home():
-    return "✅ Ton21 PlayZone API active"
+    return jsonify({
+        "status": "ok",
+        "message": "✅ Ton21 PlayZone API active",
+        "jetton": T21_JETTON
+    })
 
+# ─────────────────────────────
+# /send — handle payout requests
+# ─────────────────────────────
 @app.route("/send", methods=["POST"])
-def send_t21():
-    data = request.json
-    address = data.get("address")
-    amount = data.get("amount")  # в T21
-    if not address or not amount:
-        return jsonify({"error": "Missing address or amount"}), 400
+def send_jetton():
+    try:
+        data = request.get_json()
+        address = data.get("address")
+        amount = float(data.get("amount", 0))
 
-    # 🔹 Здесь можно подключить реальную отправку через toncenter API
-    # пока просто имитация
-    print(f"Would send {amount} T21 to {address}")
+        if not address or amount <= 0:
+            return jsonify({"status": "error", "error": "invalid address or amount"}), 400
 
-    return jsonify({"status": "ok", "message": f"{amount} T21 sent to {address}"}), 200
+        # Convert T21 amount to nanoJettons (1 T21 = 10^9 nano)
+        nano_amount = int(amount * 1_000_000_000)
 
+        # Send transaction via Toncenter API
+        payload = {
+            "to": address,
+            "value": str(nano_amount),
+            "comment": "Ton21 PlayZone reward 🎯",
+            "jetton_wallet": T21_JETTON,
+            "from_seed": T21_WALLET_SEED,
+            "api_key": TONCENTER_API_KEY
+        }
+
+        # Simulate sending (for testing phase)
+        # Later this will call a real TON send endpoint
+        print(f"Sending {amount} T21 to {address} ...")
+
+        # Dummy success
+        return jsonify({"status": "ok", "sent": amount, "to": address})
+
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
+
+# ─────────────────────────────
+# Run local (Render auto runs via gunicorn)
+# ─────────────────────────────
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
