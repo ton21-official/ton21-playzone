@@ -84,15 +84,11 @@
       min-height: 24px;
     }
 
-    .prizes {
-      color: #b5b5b5;
-      font-size: 14px;
+    #balance {
       margin-top: 10px;
-    }
-
-    .prizes span.active {
-      color: #f0d173;
-      font-weight: bold;
+      font-size: 17px;
+      color: #00ff99;
+      font-weight: 600;
     }
 
     .wallet {
@@ -124,6 +120,15 @@
       background: #ffe794;
       transform: scale(1.03);
     }
+
+    @keyframes winFlash {
+      0%,100% { background-color: #0b0b0f; }
+      50% { background-color: #1d1b00; }
+    }
+
+    .flash {
+      animation: winFlash 0.5s ease;
+    }
   </style>
 </head>
 
@@ -145,22 +150,11 @@
     </div>
 
     <div id="result"></div>
-
-    <div class="prizes">
-      Возможные награды: 
-      <br>
-      <span id="p1">500</span> | 
-      <span id="p2">700</span> | 
-      <span id="p3">1000</span> | 
-      <span id="p4">1500</span> | 
-      <span id="p5">3000</span> | 
-      <span id="p6">5000</span> | 
-      <span id="p7">10000</span> Ton21
-    </div>
+    <div id="balance">💰 Твой баланс: 0 Ton21</div>
 
     <div class="wallet">
       💎 Бесплатная демо-игра <br>
-      🪙 Кошелёк для вывода: <b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
+      🌕 Кошелёк для вывода: <b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
     </div>
 
     <button class="back-btn" onclick="openPortal()">🏠 Ton21 Portal</button>
@@ -171,22 +165,21 @@
   </div>
 
   <script>
+    let totalBalance = 0;
+
     function guess(num) {
       const random = Math.floor(Math.random() * 6) + 1;
-      const prizes = [500, 700, 1000, 1500, 3000, 5000, 10000];
+      const prizes = [5, 7, 9, 12, 15, 18, 20];
       const prize = prizes[Math.floor(Math.random() * prizes.length)];
       const result = document.getElementById("result");
-
-      // очистить подсветку
-      document.querySelectorAll(".prizes span").forEach(p => p.classList.remove("active"));
+      const body = document.body;
 
       if (num === random) {
+        totalBalance += prize;
         result.innerHTML = `🎉 Ты угадал число ${num}!<br>🏆 Приз: ${prize} Ton21`;
-        // подсветить выигранный приз
-        const prizeIndex = prizes.indexOf(prize);
-        if (prizeIndex >= 0) {
-          document.getElementById("p" + (prizeIndex + 1)).classList.add("active");
-        }
+        document.getElementById("balance").innerHTML = `💰 Твой баланс: ${totalBalance} Ton21`;
+        body.classList.add("flash");
+        setTimeout(() => body.classList.remove("flash"), 500);
       } else {
         result.innerHTML = `😔 Не угадал. Было число ${random}. Попробуй снова!`;
       }
