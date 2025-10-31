@@ -6,8 +6,6 @@
   <title>T21 Play Zone</title>
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
-
-  <!-- TON Connect UI (CDN) -->
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 
   <style>
@@ -15,48 +13,46 @@
       --bg:#0b0f16; --panel:#111724;
       --gold1:#ffdf88; --gold2:#f0cf6d; --txt:#e8ecf7; --muted:#9fb0c3;
       --ok:#25d366; --warn:#f7b733;
-      --radius:16px;
     }
     *{box-sizing:border-box} html,body{height:100%}
     body{
       margin:0; background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
-      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color:var(--txt); display:flex; align-items:center; justify-content:center; padding:22px;
     }
-    .wrap{ width:min(860px,100%); background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
-      border:1px solid rgba(255,255,255,.06); border-radius:24px; padding:22px; box-shadow:0 12px 48px rgba(0,0,0,.35);}
+    .wrap{width:min(860px,100%);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:22px;box-shadow:0 12px 48px rgba(0,0,0,.35);}
     .center{text-align:center}
     .logo-aura{width:150px;height:150px;margin:6px auto 0;border-radius:50%;
-      background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);display:grid;place-items:center}
-    .logo{width:118px;height:118px;border-radius:50%;background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;
+      background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);
+      display:grid;place-items:center}
+    .logo{width:118px;height:118px;border-radius:50%;
+      background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;
       outline:3px solid rgba(255,223,136,.85);box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05)}
-    h1{margin:8px 0 6px;font-size:34px;letter-spacing:.2px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+    h1{margin:8px 0 6px;font-size:34px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
     .subtitle{color:var(--muted);margin:0 0 14px}
     .grid10{display:grid;gap:14px;grid-template-columns:repeat(5,1fr);max-width:650px;margin:18px auto}
     @media(max-width:520px){.grid10{grid-template-columns:repeat(3,1fr)}}
-    .num{
-      border:0;border-radius:14px;padding:18px 0;font-size:22px;font-weight:800;
-      background:linear-gradient(180deg,var(--gold1),var(--gold2)); color:#3a2a00;
+    .num{border:0;border-radius:14px;padding:18px 0;font-size:22px;font-weight:800;
+      background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
       box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);
-      transition:transform .06s ease, filter .15s ease; cursor:pointer;
-    }
+      transition:transform .06s ease;cursor:pointer}
     .num:active{transform:translateY(1px) scale(.99)}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center}
+    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+      border-radius:16px;padding:14px;margin:10px auto;max-width:720px;text-align:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      border:0;border-radius:14px;padding:14px 16px;
+      background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;font-weight:800;
+      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer}
+    .btn.secondary{background:linear-gradient(180deg,#ffd86a,#f2c551)}
+    .muted{color:var(--muted)} .footer{color:var(--muted);text-align:center;margin-top:8px;font-size:13px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
     .pill{border-radius:12px;border:1px solid rgba(255,255,255,.08);padding:8px 12px;background:rgba(255,255,255,.03);cursor:pointer}
     .pill.active{outline:2px solid rgba(255,223,136,.75);background:rgba(255,223,136,.08)}
-    .stat{max-width:680px;margin:10px auto 0;color:var(--muted);text-align:center}
-    .balance{font-weight:800;color:var(--ok)}
-    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;margin:10px auto;max-width:720px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:14px;
-      padding:14px 16px;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;font-weight:800;
-      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5); cursor:pointer
-    }
-    .btn.secondary{background:linear-gradient(180deg,#ffd86a,#f2c551)}
-    .muted{color:var(--muted)} .sep{height:1px;background:rgba(255,255,255,.06);margin:14px auto;max-width:720px}
-    .footer{color:var(--muted);text-align:center;margin-top:8px;font-size:13px}
-    .hint{font-size:14px;color:var(--muted)}
     .danger{color:#ff6b6b}
+    .timer{margin-top:10px;font-size:16px}
+    .progress{width:100%;height:10px;background:rgba(255,255,255,.1);border-radius:10px;margin-top:6px;overflow:hidden}
+    .bar{height:100%;background:linear-gradient(90deg,var(--gold1),var(--gold2));transition:width 1s linear}
   </style>
 </head>
 <body>
@@ -69,37 +65,28 @@
 
   <div class="panel center">
     <div id="ton-connect"></div>
-    <div id="wallet-line" class="hint" style="margin-top:8px;"></div>
+    <div id="wallet-line" class="muted" style="margin-top:8px;"></div>
   </div>
 
   <section class="grid10" id="grid"></section>
 
-  <div class="stat">
-    <div id="balanceLine">💰 <span id="t_balance">Your balance</span>:
-      <span class="balance"><span id="balance">0</span> Ton21</span></div>
-    <div id="playsLine" class="muted" style="margin-top:6px">🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">100</span> / 100</div>
-    <div id="capLine" class="muted">🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 1000 T21</div>
-  </div>
-
   <div class="panel center" id="resultBox" style="display:none"></div>
 
-  <div class="panel center">
-    <div class="row" style="justify-content:center; gap:10px;">
-      <button class="btn" id="btnPayout">💸 <span id="t_payout">Request Payout</span></button>
-      <button class="btn secondary" id="btnPortal">🏠 Ton21 Portal</button>
-    </div>
-    <div class="hint" style="margin-top:10px">
-      💎 <span id="t_demo">Demo mode</span>. <span id="t_demo2">Payouts require connected wallet & backend.</span>
-    </div>
-    <div class="hint" style="margin-top:6px">
-      🌕 <span id="t_withdraw">Withdraw address</span>:
-      <code id="withdrawAddr">UQAqZ3e_Qf1zX3AxcaLyj...KXIskdUs2</code>
-    </div>
+  <div class="panel">
+    💰 <span id="t_balance">Balance</span>: <b><span id="balance">0</span> T21</b><br>
+    🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">100</span> / 100<br>
+    🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 1000 T21
   </div>
 
-  <div class="sep"></div>
+  <div class="panel center">
+    <div class="row">
+      <button class="btn" id="btnPayout">💸 Request Payout</button>
+      <button class="btn secondary" id="btnPortal">🏠 Ton21 Portal</button>
+    </div>
+    <p class="muted" style="margin-top:8px">💎 Demo mode. Connect wallet for real payouts.</p>
+  </div>
 
-  <div class="row" style="justify-content:center;margin-top:6px">
+  <div class="row" style="margin-top:8px">
     <span class="muted" id="t_lang">Language:</span>
     <span class="pill" data-lang="ru">RU</span>
     <span class="pill" data-lang="en">GB</span>
@@ -111,159 +98,85 @@
 </main>
 
 <script>
-  const BACKEND_URL = "https://YOUR-BACKEND.example/payout";
-  const WITHDRAW_TON_ADDRESS = "UQAqZ3e_Qf1zX3AxcaLyj...KXIskdUs2";
-  const DAILY_PLAYS = 100;
-  const DAILY_CAP = 1000;
-  const MIN_PRIZE = 1, MAX_PRIZE = 10;
-  const DEMO_MODE = true;
+  const DAILY_PLAYS=100, DAILY_CAP=1000;
+  const BACKEND_URL="https://YOUR-BACKEND.example/payout";
+  const KEY="t21_playzone_v5";
 
-  const T = {
-    ru:{ title:"T21 Play Zone", sub:"Угадай число от 1 до 10 и выиграй Ton21!",
-      balance:"Твой баланс", plays:"Игр осталось сегодня", cap:"Лимит выигрыша за сутки",
-      payout:"Запросить выплату", demo:"Бесплатная демо-игра", demo2:"Для выплат нужен подключенный кошелёк и backend.",
-      withdraw:"Кошелёк для вывода", lang:"Язык:" },
-    en:{ title:"T21 Play Zone", sub:"Guess a number 1–10 & win Ton21!",
-      balance:"Your balance", plays:"Plays left today", cap:"Daily win cap",
-      payout:"Request Payout", demo:"Demo mode", demo2:"Payouts require connected wallet & backend.",
-      withdraw:"Withdraw address", lang:"Language:" },
-    zh:{ title:"T21 游戏区", sub:"猜 1–10 的数字并赢得 Ton21！",
-      balance:"你的余额", plays:"今日剩余次数", cap:"每日上限",
-      payout:"申请提现", demo:"演示模式", demo2:"提现需连接钱包和后台。",
-      withdraw:"提现地址", lang:"语言：" },
-    hi:{ title:"T21 प्ले ज़ोन", sub:"1–10 में संख्या चुनें और Ton21 जीतें!",
-      balance:"तुम्हारा बैलेंस", plays:"आज शेष चालें", cap:"दैनिक सीमा",
-      payout:"पेयआउट का अनुरोध", demo:"डेमो मोड", demo2:"पेयआउट हेतु वॉलेट और बैकएंड आवश्यक।",
-      withdraw:"निकासी पता", lang:"भाषा:" }
-  };
+  function todayKey(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
+  function loadState(){const s=JSON.parse(localStorage.getItem(KEY)||"{}");const day=todayKey();return s.day===day?s:{day,balance:0,plays:DAILY_PLAYS,cap:0};}
+  let state=loadState();
+  function save(){localStorage.setItem(KEY,JSON.stringify(state));ui();}
 
-  function getLang(){
-    const saved = localStorage.getItem("t21_lang");
-    if(saved && T[saved]) return saved;
-    const sys = (navigator.language||"en").slice(0,2).toLowerCase();
-    return T[sys] ? sys : "en";
-  }
-
-  let LANG = getLang();
-  function applyTexts(){
-    const t=T[LANG];
-    document.getElementById("t_title").textContent=t.title;
-    document.getElementById("t_sub").textContent=t.sub;
-    document.getElementById("t_balance").textContent=t.balance;
-    document.getElementById("t_plays").textContent=t.plays;
-    document.getElementById("t_cap").textContent=t.cap;
-    document.getElementById("t_payout").textContent=t.payout;
-    document.getElementById("t_demo").textContent=t.demo;
-    document.getElementById("t_demo2").textContent=t.demo2;
-    document.getElementById("t_withdraw").textContent=t.withdraw;
-    document.getElementById("t_lang").textContent=t.lang;
-    document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active", p.dataset.lang===LANG));
-  }
-  function setLang(code){ if(!T[code])return; LANG=code; localStorage.setItem("t21_lang",LANG); applyTexts(); }
-
-  let tonUI, connectedAddress=null;
-  async function initTonConnect(){
-    try{
-      tonUI = new TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: location.origin + location.pathname.replace(/\/[^\/]*$/, '') + '/tonconnect-manifest.json',
-        buttonRootId: "ton-connect"
-      });
-      tonUI.onStatusChange(wallet=>{
-        connectedAddress = wallet?.account?.address || null;
-        document.getElementById("wallet-line").textContent =
-          connectedAddress ? `✅ ${connectedAddress}` : "";
-      });
-    }catch(e){ console.warn("TON Connect init failed", e); }
-  }
-
-  const KEY="t21_playzone_v4";
-  function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
-  function loadState(){
-    const s = JSON.parse(localStorage.getItem(KEY)||"{}");
-    const day = todayKey();
-    if(s.day!==day) return {day, balance:0, plays:DAILY_PLAYS, capUsed:0};
-    return {...{day, balance:0, plays:DAILY_PLAYS, capUsed:0}, ...s};
-  }
-  function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); refreshUI(); }
-  let state = loadState();
-
-  function tgOpen(url){
-    try{ if(window.Telegram?.WebApp){ window.Telegram.WebApp.openLink(url); return; } }catch(e){}
-    window.open(url,"_blank","noopener");
-  }
-
-  function refreshUI(){
-    document.getElementById("balance").textContent = state.balance;
-    document.getElementById("playsLeft").textContent = state.plays;
-    document.getElementById("capUsed").textContent = state.capUsed;
-    document.getElementById("withdrawAddr").textContent = WITHDRAW_TON_ADDRESS;
-  }
-
-  function weightedPrize(){
-    const weights = {1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};
-    let r = Math.floor(Math.random()*100)+1, acc=0;
-    for(let p=1; p<=10; p++){ acc+=weights[p]; if(r<=acc) return p; }
-    return 1;
-  }
+  function weightedPrize(){const w={1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};
+    let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=10;p++){a+=w[p];if(r<=a)return p;}return 1;}
 
   function play(n){
-    const out = document.getElementById("resultBox");
-    if(state.plays<=0){ out.style.display="block"; out.innerHTML = `<span class="danger">⛔ Limit reached</span>`; return; }
-    if(state.capUsed>=DAILY_CAP){ out.style.display="block"; out.innerHTML = `<span class="danger">🔒 Cap reached</span>`; return; }
+    const out=document.getElementById("resultBox");
+    if(state.plays<=0){showCooldown(out,"🎮 Limit reached for today");return;}
+    if(state.cap>=DAILY_CAP){showCooldown(out,"🔒 Cap reached for today");return;}
 
-    const hidden = Math.floor(Math.random()*10)+1;
+    const hidden=Math.floor(Math.random()*10)+1;
     if(n===hidden){
-      let prize = weightedPrize();
-      if(state.capUsed + prize > DAILY_CAP) prize = Math.max(0, DAILY_CAP - state.capUsed);
-      state.balance += prize;
-      state.capUsed += prize;
-      out.innerHTML = `🎉 <b>Guessed ${hidden}!</b> +${prize} T21`;
-    }else{
-      out.innerHTML = `🙂 Missed. It was <b>${hidden}</b>`;
-    }
-    state.plays -= 1;
-    out.style.display = "block";
-    saveState();
+      let p=weightedPrize();if(state.cap+p>DAILY_CAP)p=Math.max(0,DAILY_CAP-state.cap);
+      state.balance+=p;state.cap+=p;
+      out.innerHTML=`🎉 You guessed ${hidden}! +${p} T21`;
+    }else out.innerHTML=`😅 Missed. Was ${hidden}.`;
+    state.plays--;
+    if(state.plays===0){state.nextReset=Date.now()+24*60*60*1000;}
+    out.style.display="block";save();
   }
 
-  async function requestPayout(){
-    if(!connectedAddress){ alert("Connect wallet first."); return; }
-    if(state.balance<=0){ alert("Balance is zero."); return; }
-    try{
-      const res = await fetch(BACKEND_URL, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({ address: connectedAddress, amount: state.balance, source:"t21-playzone" })
-      });
-      if(!res.ok) throw new Error("Server error");
-      alert("✅ Request sent! Wait for credit.");
-      state.balance = 0; saveState();
-    }catch(e){
-      console.error(e);
-      alert("❗ Connection error. Check BACKEND_URL.");
-    }
+  function showCooldown(out,msg){
+    out.style.display="block";
+    if(!state.nextReset){state.nextReset=Date.now()+24*60*60*1000;save();}
+    updateTimer(out,msg);
+    const timer=setInterval(()=>{
+      if(Date.now()>=state.nextReset){clearInterval(timer);resetDay();}
+      else updateTimer(out,msg);
+    },1000);
   }
 
-  function buildGrid(){
-    const grid=document.getElementById("grid");
-    grid.innerHTML="";
-    for(let i=1;i<=10;i++){
-      const b=document.createElement("button");
-      b.className="num"; b.textContent=i;
-      b.addEventListener("click", ()=>play(i));
-      grid.appendChild(b);
-    }
+  function updateTimer(out,msg){
+    const remain=state.nextReset-Date.now();
+    if(remain<=0){resetDay();return;}
+    const h=Math.floor(remain/3600000);
+    const m=Math.floor((remain%3600000)/60000);
+    const s=Math.floor((remain%60000)/1000);
+    const total=24*3600000;
+    const percent=Math.max(0,100-remain/total*100);
+    out.innerHTML=`<span class="danger">${msg}</span><div class="timer">🕐 Next play in: <b>${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}</b></div>
+    <div class="progress"><div class="bar" style="width:${percent}%;"></div></div>`;
   }
 
-  (function init(){
-    try{ window.Telegram?.WebApp?.expand(); }catch(e){}
-    applyTexts();
-    document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click", ()=>setLang(p.dataset.lang)));
-    buildGrid(); refreshUI();
-    document.getElementById("btnPortal").addEventListener("click", ()=>tgOpen("https://t.me/Ton21PortalBot"));
-    document.getElementById("btnPayout").addEventListener("click", requestPayout);
-    initTonConnect();
-  })();
+  function resetDay(){
+    state={day:todayKey(),balance:state.balance,plays:DAILY_PLAYS,cap:0};
+    delete state.nextReset;save();
+    const out=document.getElementById("resultBox");
+    out.innerHTML="✅ New day! You can play again.";
+  }
+
+  function ui(){
+    document.getElementById("balance").textContent=state.balance;
+    document.getElementById("playsLeft").textContent=state.plays;
+    document.getElementById("capUsed").textContent=state.cap;
+  }
+
+  function buildGrid(){const g=document.getElementById("grid");for(let i=1;i<=10;i++){const b=document.createElement("button");
+    b.className="num";b.textContent=i;b.onclick=()=>play(i);g.appendChild(b);}}
+  buildGrid();ui();
+
+  document.getElementById("btnPortal").onclick=()=>window.open("https://t.me/Ton21PortalBot","_blank");
+  document.getElementById("btnPayout").onclick=()=>alert("Demo mode only");
+
+  const T={ru:{balance:"Баланс",plays:"Игр осталось",cap:"Лимит",lang:"Язык"},
+           en:{balance:"Balance",plays:"Plays left",cap:"Cap",lang:"Language"},
+           zh:{balance:"余额",plays:"次数",cap:"上限",lang:"语言"},
+           hi:{balance:"बैलेंस",plays:"बाकी",cap:"सीमा",lang:"भाषा"}};
+  let LANG=localStorage.getItem("t21_lang")||"en";
+  function setLang(c){LANG=c;localStorage.setItem("t21_lang",c);
+    document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active",p.dataset.lang===c));}
+  document.querySelectorAll(".pill").forEach(p=>p.onclick=()=>setLang(p.dataset.lang));
+  setLang(LANG);
 </script>
 </body>
 </html>
