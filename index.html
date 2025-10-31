@@ -13,14 +13,11 @@
       text-align: center;
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
     }
-
     header {
       padding: 30px 10px 10px;
       animation: fadeIn 1.5s ease-out;
     }
-
     header img {
       width: 100px;
       height: 100px;
@@ -28,35 +25,23 @@
       border: 2px solid #f0d173;
       animation: glow 3s infinite alternate;
     }
-
     @keyframes glow {
       from { box-shadow: 0 0 10px #f0d173; }
       to { box-shadow: 0 0 25px #ffe794; }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    h1 {
-      font-size: 28px;
-      margin-top: 10px;
-      color: #f0d173;
-    }
-
-    p {
-      color: #cfcfcf;
-      font-size: 15px;
-      margin: 5px 25px 25px;
-    }
+    h1 { font-size: 28px; margin-top: 10px; color: #f0d173; }
+    p { color: #cfcfcf; font-size: 15px; margin: 5px 25px 25px; }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 80px);
+      grid-template-columns: repeat(5, 60px);
       justify-content: center;
-      gap: 15px;
-      margin: 20px auto;
+      gap: 12px;
+      margin: 15px auto;
     }
 
     .num-btn {
@@ -65,8 +50,8 @@
       font-weight: 700;
       border: none;
       border-radius: 10px;
-      font-size: 20px;
-      padding: 15px 0;
+      font-size: 18px;
+      padding: 12px 0;
       cursor: pointer;
       transition: 0.2s;
       box-shadow: 0 4px 15px rgba(240,209,115,0.3);
@@ -77,35 +62,15 @@
       background: linear-gradient(180deg, #ffe794, #d6aa45);
     }
 
-    #result {
-      margin-top: 15px;
-      font-size: 18px;
-      color: #f0d173;
-      min-height: 24px;
-    }
+    #result { margin-top: 12px; font-size: 17px; color: #f0d173; min-height: 24px; }
+    #balance { margin-top: 10px; font-size: 17px; color: #00ff99; font-weight: 600; }
 
-    #balance {
-      margin-top: 10px;
-      font-size: 17px;
-      color: #00ff99;
-      font-weight: 600;
-    }
-
-    .wallet {
-      color: #aaa;
-      font-size: 14px;
-      margin-top: 15px;
-    }
-
-    .footer {
-      margin-top: 30px;
-      font-size: 13px;
-      color: #666;
-    }
+    .wallet { color: #aaa; font-size: 14px; margin-top: 15px; }
+    .footer { margin-top: 30px; font-size: 13px; color: #666; }
 
     .back-btn {
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 18px;
       background: #f0d173;
       color: #0b0b0f;
       font-weight: 600;
@@ -115,28 +80,27 @@
       cursor: pointer;
       transition: 0.25s;
     }
+    .back-btn:hover { background: #ffe794; transform: scale(1.03); }
 
-    .back-btn:hover {
-      background: #ffe794;
-      transform: scale(1.03);
+    .lang { margin-top: 20px; font-size: 14px; color: #888; }
+    .lang button {
+      background: none; border: 1px solid #f0d173; color: #f0d173;
+      margin: 5px; border-radius: 6px; padding: 4px 10px; cursor: pointer;
     }
 
     @keyframes winFlash {
       0%,100% { background-color: #0b0b0f; }
       50% { background-color: #1d1b00; }
     }
-
-    .flash {
-      animation: winFlash 0.5s ease;
-    }
+    .flash { animation: winFlash 0.5s ease; }
   </style>
 </head>
 
 <body>
   <header>
     <img src="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png" alt="Ton21 Logo" />
-    <h1>🎯 T21 Play Zone</h1>
-    <p>💎 Угадай число от 1 до 6 и выиграй Ton21!</p>
+    <h1 id="title">🎯 T21 Play Zone</h1>
+    <p id="desc">💎 Угадай число от 1 до 10 и выиграй Ton21!</p>
   </header>
 
   <main>
@@ -147,6 +111,10 @@
       <button class="num-btn" onclick="guess(4)">4</button>
       <button class="num-btn" onclick="guess(5)">5</button>
       <button class="num-btn" onclick="guess(6)">6</button>
+      <button class="num-btn" onclick="guess(7)">7</button>
+      <button class="num-btn" onclick="guess(8)">8</button>
+      <button class="num-btn" onclick="guess(9)">9</button>
+      <button class="num-btn" onclick="guess(10)">10</button>
     </div>
 
     <div id="result"></div>
@@ -158,31 +126,44 @@
     </div>
 
     <button class="back-btn" onclick="openPortal()">🏠 Ton21 Portal</button>
+
+    <div class="lang">
+      🌐 Язык:
+      <button onclick="setLang('ru')">🇷🇺</button>
+      <button onclick="setLang('en')">🇬🇧</button>
+      <button onclick="setLang('zh')">🇨🇳</button>
+      <button onclick="setLang('hi')">🇮🇳</button>
+    </div>
   </main>
 
-  <div class="footer">
-    © 2025 Ton21 Project — All rights reserved
-  </div>
+  <div class="footer">© 2025 Ton21 Project — All rights reserved</div>
 
   <script>
-    let totalBalance = 0;
+    // Загружаем баланс из localStorage
+    let totalBalance = parseInt(localStorage.getItem("t21_balance")) || 0;
+    updateBalance();
 
     function guess(num) {
-      const random = Math.floor(Math.random() * 6) + 1;
+      const random = Math.floor(Math.random() * 10) + 1;
       const result = document.getElementById("result");
       const body = document.body;
 
       if (num === random) {
-        // Приз от 5 до 20 Ton21
-        const prize = Math.floor(Math.random() * 16) + 5;
+        // Выигрыш от 1 до 10 Ton21
+        const prize = Math.floor(Math.random() * 10) + 1;
         totalBalance += prize;
-        result.innerHTML = `🎉 Ты угадал число ${num}!<br>🏆 Приз: ${prize} Ton21`;
-        document.getElementById("balance").innerHTML = `💰 Твой баланс: ${totalBalance} Ton21`;
+        localStorage.setItem("t21_balance", totalBalance);
+        result.innerHTML = `🎉 Угадал число ${num}!<br>🏆 Приз: ${prize} Ton21`;
+        updateBalance();
         body.classList.add("flash");
         setTimeout(() => body.classList.remove("flash"), 500);
       } else {
         result.innerHTML = `😔 Не угадал. Было число ${random}. Попробуй снова!`;
       }
+    }
+
+    function updateBalance() {
+      document.getElementById("balance").innerHTML = `💰 Твой баланс: ${totalBalance} Ton21`;
     }
 
     function openPortal() {
@@ -196,6 +177,29 @@
         window.location.href = "https://ton21-official.github.io/ton21-portal/";
       }
     }
+
+    // Мультиязычность
+    const TEXTS = {
+      ru: { title: "🎯 T21 Игровая зона", desc: "💎 Угадай число от 1 до 10 и выиграй Ton21!", balance: "💰 Твой баланс" },
+      en: { title: "🎯 T21 Play Zone", desc: "💎 Guess the number from 1 to 10 and win Ton21!", balance: "💰 Your balance" },
+      zh: { title: "🎯 T21 游戏区", desc: "💎 猜数字 (1-10) 赢取 Ton21!", balance: "💰 你的余额" },
+      hi: { title: "🎯 T21 प्ले ज़ोन", desc: "💎 1 से 10 तक का नंबर चुनें और Ton21 जीतें!", balance: "💰 आपका बैलेंस" },
+    };
+
+    function setLang(lang) {
+      localStorage.setItem("t21_lang", lang);
+      applyLang(lang);
+    }
+
+    function applyLang(lang) {
+      const t = TEXTS[lang] || TEXTS.ru;
+      document.getElementById("title").innerText = t.title;
+      document.getElementById("desc").innerText = t.desc;
+      updateBalance();
+    }
+
+    const savedLang = localStorage.getItem("t21_lang") || "ru";
+    applyLang(savedLang);
   </script>
 </body>
 </html>
