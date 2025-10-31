@@ -40,6 +40,8 @@
     .pill.active{outline:2px solid rgba(255,223,136,.75);background:rgba(255,223,136,.08)}
     .timer{margin-top:8px} .progress{width:100%;height:10px;background:rgba(255,255,255,.1);border-radius:10px;margin-top:6px;overflow:hidden}
     .bar{height:100%;background:linear-gradient(90deg,var(--gold1),var(--gold2));transition:width 1s linear}
+    input{width:90%;max-width:400px;margin-top:10px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.05);color:var(--txt);text-align:center}
   </style>
 </head>
 <body>
@@ -50,19 +52,18 @@
     <p id="t_sub" class="subtitle">Guess a number 1–10 & win Ton21!</p>
   </div>
 
-  <div class="panel center">
-    <div id="ton-connect"></div>
-    <div id="wallet-line" class="muted" style="margin-top:8px;"></div>
-  </div>
-
   <section class="grid10" id="grid"></section>
-
   <div class="panel center" id="resultBox" style="display:none"></div>
 
   <div class="panel" id="statsPanel">
     💰 <span id="t_balance">Balance</span>: <b><span id="balance">0</span> T21</b><br>
     🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">100</span> / 100<br>
     🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 1000 T21
+  </div>
+
+  <div class="panel center">
+    <input id="userAddress" placeholder="Enter your TON address" /><br>
+    <button class="btn" id="saveAddr">💾 Save Address</button>
   </div>
 
   <div class="panel center">
@@ -85,200 +86,82 @@
 </main>
 
 <script>
-  // ---------- Config ----------
-  const DAILY_PLAYS=100, DAILY_CAP=1000;
-  const BACKEND_URL="https://YOUR-BACKEND.example/payout";
-  const KEY="t21_playzone_v6";
+const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v7";
+const I18N={
+ ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 10 и выиграй Ton21!",balance:"Твой баланс",
+     plays:"Игр осталось сегодня",cap:"Лимит выигрыша за сутки",btnPayout:"💸 Запросить выплату",
+     btnPortal:"🏠 Ton21 Portal",demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",
+     lang:"Язык:",limitToday:"🎮 Лимит игр на сегодня исчерпан",nextPlay:"⏱ Следующая игра через",
+     addr:"Ваш TON адрес",saveAddr:"💾 Сохранить адрес"},
+ en:{title:"T21 Play Zone",sub:"Guess a number 1–10 & win Ton21!",balance:"Balance",plays:"Plays left today",
+     cap:"Daily win cap",btnPayout:"💸 Request Payout",btnPortal:"🏠 Ton21 Portal",
+     demo:"💎 Demo mode. Connect wallet for real payouts.",lang:"Language:",
+     limitToday:"🎮 Limit reached for today",nextPlay:"⏱ Next play in",addr:"Your TON address",saveAddr:"💾 Save Address"},
+ zh:{title:"T21 游戏区",sub:"猜 1–10 的数字并赢得 Ton21！",balance:"余额",plays:"今日剩余次数",cap:"每日上限",
+     btnPayout:"💸 申请提现",btnPortal:"🏠 Ton21 门户",demo:"💎 演示模式。连接钱包以获得真实提现。",
+     lang:"语言：",limitToday:"🎮 今日次数已用完",nextPlay:"⏱ 下次可玩还剩",addr:"您的 TON 地址",saveAddr:"💾 保存地址"},
+ hi:{title:"T21 प्ले ज़ोन",sub:"1–10 में संख्या चुनें और Ton21 जीतें!",balance:"बैलेंस",plays:"आज शेष खेल",
+     cap:"दैनिक सीमा",btnPayout:"💸 पेआउट का अनुरोध",btnPortal:"🏠 Ton21 पोर्टल",
+     demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",lang:"भाषा:",
+     limitToday:"🎮 आज का लिमिट पूरा",nextPlay:"⏱ अगला खेल:",addr:"आपका TON पता",saveAddr:"💾 पता सहेजें"}
+};
+let LANG=localStorage.getItem("lang")||"en";
+function t(k){return I18N[LANG][k];}
 
-  // ---------- i18n ----------
-  const I18N = {
-    ru: {
-      title:"T21 Play Zone",
-      sub:"Угадай число от 1 до 10 и выиграй Ton21!",
-      balance:"Твой баланс",
-      plays:"Игр осталось сегодня",
-      cap:"Лимит выигрыша за сутки",
-      btnPayout:"💸 Запросить выплату",
-      btnPortal:"🏠 Ton21 Portal",
-      demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",
-      lang:"Язык:",
-      limitToday:"🎮 Лимит игр на сегодня исчерпан",
-      capToday:"🔒 Достигнут лимит выигрыша на сегодня",
-      nextPlay:"⏱ Следующая игра через"
-    },
-    en: {
-      title:"T21 Play Zone",
-      sub:"Guess a number 1–10 & win Ton21!",
-      balance:"Balance",
-      plays:"Plays left today",
-      cap:"Daily win cap",
-      btnPayout:"💸 Request Payout",
-      btnPortal:"🏠 Ton21 Portal",
-      demo:"💎 Demo mode. Connect wallet for real payouts.",
-      lang:"Language:",
-      limitToday:"🎮 Limit reached for today",
-      capToday:"🔒 Cap reached for today",
-      nextPlay:"⏱ Next play in"
-    },
-    zh: {
-      title:"T21 游戏区",
-      sub:"猜 1–10 的数字并赢得 Ton21！",
-      balance:"余额",
-      plays:"今日剩余次数",
-      cap:"每日上限",
-      btnPayout:"💸 申请提现",
-      btnPortal:"🏠 Ton21 门户",
-      demo:"💎 演示模式。连接钱包以获得真实提现。",
-      lang:"语言：",
-      limitToday:"🎮 今日次数已用完",
-      capToday:"🔒 今日上限已达",
-      nextPlay:"⏱ 下次可玩还剩"
-    },
-    hi: {
-      title:"T21 प्ले ज़ोन",
-      sub:"1–10 में संख्या चुनें और Ton21 जीतें!",
-      balance:"बैलेंस",
-      plays:"आज शेष खेल",
-      cap:"दैनिक सीमा",
-      btnPayout:"💸 पेआउट का अनुरोध",
-      btnPortal:"🏠 Ton21 पोर्टल",
-      demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",
-      lang:"भाषा:",
-      limitToday:"🎮 आज का लिमिट पूरा",
-      capToday:"🔒 आज की सीमा पूरी",
-      nextPlay:"⏱ अगला खेल:"
-    }
-  };
+function today(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
+let s=JSON.parse(localStorage.getItem(KEY)||"{}");if(s.day!==today())s={day:today(),balance:0,plays:DAILY_PLAYS,cap:0};
+function save(){localStorage.setItem(KEY,JSON.stringify(s));ui();}
+function ui(){balance.textContent=s.balance;playsLeft.textContent=s.plays;capUsed.textContent=s.cap;}
 
-  function getLang(){
-    const saved = localStorage.getItem("t21_lang");
-    if(saved && I18N[saved]) return saved;
-    const sys = (navigator.language||"en").slice(0,2).toLowerCase();
-    return I18N[sys] ? sys : "en";
-  }
-  let LANG = getLang();
+function weightedPrize(){const w={1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=10;p++){a+=w[p];if(r<=a)return p;}return 1;}
+function play(n){
+ const out=resultBox;
+ if(s.plays<=0){showCooldown(out);return;}
+ const hidden=Math.floor(Math.random()*10)+1;
+ if(n===hidden){let p=weightedPrize();s.balance+=p;s.cap+=p;out.innerHTML=`🎉 +${p} T21`; }
+ else out.innerHTML=`🙂 Missed ${hidden}`;
+ s.plays--; if(s.plays===0)s.next=Date.now()+24*60*60*1000; out.style.display="block"; save();
+}
 
-  function applyTexts(){
-    const t = I18N[LANG];
-    // заголовок + подзаголовок
-    document.getElementById("t_title").textContent = t.title;
-    document.getElementById("t_sub").textContent = t.sub;
+function showCooldown(out){
+ out.style.display="block";
+ if(!s.next){s.next=Date.now()+24*60*60*1000;save();}
+ const label=t("nextPlay");
+ function tick(){
+   const r=s.next-Date.now();if(r<=0){reset();return;}
+   const h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000),sec=Math.floor((r%60000)/1000);
+   const total=86400000,per=100-r/total*100;
+   out.innerHTML=`<div class='danger'>${t("limitToday")}</div><div class='timer'>🕐 ${label}: <b>${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}</b></div><div class='progress'><div class='bar' style='width:${per}%'></div></div>`;
+ }
+ tick(); if(out._t)clearInterval(out._t); out._t=setInterval(tick,1000);
+}
+function reset(){s={day:today(),balance:s.balance,plays:DAILY_PLAYS,cap:0};delete s.next;save();resultBox.innerHTML="✅ New day!";}
+function buildGrid(){const g=document.getElementById("grid");g.innerHTML="";for(let i=1;i<=10;i++){const b=document.createElement("button");b.className="num";b.textContent=i;b.onclick=()=>play(i);g.appendChild(b);}}
+buildGrid();ui();
 
-    // статистика
-    document.getElementById("t_balance").textContent = t.balance;
-    document.getElementById("t_plays").textContent = t.plays;
-    document.getElementById("t_cap").textContent = t.cap;
+const addr=document.getElementById("userAddress");
+addr.value=localStorage.getItem("tonAddr")||"";
+document.getElementById("saveAddr").onclick=()=>{localStorage.setItem("tonAddr",addr.value.trim());alert("✅ "+t("addr")+" saved!");};
 
-    // кнопки и подписи
-    document.getElementById("t_btnPayout").textContent = t.btnPayout;
-    document.getElementById("t_btnPortal").textContent = t.btnPortal;
-    document.getElementById("t_demoLine").textContent = t.demo;
-    document.getElementById("t_lang").textContent = t.lang;
+document.getElementById("btnPortal").onclick=()=>window.open("https://t.me/Ton21PortalBot","_blank");
+document.getElementById("btnPayout").onclick=()=>alert("Demo mode");
 
-    // активная пилюля
-    document.querySelectorAll(".pill").forEach(p=>{
-      p.classList.toggle("active", p.dataset.lang===LANG);
-    });
-
-    // если открыт баннер с лимитом — перерисуем его тоже
-    if(document.getElementById("resultBox").dataset.mode==="limit") {
-      showCooldown(document.getElementById("resultBox"), I18N[LANG].limitToday);
-    }
-    if(document.getElementById("resultBox").dataset.mode==="cap") {
-      showCooldown(document.getElementById("resultBox"), I18N[LANG].capToday);
-    }
-  }
-  function setLang(code){
-    if(!I18N[code]) return;
-    LANG = code;
-    localStorage.setItem("t21_lang", code);
-    applyTexts();
-  }
-
-  // ---------- State ----------
-  function todayKey(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
-  function loadState(){const s=JSON.parse(localStorage.getItem(KEY)||"{}");const day=todayKey();return s.day===day?s:{day,balance:0,plays:DAILY_PLAYS,cap:0};}
-  let state=loadState();
-  function save(){localStorage.setItem(KEY,JSON.stringify(state));ui();}
-
-  // ---------- Game ----------
-  function weightedPrize(){const w={1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};
-    let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=10;p++){a+=w[p];if(r<=a)return p;}return 1;}
-
-  function play(n){
-    const out=document.getElementById("resultBox");
-    if(state.plays<=0){showCooldown(out, I18N[LANG].limitToday, "limit");return;}
-    if(state.cap>=DAILY_CAP){showCooldown(out, I18N[LANG].capToday, "cap");return;}
-
-    const hidden=Math.floor(Math.random()*10)+1;
-    if(n===hidden){
-      let p=weightedPrize(); if(state.cap+p>DAILY_CAP) p=Math.max(0,DAILY_CAP-state.cap);
-      state.balance+=p; state.cap+=p;
-      out.dataset.mode=""; out.style.display="block";
-      out.innerHTML=`🎉 ${I18N[LANG].sub.split(' ')[0]} ${hidden}! +${p} T21`;
-    }else{
-      out.dataset.mode=""; out.style.display="block";
-      out.innerHTML=`🙂 Missed. Was <b>${hidden}</b>`;
-    }
-    state.plays--; if(state.plays===0){state.nextReset=Date.now()+24*60*60*1000;}
-    save();
-  }
-
-  function showCooldown(out,msg,mode="limit"){
-    out.dataset.mode=mode;
-    out.style.display="block";
-    if(!state.nextReset){state.nextReset=Date.now()+24*60*60*1000;save();}
-    const tLabel=I18N[LANG].nextPlay;
-
-    function tick(){
-      const remain=state.nextReset-Date.now();
-      if(remain<=0){resetDay(); return;}
-      const h=Math.floor(remain/3600000);
-      const m=Math.floor((remain%3600000)/60000);
-      const s=Math.floor((remain%60000)/1000);
-      const total=24*3600000;
-      const percent=Math.max(0,100-remain/total*100);
-      out.innerHTML=`<div class="danger">${msg}</div>
-        <div class="timer">🕐 ${tLabel}: <b>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</b></div>
-        <div class="progress"><div class="bar" style="width:${percent}%"></div></div>`;
-    }
-    tick();
-    if(out._timer) clearInterval(out._timer);
-    out._timer=setInterval(tick,1000);
-  }
-
-  function resetDay(){
-    const out=document.getElementById("resultBox");
-    if(out._timer) clearInterval(out._timer);
-    state={day:todayKey(),balance:state.balance,plays:DAILY_PLAYS,cap:0};
-    delete state.nextReset; save();
-    out.dataset.mode=""; out.innerHTML="✅ New day! You can play again.";
-  }
-
-  function ui(){
-    document.getElementById("balance").textContent=state.balance;
-    document.getElementById("playsLeft").textContent=state.plays;
-    document.getElementById("capUsed").textContent=state.cap;
-  }
-
-  // ---------- UI build ----------
-  function buildGrid(){
-    const g=document.getElementById("grid"); g.innerHTML="";
-    for(let i=1;i<=10;i++){const b=document.createElement("button");
-      b.className="num"; b.textContent=i; b.onclick=()=>play(i); g.appendChild(b);}
-  }
-
-  // ---------- Links / Wallet ----------
-  document.getElementById("btnPortal").onclick=()=>window.open("https://t.me/Ton21PortalBot","_blank");
-  document.getElementById("btnPayout").onclick=()=>alert("Demo mode");
-
-  // ---------- Init ----------
-  (function init(){
-    try{ window.Telegram?.WebApp?.expand(); }catch(e){}
-    buildGrid(); ui();
-    document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click",()=>setLang(p.dataset.lang)));
-    applyTexts(); // важное: сразу применяем выбранный язык
-  })();
+function applyTexts(){
+ document.getElementById("t_title").textContent=t("title");
+ document.getElementById("t_sub").textContent=t("sub");
+ document.getElementById("t_balance").textContent=t("balance");
+ document.getElementById("t_plays").textContent=t("plays");
+ document.getElementById("t_cap").textContent=t("cap");
+ document.getElementById("t_btnPayout").textContent=t("btnPayout");
+ document.getElementById("t_btnPortal").textContent=t("btnPortal");
+ document.getElementById("t_demoLine").textContent=t("demo");
+ document.getElementById("t_lang").textContent=t("lang");
+ addr.placeholder=t("addr");
+ document.getElementById("saveAddr").textContent=t("saveAddr");
+ document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active",p.dataset.lang===LANG));
+}
+applyTexts();
+document.querySelectorAll(".pill").forEach(p=>p.onclick=()=>{LANG=p.dataset.lang;localStorage.setItem("lang",LANG);applyTexts();});
 </script>
 </body>
 </html>
