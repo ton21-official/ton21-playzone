@@ -93,10 +93,12 @@
 
 <script>
 const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v9";
-const I18N={ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 9 и выиграй Ton21!",balance:"Твой баланс",plays:"Игр осталось сегодня",cap:"Лимит выигрыша за сутки",btnPayout:"💸 Запросить выплату",btnPortal:"🏠 Ton21 Portal",demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",lang:"Язык:",limitToday:"🎮 Лимит игр на сегодня исчерпан",nextPlay:"⏱ Следующая игра через",addr:"Ваш TON адрес",saveAddr:"💾 Сохранить адрес"},
-en:{title:"T21 Play Zone",sub:"Guess a number 1–9 & win Ton21!",balance:"Balance",plays:"Plays left today",cap:"Daily win cap",btnPayout:"💸 Request Payout",btnPortal:"🏠 Ton21 Portal",demo:"💎 Demo mode. Connect wallet for real payouts.",lang:"Language:",limitToday:"🎮 Limit reached for today",nextPlay:"⏱ Next play in",addr:"Your TON address",saveAddr:"💾 Save Address"},
-zh:{title:"T21 游戏区",sub:"猜 1–9 的数字并赢得 Ton21！",balance:"余额",plays:"今日剩余次数",cap:"每日上限",btnPayout:"💸 申请提现",btnPortal:"🏠 Ton21 门户",demo:"💎 演示模式。连接钱包以获得真实提现。",lang:"语言：",limitToday:"🎮 今日次数已用完",nextPlay:"⏱ 下次可玩还剩",addr:"您的 TON 地址",saveAddr:"💾 保存地址"},
-hi:{title:"T21 प्ले ज़ोन",sub:"1–9 में संख्या चुनें और Ton21 जीतें!",balance:"बैलेंस",plays:"आज शेष खेल",cap:"दैनिक सीमा",btnPayout:"💸 पेआउट का अनुरोध",btnPortal:"🏠 Ton21 पोर्टल",demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",lang:"भाषा:",limitToday:"🎮 आज का लिमिट पूरा",nextPlay:"⏱ अगला खेल:",addr:"आपका TON पता",saveAddr:"💾 पता सहेजें"}};
+const I18N={
+ ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 9 и выиграй Ton21!",balance:"Твой баланс",plays:"Игр осталось сегодня",cap:"Лимит выигрыша за сутки",btnPayout:"💸 Запросить выплату",btnPortal:"🏠 Ton21 Portal",demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",lang:"Язык:",limitToday:"🎮 Лимит игр на сегодня исчерпан",nextPlay:"⏱ Следующая игра через",addr:"Ваш TON адрес",saveAddr:"💾 Сохранить адрес"},
+ en:{title:"T21 Play Zone",sub:"Guess a number 1–9 & win Ton21!",balance:"Balance",plays:"Plays left today",cap:"Daily win cap",btnPayout:"💸 Request Payout",btnPortal:"🏠 Ton21 Portal",demo:"💎 Demo mode. Connect wallet for real payouts.",lang:"Language:",limitToday:"🎮 Limit reached for today",nextPlay:"⏱ Next play in",addr:"Your TON address",saveAddr:"💾 Save Address"},
+ zh:{title:"T21 游戏区",sub:"猜 1–9 的数字并赢得 Ton21！",balance:"余额",plays:"今日剩余次数",cap:"每日上限",btnPayout:"💸 申请提现",btnPortal:"🏠 Ton21 门户",demo:"💎 演示模式。连接钱包以获得真实提现。",lang:"语言：",limitToday:"🎮 今日次数已用完",nextPlay:"⏱ 下次可玩还剩",addr:"您的 TON 地址",saveAddr:"💾 保存地址"},
+ hi:{title:"T21 प्ले ज़ोन",sub:"1–9 में संख्या चुनें और Ton21 जीतें!",balance:"बैलेंस",plays:"आज शेष खेल",cap:"दैनिक सीमा",btnPayout:"💸 पेआउट का अनुरोध",btnPortal:"🏠 Ton21 पोर्टल",demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",lang:"भाषा:",limitToday:"🎮 आज का लिमिट पूरा",nextPlay:"⏱ अगला खेल:",addr:"आपका TON पता",saveAddr:"💾 पता सहेजें"}
+};
 let LANG=localStorage.getItem("lang")||"en";
 function t(k){return I18N[LANG][k];}
 function today(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
@@ -114,24 +116,29 @@ addr.value=localStorage.getItem("tonAddr")||"";
 document.getElementById("saveAddr").onclick=()=>{localStorage.setItem("tonAddr",addr.value.trim());alert("✅ "+t("addr")+" saved!");};
 document.getElementById("btnPortal").onclick=()=>window.open("https://t.me/Ton21PortalBot","_blank");
 
-/* 🔥 Отправка выплаты на твой Render API */
+/* 🔥 Отправка выплаты на Render API */
 document.getElementById("btnPayout").onclick = async () => {
-  const address = localStorage.getItem("tonAddr");
-  if (!address) { alert("❗ Укажите TON адрес перед выплатой"); return; }
+  const address = localStorage.getItem("tonAddr") || addr.value.trim();
+  if (!address) return alert("⚠️ Укажите TON адрес перед выплатой!");
   const amount = s.balance;
-  if (amount <= 0) { alert("Нет T21 для вывода 😅"); return; }
+  if (amount <= 0) return alert("😅 Нет T21 для вывода!");
   try {
     const res = await fetch("https://ton21-playzone.onrender.com/send", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ address, amount })
     });
     const data = await res.json();
     if (data.status === "ok") {
       alert(`✅ Выплата ${amount} T21 отправлена на ${address}`);
       s.balance = 0; save();
-    } else alert("⚠️ Ошибка: " + (data.error || "неизвестно"));
-  } catch(e){ alert("❌ Ошибка соединения с сервером"); }
+    } else {
+      alert(`⚠️ Ошибка: ${data.error || "неизвестно"}`);
+    }
+  } catch (e) {
+    console.error(e);
+    alert("❌ Ошибка соединения с сервером");
+  }
 };
 
 function applyTexts(){
