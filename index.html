@@ -3,180 +3,67 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-  <title>Ton21 Portal</title>
+  <title>T21 Play Zone</title>
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
 
   <style>
     :root{
-      --bg:#0b0f16; --card:#121826; --gold:#f0cf6d; --gold-2:#ffdf88;
-      --text:#e8ecf7; --muted:#9fb0c3; --btn-shadow:0 10px 24px rgba(240,207,109,.25);
+      --bg:#0b0f16; --gold:#f0cf6d; --gold2:#ffdf88;
+      --text:#e8ecf7; --muted:#9fb0c3;
+      --shadow:0 10px 24px rgba(240,207,109,.25);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{
-      margin:0; color:var(--text);
-      font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-      background:radial-gradient(1200px 600px at 50% -10%,#1b2232 0%,#0b0f16 60%,#080b11 100%) fixed;
-      display:flex; align-items:center; justify-content:center; padding:28px;
+      margin:0; display:flex; align-items:center; justify-content:center;
+      background:radial-gradient(1200px 600px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      padding:24px;
     }
     .wrap{
-      width:min(820px,100%); border-radius:24px; padding:32px 22px 18px;
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      width:min(420px, 95%);
+      border-radius:24px;
       border:1px solid rgba(255,255,255,.06);
-      box-shadow:0 12px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .center{text-align:center}
-    .logo-wrap{
-      width:140px;height:140px;margin:0 auto 10px;border-radius:50%;
-      background:radial-gradient(circle at 50% 50%,rgba(255,223,136,.45),rgba(255,223,136,0) 60%);
-      display:grid;place-items:center;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      box-shadow:0 12px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+      text-align:center;
+      padding:30px 20px 24px;
     }
     .logo{
-      width:108px;height:108px;border-radius:50%;
-      background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;
+      width:100px;height:100px;margin:0 auto 10px;border-radius:50%;
+      background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/75% no-repeat;
       outline:3px solid rgba(255,223,136,.85);
-      box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05);
+      box-shadow:0 0 24px rgba(255,223,136,.5), inset 0 0 20px rgba(255,255,255,.05);
     }
-    h1{margin:6px 0 8px;font-size:34px;letter-spacing:.2px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
-    .subtitle{color:var(--muted);font-size:16px;margin:0 0 18px}
-    .grid{display:grid;gap:14px;grid-template-columns:1fr;max-width:600px;margin:18px auto 14px}
+    h1{margin:6px 0 8px;font-size:30px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+    .subtitle{color:var(--muted);font-size:15px;margin:0 0 25px}
     .btn{
-      display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
-      padding:16px 18px;border-radius:16px;text-decoration:none;border:0;cursor:pointer;
-      color:#3a2a00;font-weight:800;font-size:20px;
-      background:linear-gradient(180deg,var(--gold-2),var(--gold));
-      box-shadow:var(--btn-shadow), inset 0 1px 0 rgba(255,255,255,.5);
-      transition:transform .06s ease,filter .15s ease,box-shadow .15s ease;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      width:100%;padding:16px;border-radius:16px;border:0;cursor:pointer;
+      background:linear-gradient(180deg,var(--gold2),var(--gold));
+      color:#3a2a00;font-weight:800;font-size:19px;text-decoration:none;
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.5);
+      transition:transform .06s ease,filter .15s ease;
+      margin-top:10px;
     }
-    .btn:active{transform:translateY(1px) scale(.99);filter:saturate(.95)}
-    .btn.secondary{background:linear-gradient(180deg,#ffd86a,#f2c551)}
-    .lang{margin:14px auto 0;max-width:600px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;color:var(--muted)}
-    .pill{min-width:54px;text-align:center;border-radius:12px;padding:8px 12px;font-weight:700;
-      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.15s}
+    .btn:active{transform:translateY(1px) scale(.98);filter:saturate(.95)}
+    .footer{color:var(--muted);font-size:13px;margin-top:20px}
+    .lang{margin-top:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .pill{padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer}
     .pill.active{outline:2px solid rgba(255,223,136,.75);background:rgba(255,223,136,.08)}
-    .footer{text-align:center;color:var(--muted);font-size:13px;margin-top:10px}
-    .small{font-size:14px;color:var(--muted)}
-    .sep{height:1px;background:rgba(255,255,255,.06);margin:14px auto;width:min(600px,92%)}
   </style>
-
-  <script>
-    // ===== Helpers =====
-    function openSmart(url){
-      try{
-        // Если это t.me — используем официальный метод Telegram
-        if (/^https?:\/\/t\.me\//i.test(url) && window?.Telegram?.WebApp?.openTelegramLink){
-          window.Telegram.WebApp.openTelegramLink(url);
-          return;
-        }
-        // Внутри мини-аппа — можно просто перейти
-        if (window?.Telegram?.WebApp){
-          window.location.href = url;
-          return;
-        }
-      }catch(e){}
-      // Обычный браузер
-      window.open(url, "_blank", "noopener");
-    }
-
-    // ===== i18n =====
-    const TEXTS = {
-      ru:{ title:"Ton21 Portal", subtitle:"Главные ворота в экосистему Ton21",
-        buy:"💰 Buy & Wallet", play:"🎮 Play Zone", airdrops:"🎁 Airdrops",
-        stats:"📊 Stats & Rewards", partners:"🤝 Partners", ai:"🧠 AI Tools", language:"Язык:" },
-      en:{ title:"Ton21 Portal", subtitle:"The main gateway to the Ton21 Ecosystem",
-        buy:"💰 Buy & Wallet", play:"🎮 Play Zone", airdrops:"🎁 Airdrops",
-        stats:"📊 Stats & Rewards", partners:"🤝 Partners", ai:"🧠 AI Tools", language:"Language:" },
-      zh:{ title:"Ton21 门户", subtitle:"通往 Ton21 生态的主入口",
-        buy:"💰 购买 & 钱包", play:"🎮 游戏区", airdrops:"🎁 空投",
-        stats:"📊 统计 & 奖励", partners:"🤝 合作伙伴", ai:"🧠 AI 工具", language:"语言：" },
-      hi:{ title:"Ton21 पोर्टल", subtitle:"Ton21 इकोसिस्टम का मुख्य द्वार",
-        buy:"💰 खरीदें & वॉलेट", play:"🎮 प्ले ज़ोन", airdrops:"🎁 एयरड्रॉप्स",
-        stats:"📊 आँकड़े & रिवार्ड्स", partners:"🤝 पार्टनर्स", ai:"🧠 AI टूल्स", language:"भाषा:" }
-    };
-
-    function getLang(){
-      const saved = localStorage.getItem("t21_portal_lang");
-      if (saved && TEXTS[saved]) return saved;
-      const sys=(navigator.language||"en").slice(0,2).toLowerCase();
-      return ["ru","en","zh","hi"].includes(sys)?sys:"en";
-    }
-    let LANG = getLang();
-
-    function applyTexts(){
-      const t = TEXTS[LANG];
-      titleEl.textContent=t.title; subtitleEl.textContent=t.subtitle;
-      btnBuy.textContent=t.buy; btnPlay.textContent=t.play; btnAirdrops.textContent=t.airdrops;
-      btnStats.textContent=t.stats; btnPartners.textContent=t.partners; btnAI.textContent=t.ai;
-      langLabel.textContent=t.language;
-      document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active", p.dataset.lang===LANG));
-    }
-    function setLang(code){
-      if(!TEXTS[code])return; LANG=code; localStorage.setItem("t21_portal_lang",code); applyTexts();
-    }
-
-    // ===== Links =====
-    const LINKS = {
-      buy: "https://ton21-official.github.io/ton21-buy/",
-      // ⚠️ По просьбе — открываем именно Telegram-бот
-      play: "https://t.me/T21PlayZoneBot",
-      airdrops: "https://t.me/T21AirdropBot",
-      stats: "https://t.me/T21StatsBot",
-      partners: "https://t.me/T21PartnersBot",
-      ai: "https://t.me/Ton21PortalBot"
-    };
-
-    // DOM refs (чтобы не дергать getElementById много раз)
-    let titleEl, subtitleEl, btnBuy, btnPlay, btnAirdrops, btnStats, btnPartners, btnAI, langLabel;
-
-    window.addEventListener("DOMContentLoaded", ()=>{
-      titleEl = document.getElementById("title");
-      subtitleEl = document.getElementById("subtitle");
-      btnBuy = document.getElementById("btn-buy");
-      btnPlay = document.getElementById("btn-play");
-      btnAirdrops = document.getElementById("btn-airdrops");
-      btnStats = document.getElementById("btn-stats");
-      btnPartners = document.getElementById("btn-partners");
-      btnAI = document.getElementById("btn-ai");
-      langLabel = document.getElementById("lang-label");
-
-      applyTexts();
-
-      document.getElementById("open-buy").addEventListener("click", ()=>openSmart(LINKS.buy));
-      document.getElementById("open-play").addEventListener("click", ()=>openSmart(LINKS.play));
-      document.getElementById("open-airdrops").addEventListener("click", ()=>openSmart(LINKS.airdrops));
-      document.getElementById("open-stats").addEventListener("click", ()=>openSmart(LINKS.stats));
-      document.getElementById("open-partners").addEventListener("click", ()=>openSmart(LINKS.partners));
-      document.getElementById("open-ai").addEventListener("click", ()=>openSmart(LINKS.ai));
-
-      document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click", ()=>setLang(p.dataset.lang)));
-
-      // Подгонка мини-аппа
-      try{ window.Telegram?.WebApp?.expand(); }catch(e){}
-    });
-  </script>
 </head>
 <body>
   <main class="wrap">
-    <div class="center">
-      <div class="logo-wrap"><div class="logo" aria-hidden="true"></div></div>
-      <h1 id="title">Ton21 Portal</h1>
-      <p id="subtitle" class="subtitle">The main gateway to the Ton21 Ecosystem</p>
-    </div>
+    <div class="logo"></div>
+    <h1 id="title">T21 Play Zone</h1>
+    <p id="subtitle" class="subtitle">Угадай число и выиграй 💎</p>
 
-    <section class="grid" aria-label="Main actions">
-      <button id="open-buy" class="btn"><span id="btn-buy">💰 Buy & Wallet</span></button>
-      <button id="open-play" class="btn secondary"><span id="btn-play">🎮 Play Zone</span></button>
-      <button id="open-airdrops" class="btn"><span id="btn-airdrops">🎁 Airdrops</span></button>
-      <button id="open-stats" class="btn"><span id="btn-stats">📊 Stats & Rewards</span></button>
-      <button id="open-partners" class="btn"><span id="btn-partners">🤝 Partners</span></button>
-      <button id="open-ai" class="btn"><span id="btn-ai">🧠 AI Tools</span></button>
-    </section>
+    <button id="play-btn" class="btn">🎮 Play Zone</button>
+    <button id="portal-btn" class="btn">🏠 Ton21 Portal</button>
 
-    <div class="sep" aria-hidden="true"></div>
-
-    <div class="lang" aria-label="Language switch">
-      <span id="lang-label" class="small">Language:</span>
+    <div class="lang">
       <span class="pill" data-lang="ru">RU</span>
       <span class="pill" data-lang="en">GB</span>
       <span class="pill" data-lang="zh">CN</span>
@@ -185,5 +72,51 @@
 
     <p class="footer">© 2025 Ton21 Project — All rights reserved</p>
   </main>
+
+  <script>
+    const TEXTS = {
+      ru:{title:"T21 Play Zone",subtitle:"Угадай число и выиграй 💎",play:"🎮 Играть",portal:"🏠 Портал Ton21"},
+      en:{title:"T21 Play Zone",subtitle:"Guess the number & win 💎",play:"🎮 Play Zone",portal:"🏠 Ton21 Portal"},
+      zh:{title:"T21 游戏区",subtitle:"猜数字赢奖 💎",play:"🎮 开始游戏",portal:"🏠 返回 Ton21 门户"},
+      hi:{title:"T21 खेल ज़ोन",subtitle:"संख्या का अनुमान लगाओ और जीतें 💎",play:"🎮 खेलें",portal:"🏠 Ton21 पोर्टल"}
+    };
+    const LINKS = {
+      play:"https://ton21-official.github.io/ton21-playzone/game.html", 
+      portal:"https://ton21-official.github.io/ton21-portal/"
+    };
+
+    function getLang(){
+      const saved=localStorage.getItem("t21_lang");
+      if(saved && TEXTS[saved])return saved;
+      const sys=(navigator.language||"en").slice(0,2).toLowerCase();
+      return ["ru","en","zh","hi"].includes(sys)?sys:"en";
+    }
+    let LANG=getLang();
+    function applyLang(){
+      const t=TEXTS[LANG];
+      document.getElementById("title").textContent=t.title;
+      document.getElementById("subtitle").textContent=t.subtitle;
+      document.getElementById("play-btn").textContent=t.play;
+      document.getElementById("portal-btn").textContent=t.portal;
+      document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active",p.dataset.lang===LANG));
+    }
+    function setLang(c){if(TEXTS[c]){LANG=c;localStorage.setItem("t21_lang",c);applyLang();}}
+
+    function openSmart(url){
+      try{
+        const t=window.Telegram?.WebApp;
+        if(t&&typeof t.openLink==="function"){t.openLink(url);return;}
+      }catch(e){}
+      window.open(url,"_blank","noopener");
+    }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+      applyLang();
+      document.getElementById("play-btn").addEventListener("click",()=>openSmart(LINKS.play));
+      document.getElementById("portal-btn").addEventListener("click",()=>openSmart(LINKS.portal));
+      document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click",()=>setLang(p.dataset.lang)));
+      try{window.Telegram?.WebApp?.expand();}catch(e){}
+    });
+  </script>
 </body>
 </html>
