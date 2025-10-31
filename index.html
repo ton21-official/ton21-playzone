@@ -13,8 +13,12 @@
       --gold1:#ffdf88; --gold2:#f0cf6d; --txt:#e8ecf7; --muted:#9fb0c3; --ok:#25d366;
     }
     *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--txt);display:flex;align-items:center;justify-content:center;padding:22px}
+    body{
+      margin:0;
+      background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--txt);display:flex;align-items:center;justify-content:center;padding:22px
+    }
     .wrap{width:min(860px,100%);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
       border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:22px;box-shadow:0 12px 48px rgba(0,0,0,.35)}
     .center{text-align:center}
@@ -23,10 +27,9 @@
       box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05)}
     h1{margin:8px 0 6px;font-size:34px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
     .subtitle{color:var(--muted);margin:0 0 14px}
-    .grid10{display:grid;gap:14px;grid-template-columns:repeat(5,1fr);max-width:650px;margin:18px auto}
-    @media(max-width:520px){.grid10{grid-template-columns:repeat(3,1fr)}}
-    .num{border:0;border-radius:14px;padding:18px 0;font-size:22px;font-weight:800;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
-      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transition:transform .06s}
+    .grid9{display:grid;gap:14px;grid-template-columns:repeat(3,1fr);max-width:420px;margin:18px auto}
+    .num{border:0;border-radius:14px;padding:20px 0;font-size:22px;font-weight:800;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
+      box-shadow:0 10px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transition:transform .06s}
     .num:active{transform:translateY(1px) scale(.99)}
     .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;margin:10px auto;max-width:720px}
     .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
@@ -49,10 +52,10 @@
   <div class="center">
     <div class="logo-aura"><div class="logo"></div></div>
     <h1 id="t_title">T21 Play Zone</h1>
-    <p id="t_sub" class="subtitle">Guess a number 1–10 & win Ton21!</p>
+    <p id="t_sub" class="subtitle">Guess a number 1–9 & win Ton21!</p>
   </div>
 
-  <section class="grid10" id="grid"></section>
+  <section class="grid9" id="grid"></section>
   <div class="panel center" id="resultBox" style="display:none"></div>
 
   <div class="panel" id="statsPanel">
@@ -86,21 +89,21 @@
 </main>
 
 <script>
-const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v7";
+const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v8";
 const I18N={
- ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 10 и выиграй Ton21!",balance:"Твой баланс",
+ ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 9 и выиграй Ton21!",balance:"Твой баланс",
      plays:"Игр осталось сегодня",cap:"Лимит выигрыша за сутки",btnPayout:"💸 Запросить выплату",
      btnPortal:"🏠 Ton21 Portal",demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",
      lang:"Язык:",limitToday:"🎮 Лимит игр на сегодня исчерпан",nextPlay:"⏱ Следующая игра через",
      addr:"Ваш TON адрес",saveAddr:"💾 Сохранить адрес"},
- en:{title:"T21 Play Zone",sub:"Guess a number 1–10 & win Ton21!",balance:"Balance",plays:"Plays left today",
+ en:{title:"T21 Play Zone",sub:"Guess a number 1–9 & win Ton21!",balance:"Balance",plays:"Plays left today",
      cap:"Daily win cap",btnPayout:"💸 Request Payout",btnPortal:"🏠 Ton21 Portal",
      demo:"💎 Demo mode. Connect wallet for real payouts.",lang:"Language:",
      limitToday:"🎮 Limit reached for today",nextPlay:"⏱ Next play in",addr:"Your TON address",saveAddr:"💾 Save Address"},
- zh:{title:"T21 游戏区",sub:"猜 1–10 的数字并赢得 Ton21！",balance:"余额",plays:"今日剩余次数",cap:"每日上限",
+ zh:{title:"T21 游戏区",sub:"猜 1–9 的数字并赢得 Ton21！",balance:"余额",plays:"今日剩余次数",cap:"每日上限",
      btnPayout:"💸 申请提现",btnPortal:"🏠 Ton21 门户",demo:"💎 演示模式。连接钱包以获得真实提现。",
      lang:"语言：",limitToday:"🎮 今日次数已用完",nextPlay:"⏱ 下次可玩还剩",addr:"您的 TON 地址",saveAddr:"💾 保存地址"},
- hi:{title:"T21 प्ले ज़ोन",sub:"1–10 में संख्या चुनें और Ton21 जीतें!",balance:"बैलेंस",plays:"आज शेष खेल",
+ hi:{title:"T21 प्ले ज़ोन",sub:"1–9 में संख्या चुनें और Ton21 जीतें!",balance:"बैलेंस",plays:"आज शेष खेल",
      cap:"दैनिक सीमा",btnPayout:"💸 पेआउट का अनुरोध",btnPortal:"🏠 Ton21 पोर्टल",
      demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",lang:"भाषा:",
      limitToday:"🎮 आज का लिमिट पूरा",nextPlay:"⏱ अगला खेल:",addr:"आपका TON पता",saveAddr:"💾 पता सहेजें"}
@@ -113,11 +116,11 @@ let s=JSON.parse(localStorage.getItem(KEY)||"{}");if(s.day!==today())s={day:toda
 function save(){localStorage.setItem(KEY,JSON.stringify(s));ui();}
 function ui(){balance.textContent=s.balance;playsLeft.textContent=s.plays;capUsed.textContent=s.cap;}
 
-function weightedPrize(){const w={1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=10;p++){a+=w[p];if(r<=a)return p;}return 1;}
+function weightedPrize(){const w={1:20,2:18,3:15,4:12,5:10,6:8,7:7,8:6,9:4};let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=9;p++){a+=w[p];if(r<=a)return p;}return 1;}
 function play(n){
  const out=resultBox;
  if(s.plays<=0){showCooldown(out);return;}
- const hidden=Math.floor(Math.random()*10)+1;
+ const hidden=Math.floor(Math.random()*9)+1;
  if(n===hidden){let p=weightedPrize();s.balance+=p;s.cap+=p;out.innerHTML=`🎉 +${p} T21`; }
  else out.innerHTML=`🙂 Missed ${hidden}`;
  s.plays--; if(s.plays===0)s.next=Date.now()+24*60*60*1000; out.style.display="block"; save();
@@ -136,7 +139,7 @@ function showCooldown(out){
  tick(); if(out._t)clearInterval(out._t); out._t=setInterval(tick,1000);
 }
 function reset(){s={day:today(),balance:s.balance,plays:DAILY_PLAYS,cap:0};delete s.next;save();resultBox.innerHTML="✅ New day!";}
-function buildGrid(){const g=document.getElementById("grid");g.innerHTML="";for(let i=1;i<=10;i++){const b=document.createElement("button");b.className="num";b.textContent=i;b.onclick=()=>play(i);g.appendChild(b);}}
+function buildGrid(){const g=document.getElementById("grid");g.innerHTML="";for(let i=1;i<=9;i++){const b=document.createElement("button");b.className="num";b.textContent=i;b.onclick=()=>play(i);g.appendChild(b);}}
 buildGrid();ui();
 
 const addr=document.getElementById("userAddress");
