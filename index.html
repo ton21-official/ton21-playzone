@@ -169,12 +169,12 @@
 
     function guess(num) {
       const random = Math.floor(Math.random() * 6) + 1;
-      const prizes = [5, 7, 9, 12, 15, 18, 20];
-      const prize = prizes[Math.floor(Math.random() * prizes.length)];
       const result = document.getElementById("result");
       const body = document.body;
 
       if (num === random) {
+        // Приз от 5 до 20 Ton21
+        const prize = Math.floor(Math.random() * 16) + 5;
         totalBalance += prize;
         result.innerHTML = `🎉 Ты угадал число ${num}!<br>🏆 Приз: ${prize} Ton21`;
         document.getElementById("balance").innerHTML = `💰 Твой баланс: ${totalBalance} Ton21`;
