@@ -7,51 +7,38 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-
   <style>
     :root{
       --bg:#0b0f16; --panel:#111724;
-      --gold1:#ffdf88; --gold2:#f0cf6d; --txt:#e8ecf7; --muted:#9fb0c3;
-      --ok:#25d366; --warn:#f7b733;
+      --gold1:#ffdf88; --gold2:#f0cf6d; --txt:#e8ecf7; --muted:#9fb0c3; --ok:#25d366;
     }
     *{box-sizing:border-box} html,body{height:100%}
-    body{
-      margin:0; background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      color:var(--txt); display:flex; align-items:center; justify-content:center; padding:22px;
-    }
+    body{margin:0;background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 60%, #080b11 100%) fixed;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--txt);display:flex;align-items:center;justify-content:center;padding:22px}
     .wrap{width:min(860px,100%);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
-      border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:22px;box-shadow:0 12px 48px rgba(0,0,0,.35);}
+      border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:22px;box-shadow:0 12px 48px rgba(0,0,0,.35)}
     .center{text-align:center}
-    .logo-aura{width:150px;height:150px;margin:6px auto 0;border-radius:50%;
-      background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);
-      display:grid;place-items:center}
-    .logo{width:118px;height:118px;border-radius:50%;
-      background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;
-      outline:3px solid rgba(255,223,136,.85);box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05)}
+    .logo-aura{width:150px;height:150px;margin:6px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);display:grid;place-items:center}
+    .logo{width:118px;height:118px;border-radius:50%;background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;outline:3px solid rgba(255,223,136,.85);
+      box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05)}
     h1{margin:8px 0 6px;font-size:34px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
     .subtitle{color:var(--muted);margin:0 0 14px}
     .grid10{display:grid;gap:14px;grid-template-columns:repeat(5,1fr);max-width:650px;margin:18px auto}
     @media(max-width:520px){.grid10{grid-template-columns:repeat(3,1fr)}}
-    .num{border:0;border-radius:14px;padding:18px 0;font-size:22px;font-weight:800;
-      background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
-      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);
-      transition:transform .06s ease;cursor:pointer}
+    .num{border:0;border-radius:14px;padding:18px 0;font-size:22px;font-weight:800;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
+      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transition:transform .06s}
     .num:active{transform:translateY(1px) scale(.99)}
-    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;padding:14px;margin:10px auto;max-width:720px;text-align:center}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      border:0;border-radius:14px;padding:14px 16px;
+    .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;margin:10px auto;max-width:720px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:14px;padding:14px 16px;
       background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;font-weight:800;
       box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer}
     .btn.secondary{background:linear-gradient(180deg,#ffd86a,#f2c551)}
-    .muted{color:var(--muted)} .footer{color:var(--muted);text-align:center;margin-top:8px;font-size:13px}
-    .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .muted{color:var(--muted)} .danger{color:#ff6b6b}
+    .footer{color:var(--muted);text-align:center;margin-top:8px;font-size:13px}
     .pill{border-radius:12px;border:1px solid rgba(255,255,255,.08);padding:8px 12px;background:rgba(255,255,255,.03);cursor:pointer}
     .pill.active{outline:2px solid rgba(255,223,136,.75);background:rgba(255,223,136,.08)}
-    .danger{color:#ff6b6b}
-    .timer{margin-top:10px;font-size:16px}
-    .progress{width:100%;height:10px;background:rgba(255,255,255,.1);border-radius:10px;margin-top:6px;overflow:hidden}
+    .timer{margin-top:8px} .progress{width:100%;height:10px;background:rgba(255,255,255,.1);border-radius:10px;margin-top:6px;overflow:hidden}
     .bar{height:100%;background:linear-gradient(90deg,var(--gold1),var(--gold2));transition:width 1s linear}
   </style>
 </head>
@@ -72,7 +59,7 @@
 
   <div class="panel center" id="resultBox" style="display:none"></div>
 
-  <div class="panel">
+  <div class="panel" id="statsPanel">
     💰 <span id="t_balance">Balance</span>: <b><span id="balance">0</span> T21</b><br>
     🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">100</span> / 100<br>
     🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 1000 T21
@@ -80,10 +67,10 @@
 
   <div class="panel center">
     <div class="row">
-      <button class="btn" id="btnPayout">💸 Request Payout</button>
-      <button class="btn secondary" id="btnPortal">🏠 Ton21 Portal</button>
+      <button class="btn" id="btnPayout"><span id="t_btnPayout">💸 Request Payout</span></button>
+      <button class="btn secondary" id="btnPortal"><span id="t_btnPortal">🏠 Ton21 Portal</span></button>
     </div>
-    <p class="muted" style="margin-top:8px">💎 Demo mode. Connect wallet for real payouts.</p>
+    <p class="muted" id="t_demoLine" style="margin-top:8px">💎 Demo mode. Connect wallet for real payouts.</p>
   </div>
 
   <div class="row" style="margin-top:8px">
@@ -98,61 +85,174 @@
 </main>
 
 <script>
+  // ---------- Config ----------
   const DAILY_PLAYS=100, DAILY_CAP=1000;
   const BACKEND_URL="https://YOUR-BACKEND.example/payout";
-  const KEY="t21_playzone_v5";
+  const KEY="t21_playzone_v6";
 
+  // ---------- i18n ----------
+  const I18N = {
+    ru: {
+      title:"T21 Play Zone",
+      sub:"Угадай число от 1 до 10 и выиграй Ton21!",
+      balance:"Твой баланс",
+      plays:"Игр осталось сегодня",
+      cap:"Лимит выигрыша за сутки",
+      btnPayout:"💸 Запросить выплату",
+      btnPortal:"🏠 Ton21 Portal",
+      demo:"💎 Бесплатная демо-игра. Подключи кошелёк для реальных выплат.",
+      lang:"Язык:",
+      limitToday:"🎮 Лимит игр на сегодня исчерпан",
+      capToday:"🔒 Достигнут лимит выигрыша на сегодня",
+      nextPlay:"⏱ Следующая игра через"
+    },
+    en: {
+      title:"T21 Play Zone",
+      sub:"Guess a number 1–10 & win Ton21!",
+      balance:"Balance",
+      plays:"Plays left today",
+      cap:"Daily win cap",
+      btnPayout:"💸 Request Payout",
+      btnPortal:"🏠 Ton21 Portal",
+      demo:"💎 Demo mode. Connect wallet for real payouts.",
+      lang:"Language:",
+      limitToday:"🎮 Limit reached for today",
+      capToday:"🔒 Cap reached for today",
+      nextPlay:"⏱ Next play in"
+    },
+    zh: {
+      title:"T21 游戏区",
+      sub:"猜 1–10 的数字并赢得 Ton21！",
+      balance:"余额",
+      plays:"今日剩余次数",
+      cap:"每日上限",
+      btnPayout:"💸 申请提现",
+      btnPortal:"🏠 Ton21 门户",
+      demo:"💎 演示模式。连接钱包以获得真实提现。",
+      lang:"语言：",
+      limitToday:"🎮 今日次数已用完",
+      capToday:"🔒 今日上限已达",
+      nextPlay:"⏱ 下次可玩还剩"
+    },
+    hi: {
+      title:"T21 प्ले ज़ोन",
+      sub:"1–10 में संख्या चुनें और Ton21 जीतें!",
+      balance:"बैलेंस",
+      plays:"आज शेष खेल",
+      cap:"दैनिक सीमा",
+      btnPayout:"💸 पेआउट का अनुरोध",
+      btnPortal:"🏠 Ton21 पोर्टल",
+      demo:"💎 डेमो मोड। असली पेआउट के लिए वॉलेट कनेक्ट करें।",
+      lang:"भाषा:",
+      limitToday:"🎮 आज का लिमिट पूरा",
+      capToday:"🔒 आज की सीमा पूरी",
+      nextPlay:"⏱ अगला खेल:"
+    }
+  };
+
+  function getLang(){
+    const saved = localStorage.getItem("t21_lang");
+    if(saved && I18N[saved]) return saved;
+    const sys = (navigator.language||"en").slice(0,2).toLowerCase();
+    return I18N[sys] ? sys : "en";
+  }
+  let LANG = getLang();
+
+  function applyTexts(){
+    const t = I18N[LANG];
+    // заголовок + подзаголовок
+    document.getElementById("t_title").textContent = t.title;
+    document.getElementById("t_sub").textContent = t.sub;
+
+    // статистика
+    document.getElementById("t_balance").textContent = t.balance;
+    document.getElementById("t_plays").textContent = t.plays;
+    document.getElementById("t_cap").textContent = t.cap;
+
+    // кнопки и подписи
+    document.getElementById("t_btnPayout").textContent = t.btnPayout;
+    document.getElementById("t_btnPortal").textContent = t.btnPortal;
+    document.getElementById("t_demoLine").textContent = t.demo;
+    document.getElementById("t_lang").textContent = t.lang;
+
+    // активная пилюля
+    document.querySelectorAll(".pill").forEach(p=>{
+      p.classList.toggle("active", p.dataset.lang===LANG);
+    });
+
+    // если открыт баннер с лимитом — перерисуем его тоже
+    if(document.getElementById("resultBox").dataset.mode==="limit") {
+      showCooldown(document.getElementById("resultBox"), I18N[LANG].limitToday);
+    }
+    if(document.getElementById("resultBox").dataset.mode==="cap") {
+      showCooldown(document.getElementById("resultBox"), I18N[LANG].capToday);
+    }
+  }
+  function setLang(code){
+    if(!I18N[code]) return;
+    LANG = code;
+    localStorage.setItem("t21_lang", code);
+    applyTexts();
+  }
+
+  // ---------- State ----------
   function todayKey(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
   function loadState(){const s=JSON.parse(localStorage.getItem(KEY)||"{}");const day=todayKey();return s.day===day?s:{day,balance:0,plays:DAILY_PLAYS,cap:0};}
   let state=loadState();
   function save(){localStorage.setItem(KEY,JSON.stringify(state));ui();}
 
+  // ---------- Game ----------
   function weightedPrize(){const w={1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};
     let r=Math.floor(Math.random()*100)+1,a=0;for(let p=1;p<=10;p++){a+=w[p];if(r<=a)return p;}return 1;}
 
   function play(n){
     const out=document.getElementById("resultBox");
-    if(state.plays<=0){showCooldown(out,"🎮 Limit reached for today");return;}
-    if(state.cap>=DAILY_CAP){showCooldown(out,"🔒 Cap reached for today");return;}
+    if(state.plays<=0){showCooldown(out, I18N[LANG].limitToday, "limit");return;}
+    if(state.cap>=DAILY_CAP){showCooldown(out, I18N[LANG].capToday, "cap");return;}
 
     const hidden=Math.floor(Math.random()*10)+1;
     if(n===hidden){
-      let p=weightedPrize();if(state.cap+p>DAILY_CAP)p=Math.max(0,DAILY_CAP-state.cap);
-      state.balance+=p;state.cap+=p;
-      out.innerHTML=`🎉 You guessed ${hidden}! +${p} T21`;
-    }else out.innerHTML=`😅 Missed. Was ${hidden}.`;
-    state.plays--;
-    if(state.plays===0){state.nextReset=Date.now()+24*60*60*1000;}
-    out.style.display="block";save();
+      let p=weightedPrize(); if(state.cap+p>DAILY_CAP) p=Math.max(0,DAILY_CAP-state.cap);
+      state.balance+=p; state.cap+=p;
+      out.dataset.mode=""; out.style.display="block";
+      out.innerHTML=`🎉 ${I18N[LANG].sub.split(' ')[0]} ${hidden}! +${p} T21`;
+    }else{
+      out.dataset.mode=""; out.style.display="block";
+      out.innerHTML=`🙂 Missed. Was <b>${hidden}</b>`;
+    }
+    state.plays--; if(state.plays===0){state.nextReset=Date.now()+24*60*60*1000;}
+    save();
   }
 
-  function showCooldown(out,msg){
+  function showCooldown(out,msg,mode="limit"){
+    out.dataset.mode=mode;
     out.style.display="block";
     if(!state.nextReset){state.nextReset=Date.now()+24*60*60*1000;save();}
-    updateTimer(out,msg);
-    const timer=setInterval(()=>{
-      if(Date.now()>=state.nextReset){clearInterval(timer);resetDay();}
-      else updateTimer(out,msg);
-    },1000);
-  }
+    const tLabel=I18N[LANG].nextPlay;
 
-  function updateTimer(out,msg){
-    const remain=state.nextReset-Date.now();
-    if(remain<=0){resetDay();return;}
-    const h=Math.floor(remain/3600000);
-    const m=Math.floor((remain%3600000)/60000);
-    const s=Math.floor((remain%60000)/1000);
-    const total=24*3600000;
-    const percent=Math.max(0,100-remain/total*100);
-    out.innerHTML=`<span class="danger">${msg}</span><div class="timer">🕐 Next play in: <b>${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}</b></div>
-    <div class="progress"><div class="bar" style="width:${percent}%;"></div></div>`;
+    function tick(){
+      const remain=state.nextReset-Date.now();
+      if(remain<=0){resetDay(); return;}
+      const h=Math.floor(remain/3600000);
+      const m=Math.floor((remain%3600000)/60000);
+      const s=Math.floor((remain%60000)/1000);
+      const total=24*3600000;
+      const percent=Math.max(0,100-remain/total*100);
+      out.innerHTML=`<div class="danger">${msg}</div>
+        <div class="timer">🕐 ${tLabel}: <b>${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</b></div>
+        <div class="progress"><div class="bar" style="width:${percent}%"></div></div>`;
+    }
+    tick();
+    if(out._timer) clearInterval(out._timer);
+    out._timer=setInterval(tick,1000);
   }
 
   function resetDay(){
-    state={day:todayKey(),balance:state.balance,plays:DAILY_PLAYS,cap:0};
-    delete state.nextReset;save();
     const out=document.getElementById("resultBox");
-    out.innerHTML="✅ New day! You can play again.";
+    if(out._timer) clearInterval(out._timer);
+    state={day:todayKey(),balance:state.balance,plays:DAILY_PLAYS,cap:0};
+    delete state.nextReset; save();
+    out.dataset.mode=""; out.innerHTML="✅ New day! You can play again.";
   }
 
   function ui(){
@@ -161,22 +261,24 @@
     document.getElementById("capUsed").textContent=state.cap;
   }
 
-  function buildGrid(){const g=document.getElementById("grid");for(let i=1;i<=10;i++){const b=document.createElement("button");
-    b.className="num";b.textContent=i;b.onclick=()=>play(i);g.appendChild(b);}}
-  buildGrid();ui();
+  // ---------- UI build ----------
+  function buildGrid(){
+    const g=document.getElementById("grid"); g.innerHTML="";
+    for(let i=1;i<=10;i++){const b=document.createElement("button");
+      b.className="num"; b.textContent=i; b.onclick=()=>play(i); g.appendChild(b);}
+  }
 
+  // ---------- Links / Wallet ----------
   document.getElementById("btnPortal").onclick=()=>window.open("https://t.me/Ton21PortalBot","_blank");
-  document.getElementById("btnPayout").onclick=()=>alert("Demo mode only");
+  document.getElementById("btnPayout").onclick=()=>alert("Demo mode");
 
-  const T={ru:{balance:"Баланс",plays:"Игр осталось",cap:"Лимит",lang:"Язык"},
-           en:{balance:"Balance",plays:"Plays left",cap:"Cap",lang:"Language"},
-           zh:{balance:"余额",plays:"次数",cap:"上限",lang:"语言"},
-           hi:{balance:"बैलेंस",plays:"बाकी",cap:"सीमा",lang:"भाषा"}};
-  let LANG=localStorage.getItem("t21_lang")||"en";
-  function setLang(c){LANG=c;localStorage.setItem("t21_lang",c);
-    document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active",p.dataset.lang===c));}
-  document.querySelectorAll(".pill").forEach(p=>p.onclick=()=>setLang(p.dataset.lang));
-  setLang(LANG);
+  // ---------- Init ----------
+  (function init(){
+    try{ window.Telegram?.WebApp?.expand(); }catch(e){}
+    buildGrid(); ui();
+    document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click",()=>setLang(p.dataset.lang)));
+    applyTexts(); // важное: сразу применяем выбранный язык
+  })();
 </script>
 </body>
 </html>
