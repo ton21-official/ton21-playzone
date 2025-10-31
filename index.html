@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,18 +43,12 @@
       font-size: 28px;
       margin-top: 10px;
       color: #f0d173;
-      animation: fadeIn 1.5s ease-out;
     }
 
     p {
       color: #cfcfcf;
       font-size: 15px;
       margin: 5px 25px 25px;
-    }
-
-    .game-area {
-      margin-top: 10px;
-      animation: fadeIn 1.5s ease-out;
     }
 
     .grid {
@@ -88,6 +82,17 @@
       font-size: 18px;
       color: #f0d173;
       min-height: 24px;
+    }
+
+    .prizes {
+      color: #b5b5b5;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .prizes span.active {
+      color: #f0d173;
+      font-weight: bold;
     }
 
     .wallet {
@@ -129,7 +134,7 @@
     <p>💎 Угадай число от 1 до 6 и выиграй Ton21!</p>
   </header>
 
-  <main class="game-area">
+  <main>
     <div class="grid">
       <button class="num-btn" onclick="guess(1)">1</button>
       <button class="num-btn" onclick="guess(2)">2</button>
@@ -141,10 +146,21 @@
 
     <div id="result"></div>
 
+    <div class="prizes">
+      Возможные награды: 
+      <br>
+      <span id="p1">500</span> | 
+      <span id="p2">700</span> | 
+      <span id="p3">1000</span> | 
+      <span id="p4">1500</span> | 
+      <span id="p5">3000</span> | 
+      <span id="p6">5000</span> | 
+      <span id="p7">10000</span> Ton21
+    </div>
+
     <div class="wallet">
-      💎 Кошелёк для вывода:  
-      <br><b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
-      <br>💰 Вход: 0.1 TON = 1 игра
+      💎 Бесплатная демо-игра <br>
+      🪙 Кошелёк для вывода: <b>UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2</b>
     </div>
 
     <button class="back-btn" onclick="openPortal()">🏠 Ton21 Portal</button>
@@ -157,12 +173,20 @@
   <script>
     function guess(num) {
       const random = Math.floor(Math.random() * 6) + 1;
-      const prizes = [5, 7, 9, 12, 15, 18, 20];
+      const prizes = [500, 700, 1000, 1500, 3000, 5000, 10000];
       const prize = prizes[Math.floor(Math.random() * prizes.length)];
       const result = document.getElementById("result");
 
+      // очистить подсветку
+      document.querySelectorAll(".prizes span").forEach(p => p.classList.remove("active"));
+
       if (num === random) {
         result.innerHTML = `🎉 Ты угадал число ${num}!<br>🏆 Приз: ${prize} Ton21`;
+        // подсветить выигранный приз
+        const prizeIndex = prizes.indexOf(prize);
+        if (prizeIndex >= 0) {
+          document.getElementById("p" + (prizeIndex + 1)).classList.add("active");
+        }
       } else {
         result.innerHTML = `😔 Не угадал. Было число ${random}. Попробуй снова!`;
       }
@@ -171,12 +195,12 @@
     function openPortal() {
       try {
         if (window.Telegram && Telegram.WebApp) {
-          Telegram.WebApp.openLink("https://ton21-official.github.io/");
+          Telegram.WebApp.openLink("https://ton21-official.github.io/ton21-portal/");
         } else {
-          window.location.href = "https://ton21-official.github.io/";
+          window.location.href = "https://ton21-official.github.io/ton21-portal/";
         }
       } catch (e) {
-        window.location.href = "https://ton21-official.github.io/";
+        window.location.href = "https://ton21-official.github.io/ton21-portal/";
       }
     }
   </script>
