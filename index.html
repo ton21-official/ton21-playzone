@@ -22,20 +22,39 @@
     .wrap{width:min(860px,100%);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
       border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:22px;box-shadow:0 12px 48px rgba(0,0,0,.35)}
     .center{text-align:center}
-    .logo-aura{width:150px;height:150px;margin:6px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);display:grid;place-items:center}
-    .logo{width:118px;height:118px;border-radius:50%;background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;outline:3px solid rgba(255,223,136,.85);
-      box-shadow:0 0 24px rgba(255,223,136,.55), inset 0 0 20px rgba(255,255,255,.05)}
-    h1{margin:8px 0 6px;font-size:34px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
-    .subtitle{color:var(--muted);margin:0 0 14px}
-    .grid9{display:grid;gap:14px;grid-template-columns:repeat(3,1fr);max-width:420px;margin:18px auto}
-    .num{border:0;border-radius:14px;padding:20px 0;font-size:22px;font-weight:800;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;
-      box-shadow:0 10px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer;transition:transform .06s}
-    .num:active{transform:translateY(1px) scale(.99)}
+    .logo-aura{width:140px;height:140px;margin:6px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,223,136,.5), rgba(255,223,136,0) 60%);display:grid;place-items:center}
+    .logo{width:110px;height:110px;border-radius:50%;background:#0e1a2b url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/80% no-repeat;outline:3px solid rgba(255,223,136,.85);
+      box-shadow:0 0 20px rgba(255,223,136,.55), inset 0 0 18px rgba(255,255,255,.05)}
+    h1{margin:8px 0 6px;font-size:30px;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+    .subtitle{color:var(--muted);margin:0 0 14px;font-size:15px}
+    
+    /* ——— 9 плиток, компактнее ——— */
+    .grid9{
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(3,1fr);
+      max-width:330px;
+      margin:16px auto;
+    }
+    .num{
+      border:0;
+      border-radius:12px;
+      padding:14px 0;
+      font-size:18px;
+      font-weight:800;
+      background:linear-gradient(180deg,var(--gold1),var(--gold2));
+      color:#3a2a00;
+      box-shadow:0 6px 14px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);
+      cursor:pointer;
+      transition:transform .06s;
+    }
+    .num:active{transform:translateY(1px) scale(.98)}
+
     .panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;margin:10px auto;max-width:720px}
     .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:14px;padding:14px 16px;
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:14px;padding:12px 14px;
       background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#3a2a00;font-weight:800;
-      box-shadow:0 12px 24px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer}
+      box-shadow:0 10px 20px rgba(240,207,109,.25), inset 0 1px 0 rgba(255,255,255,.5);cursor:pointer}
     .btn.secondary{background:linear-gradient(180deg,#ffd86a,#f2c551)}
     .muted{color:var(--muted)} .danger{color:#ff6b6b}
     .footer{color:var(--muted);text-align:center;margin-top:8px;font-size:13px}
@@ -89,7 +108,7 @@
 </main>
 
 <script>
-const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v8";
+const DAILY_PLAYS=100,DAILY_CAP=1000,KEY="t21_playzone_v9";
 const I18N={
  ru:{title:"T21 Play Zone",sub:"Угадай число от 1 до 9 и выиграй Ton21!",balance:"Твой баланс",
      plays:"Игр осталось сегодня",cap:"Лимит выигрыша за сутки",btnPayout:"💸 Запросить выплату",
