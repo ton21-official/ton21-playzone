@@ -67,20 +67,18 @@
     <p id="t_sub" class="subtitle">Guess a number 1–10 & win Ton21!</p>
   </div>
 
-  <!-- TON Connect button -->
   <div class="panel center">
     <div id="ton-connect"></div>
     <div id="wallet-line" class="hint" style="margin-top:8px;"></div>
   </div>
 
-  <!-- Game grid -->
   <section class="grid10" id="grid"></section>
 
   <div class="stat">
     <div id="balanceLine">💰 <span id="t_balance">Your balance</span>:
       <span class="balance"><span id="balance">0</span> Ton21</span></div>
-    <div id="playsLine" class="muted" style="margin-top:6px">🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">10</span> / 10</div>
-    <div id="capLine" class="muted">🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 100 T21</div>
+    <div id="playsLine" class="muted" style="margin-top:6px">🎮 <span id="t_plays">Plays left today</span>: <span id="playsLeft">100</span> / 100</div>
+    <div id="capLine" class="muted">🔒 <span id="t_cap">Daily win cap</span>: +<span id="capUsed">0</span> / 1000 T21</div>
   </div>
 
   <div class="panel center" id="resultBox" style="display:none"></div>
@@ -101,7 +99,6 @@
 
   <div class="sep"></div>
 
-  <!-- Language switch -->
   <div class="row" style="justify-content:center;margin-top:6px">
     <span class="muted" id="t_lang">Language:</span>
     <span class="pill" data-lang="ru">RU</span>
@@ -114,15 +111,13 @@
 </main>
 
 <script>
-  // ====== CONFIG ======
-  const BACKEND_URL = "https://YOUR-BACKEND.example/payout"; // <-- поменяй, когда подключим сервер
-  const WITHDRAW_TON_ADDRESS = "UQAqZ3e_Qf1zX3AxcaLyj...KXIskdUs2"; // ваш Tonkeeper-адрес для вывода
-  const DAILY_PLAYS = 10;           // игр в сутки
-  const DAILY_CAP = 100;            // максимум выигрыша/сутки (T21)
-  const MIN_PRIZE = 1, MAX_PRIZE = 10; // диапазон выигрышей T21
-  const DEMO_MODE = true;           // демо бесплатно
+  const BACKEND_URL = "https://YOUR-BACKEND.example/payout";
+  const WITHDRAW_TON_ADDRESS = "UQAqZ3e_Qf1zX3AxcaLyj...KXIskdUs2";
+  const DAILY_PLAYS = 100;
+  const DAILY_CAP = 1000;
+  const MIN_PRIZE = 1, MAX_PRIZE = 10;
+  const DEMO_MODE = true;
 
-  // ====== i18n ======
   const T = {
     ru:{ title:"T21 Play Zone", sub:"Угадай число от 1 до 10 и выиграй Ton21!",
       balance:"Твой баланс", plays:"Игр осталось сегодня", cap:"Лимит выигрыша за сутки",
@@ -141,12 +136,14 @@
       payout:"पेयआउट का अनुरोध", demo:"डेमो मोड", demo2:"पेयआउट हेतु वॉलेट और बैकएंड आवश्यक।",
       withdraw:"निकासी पता", lang:"भाषा:" }
   };
+
   function getLang(){
     const saved = localStorage.getItem("t21_lang");
     if(saved && T[saved]) return saved;
     const sys = (navigator.language||"en").slice(0,2).toLowerCase();
     return T[sys] ? sys : "en";
   }
+
   let LANG = getLang();
   function applyTexts(){
     const t=T[LANG];
@@ -164,7 +161,6 @@
   }
   function setLang(code){ if(!T[code])return; LANG=code; localStorage.setItem("t21_lang",LANG); applyTexts(); }
 
-  // ====== Wallet (TON Connect) ======
   let tonUI, connectedAddress=null;
   async function initTonConnect(){
     try{
@@ -180,8 +176,7 @@
     }catch(e){ console.warn("TON Connect init failed", e); }
   }
 
-  // ====== Game State in localStorage ======
-  const KEY="t21_playzone_v3";
+  const KEY="t21_playzone_v4";
   function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
   function loadState(){
     const s = JSON.parse(localStorage.getItem(KEY)||"{}");
@@ -192,11 +187,11 @@
   function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); refreshUI(); }
   let state = loadState();
 
-  // ====== UI helpers ======
   function tgOpen(url){
     try{ if(window.Telegram?.WebApp){ window.Telegram.WebApp.openLink(url); return; } }catch(e){}
     window.open(url,"_blank","noopener");
   }
+
   function refreshUI(){
     document.getElementById("balance").textContent = state.balance;
     document.getElementById("playsLeft").textContent = state.plays;
@@ -204,9 +199,8 @@
     document.getElementById("withdrawAddr").textContent = WITHDRAW_TON_ADDRESS;
   }
 
-  // ====== Prize logic (1..10, с бОльшей вероятностью мелких) ======
   function weightedPrize(){
-    const weights = {1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4}; // сумма 100
+    const weights = {1:18,2:16,3:14,4:12,5:10,6:8,7:7,8:6,9:5,10:4};
     let r = Math.floor(Math.random()*100)+1, acc=0;
     for(let p=1; p<=10; p++){ acc+=weights[p]; if(r<=acc) return p; }
     return 1;
@@ -214,46 +208,42 @@
 
   function play(n){
     const out = document.getElementById("resultBox");
-    if(state.plays<=0){ out.style.display="block"; out.innerHTML = `<span class="danger">⛔ Дневной лимит игр исчерпан.</span>`; return; }
-    if(state.capUsed>=DAILY_CAP){ out.style.display="block"; out.innerHTML = `<span class="danger">🔒 Дневной лимит выигрыша достигнут.</span>`; return; }
+    if(state.plays<=0){ out.style.display="block"; out.innerHTML = `<span class="danger">⛔ Limit reached</span>`; return; }
+    if(state.capUsed>=DAILY_CAP){ out.style.display="block"; out.innerHTML = `<span class="danger">🔒 Cap reached</span>`; return; }
 
     const hidden = Math.floor(Math.random()*10)+1;
     if(n===hidden){
       let prize = weightedPrize();
-      // не превышаем суточный CAP
       if(state.capUsed + prize > DAILY_CAP) prize = Math.max(0, DAILY_CAP - state.capUsed);
       state.balance += prize;
       state.capUsed += prize;
-      out.innerHTML = `🎉 <b>Угадал ${hidden}!</b> +${prize} T21`;
+      out.innerHTML = `🎉 <b>Guessed ${hidden}!</b> +${prize} T21`;
     }else{
-      out.innerHTML = `🙂 Не угадал. Было: <b>${hidden}</b>`;
+      out.innerHTML = `🙂 Missed. It was <b>${hidden}</b>`;
     }
     state.plays -= 1;
     out.style.display = "block";
     saveState();
   }
 
-  // ====== Payout Request (backend stub) ======
   async function requestPayout(){
     if(!connectedAddress){ alert("Connect wallet first."); return; }
     if(state.balance<=0){ alert("Balance is zero."); return; }
     try{
-      // отправляем на backend: кто, сколько и подпись не требуется (сервер проверит анти-фрод)
       const res = await fetch(BACKEND_URL, {
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({ address: connectedAddress, amount: state.balance, source:"t21-playzone" })
       });
       if(!res.ok) throw new Error("Server error");
-      alert("✅ Запрос на выплату отправлен! Ожидай зачисления.");
+      alert("✅ Request sent! Wait for credit.");
       state.balance = 0; saveState();
     }catch(e){
       console.error(e);
-      alert("❗ Не удалось отправить запрос. Проверь BACKEND_URL.");
+      alert("❗ Connection error. Check BACKEND_URL.");
     }
   }
 
-  // ====== Build grid / bindings ======
   function buildGrid(){
     const grid=document.getElementById("grid");
     grid.innerHTML="";
@@ -265,19 +255,13 @@
     }
   }
 
-  // ====== Init ======
   (function init(){
-    // Telegram expand
     try{ window.Telegram?.WebApp?.expand(); }catch(e){}
-    // i18n
     applyTexts();
     document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click", ()=>setLang(p.dataset.lang)));
-    // UI
     buildGrid(); refreshUI();
-    // Buttons
     document.getElementById("btnPortal").addEventListener("click", ()=>tgOpen("https://t.me/Ton21PortalBot"));
     document.getElementById("btnPayout").addEventListener("click", requestPayout);
-    // TON Connect
     initTonConnect();
   })();
 </script>
