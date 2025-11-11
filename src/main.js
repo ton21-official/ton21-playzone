@@ -1,51 +1,73 @@
+// === CONFIG ===
 const API = "https://t21-playzone-api.t21playzone.workers.dev";
 
-// === загрузка начального состояния ===
+// === LOAD INITIAL STATE ===
 async function loadState() {
-  try {
-    const res = await fetch(`${API}/state`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API}/state`);
+        const data = await res.json();
 
-    document.getElementById("balance").innerText = data.balance;
-    document.getElementById("plays").innerText = data.plays;
-    document.getElementById("limit").innerText = data.limit;
-
-  } catch(e) {
-    console.log("Ошибка:", e);
-  }
+        document.getElementById("balance").textContent = data.balance;
+        document.getElementById("playCount").textContent = data.plays;
+        document.getElementById("limit").textContent = data.limit;
+    } catch (err) {
+        console.error("STATE ERROR:", err);
+    }
 }
 
-// === реклама ===
+// === WATCH AD ===
 async function watchAd(amount) {
-  try {
-    const res = await fetch(`${API}/ad/amount-${amount}`, { method: "POST" });
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API}/ad/amount-${amount}`);
+        const data = await res.json();
 
-    document.getElementById("balance").innerText = data.balance;
-    document.getElementById("plays").innerText = data.plays;
-    document.getElementById("limit").innerText = data.limit;
-
-  } catch(e) {
-    alert("Ошибка");
-  }
+        document.getElementById("balance").textContent = data.balance;
+        document.getElementById("playCount").textContent = data.plays;
+        document.getElementById("limit").textContent = data.limit;
+    } catch (err) {
+        console.error("AD ERROR:", err);
+    }
 }
 
-// === игра ===
+// === PLAY GAME ===
 async function play(num) {
-  try {
-    const res = await fetch(`${API}/play/${num}`, { method: "POST" });
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API}/play/number-${num}`);
+        const data = await res.json();
 
-    alert(data.message);
+        if (data.error === "LIMIT_REACHED") {
+            alert("Лимит игр достигнут. Возвращайся позже! ⌛");
+            return;
+        }
 
-    document.getElementById("balance").innerText = data.balance;
-    document.getElementById("plays").innerText = data.plays;
-    document.getElementById("limit").innerText = data.limit;
+        // Обновляем UI
+        if (data.win) {
+            alert(`Поздравляем! 🎉 Вы выиграли ${data.reward} T21`);
+        } else {
+            alert("Увы… Попробуй ещё 😢");
+        }
 
-  } catch(e) {
-    alert("Ошибка");
-  }
+        document.getElementById("balance").textContent = data.balance;
+        document.getElementById("playCount").textContent = data.plays;
+        document.getElementById("limit").textContent = data.limit;
+
+    } catch (err) {
+        console.error("PLAY ERROR:", err);
+    }
 }
 
-// авто-обновление при заходе
+// === SHARE ===
+function share() {
+    if (navigator.share) {
+        navigator.share({
+            title: "T21 Play Zone",
+            text: "🔥 Try to win free T21 tokens!",
+            url: window.location.href
+        });
+    } else {
+        alert("Ваш браузер не поддерживает Share API.");
+    }
+}
+
+// === INIT ===
 loadState();
