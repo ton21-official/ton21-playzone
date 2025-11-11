@@ -11,7 +11,8 @@ let playLimit = 100;
 let timerActive = false;
 
 // === API URL ===
-const API_URL = "https://t21-playzone-api.ton21-official.workers.dev";
+const API_URL = "https://t21-playzone-api.t21playzone.workers.dev";
+
 
 // === LOAD STATE ===
 async function loadState() {
