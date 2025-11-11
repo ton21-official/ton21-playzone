@@ -1,122 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-  <title>T21 PlayZone</title>
-  <meta name="color-scheme" content="dark light">
+  <meta charset="utf-8">
+  <title>T21 Play Zone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    :root {
-      --bg: #0b0f16;
-      --panel: #111724;
-      --gold1: #ffdf88;
-      --gold2: #f0cf6d;
-      --txt: #e8ecf7;
-      --muted: #9fb0c3;
-      --btn: #1b2533;
-      --btn-active: #273244;
-      --ok: #25d366;
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, sans-serif;
-    }
-
     body {
       margin: 0;
-      padding: 16px;
-      background: var(--bg);
-      color: var(--txt);
-    }
-
-    h2, h3 {
-      margin: 16px 0;
-      font-weight: 600;
+      background: #0b0f16;
+      font-family: Arial, sans-serif;
+      color: #e8ecf7;
       text-align: center;
+      padding: 20px;
     }
-
     .panel {
-      background: var(--panel);
-      padding: 16px;
+      background: #111724;
+      padding: 20px;
       border-radius: 12px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.06);
       margin-bottom: 20px;
     }
-
-    .panel button {
+    button {
       width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 10px;
+      padding: 16px;
+      margin: 6px 0;
       border: none;
-      cursor: pointer;
-      background: var(--gold1);
-      color: black;
-      transition: 0.2s;
+      border-radius: 12px;
+      font-size: 18px;
+      background: #ffdf88;
+      color: #000;
+      font-weight: bold;
     }
-
-    .panel button.secondary {
-      background: var(--btn);
-      color: var(--txt);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    button.secondary {
+      background: #1e2735;
+      color: #e8ecf7;
     }
-
-    .panel button:hover {
-      opacity: 0.9;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin: 20px 0;
-    }
-
-    .grid button {
-      padding: 18px;
-      font-size: 20px;
-      font-weight: 700;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: var(--btn);
-      color: var(--txt);
-      cursor: pointer;
-      transition: 0.25s ease;
-    }
-
-    .grid button:active {
-      background: var(--btn-active);
-      transform: scale(0.95);
-    }
-
-    #timer {
-      text-align: center;
-      margin-bottom: 10px;
-      color: var(--gold2);
-      font-weight: 600;
-    }
-
-    .share-btn {
-      width: 100%;
       margin-top: 20px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      background: var(--gold2);
-      color: black;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
     }
-
-    .share-btn:hover {
-      opacity: 0.85;
+    .grid button {
+      background: #1d2633;
+      font-size: 22px;
+      padding: 18px;
     }
   </style>
 </head>
@@ -126,19 +54,14 @@
   <h2>Ton21 PlayZone 💎</h2>
 
   <div class="panel">
-    <h3>Ваш баланс T21: <span id="balance">0</span></h3>
-    <p>
-      Игры: <span id="playCount">0</span> —
-      Лимит: <span id="limit">100</span>
-    </p>
+    <h3>Баланс T21: <span id="balance">0</span></h3>
+    <p>Игры: <span id="plays">0</span> — Лимит: <span id="limit">100</span></p>
 
     <button onclick="watchAd(100)">Смотреть рекламу (+100 T21)</button>
     <button onclick="watchAd(10)" class="secondary">Смотреть рекламу (+10 T21)</button>
   </div>
 
-  <div id="timer"></div>
-
-  <h3>Угадай число от 1 до 9 🌀</h3>
+  <h3>Угадай число от 1 до 9 🔮</h3>
 
   <div class="grid">
     <button onclick="play(1)">1</button>
@@ -152,9 +75,7 @@
     <button onclick="play(9)">9</button>
   </div>
 
-  <button class="share-btn" onclick="share()">Поделиться 🎉</button>
-
-  <script src="src/main.js"></script>
+  <script src="main.js"></script>
 
 </body>
 </html>
