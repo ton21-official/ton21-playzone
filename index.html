@@ -2,229 +2,433 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>T21 Play Zone</title>
+<link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
 <style>
-:root {
-  --bg:#0b0f16;
-  --panel:#121826;
-  --gold1:#ffdf88;
-  --gold2:#f0cf6d;
-  --txt:#e8ecf7;
-  --accent:#1f2a45;
-}
-body {
-  margin:0;
-  font-family:'Segoe UI', Roboto, system-ui;
-  background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 80%);
-  color:var(--txt);
-  text-align:center;
-}
-.container {
-  max-width:460px;
-  margin:auto;
-  padding:25px 15px 60px;
-}
-h1 {
-  color:var(--gold1);
-  text-shadow:0 0 10px rgba(255,223,136,0.4);
-  margin:5px 0 15px;
-}
-select {
-  background:var(--accent);
-  color:var(--gold1);
-  border:none;
-  border-radius:8px;
-  padding:6px 10px;
-  font-size:15px;
-  float:right;
-  margin-top:10px;
-}
-p {margin:6px 0;}
-input {
-  width:90%;
-  max-width:400px;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #2a2a2a;
-  background:var(--accent);
-  color:#fff;
-  text-align:center;
-  font-size:15px;
-}
-button {
-  width:90%;
-  max-width:400px;
-  margin:6px auto;
-  padding:12px 20px;
-  border:none;
-  border-radius:10px;
-  font-weight:600;
-  font-size:16px;
-  color:#111;
-  background:linear-gradient(90deg,var(--gold1),var(--gold2));
-  box-shadow:0 3px 8px rgba(240,207,109,0.25);
-  cursor:pointer;
-  transition:all .2s;
-}
-button:hover {
-  transform:scale(1.03);
-  box-shadow:0 5px 15px rgba(240,207,109,0.4);
-}
-#numbers {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  max-width:400px;
-  margin:20px auto;
-}
-#numbers button {
-  background:var(--accent);
-  color:var(--gold1);
-  border:none;
-  font-size:22px;
-  height:65px;
-  border-radius:10px;
-  transition:.15s;
-}
-#numbers button:hover {background:#1b2236; transform:scale(1.05);}
-.flash {
-  position:fixed;
-  bottom:30px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(20,45,25,0.9);
-  border:1px solid #2a5d34;
-  color:#b9ffd1;
-  padding:12px 16px;
-  border-radius:10px;
-  font-weight:bold;
-  display:none;
-  z-index:999;
-}
+  :root{
+    --bg:#0b0f16;--panel:#121827;--muted:#9fb0c3;
+    --gold1:#ffdf88;--gold2:#f0cf6d;--txt:#e8ecf7;--accent:#3cc8ff;
+    --button-shadow:0 8px 20px rgba(240,207,109,.25);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, #0b0f16 60%),
+                   radial-gradient(800px 500px at 120% 110%, #132033 0%, transparent 60%);
+       color:var(--txt);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+  .wrap{max-width:960px;margin:24px auto;padding:16px}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-emoji{font-size:26px}
+  .brand h1{font-size:20px;margin:0}
+  .card{background:linear-gradient(180deg,#0f1524 0%, #0c1220 100%);border:1px solid #1c2742;border-radius:16px;padding:18px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .pill{flex:1;min-width:160px;background:#0f1a2c;border:1px solid #1e2a45;color:var(--txt);
+        border-radius:12px;padding:12px 14px;font-weight:600}
+  .muted{color:var(--muted);font-weight:500}
+  input[type=text]{width:100%;padding:14px 16px;border-radius:12px;border:1px solid #273553;background:#0f1a2c;color:var(--txt)}
+  .btn{display:block;width:100%;padding:14px 18px;border-radius:12px;border:0;cursor:pointer;
+       background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#2b1f06;font-weight:800;
+       box-shadow:var(--button-shadow);transition:transform .06s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.secondary{background:transparent;color:var(--gold1);border:1px solid var(--gold2)}
+  .btn.disabled,.btn:disabled{opacity:.5;pointer-events:none}
+  .section{margin-top:18px}
+  .title{font-weight:800;margin:0 0 10px}
+  .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .key{padding:14px;border-radius:12px;background:#0f1a2c;border:1px solid #1e2a45;
+       font-size:20px;font-weight:800;cursor:pointer;text-align:center}
+  .key:active{transform:scale(.98)}
+  .topbar{display:flex;gap:8px;align-items:center}
+  select{appearance:none;background:#0f1a2c;border:1px solid #223150;color:var(--txt);
+         padding:10px 28px 10px 12px;border-radius:10px}
+  .note{font-size:13px;color:var(--muted);margin-top:8px}
+  .flash{position:fixed;top:18px;left:50%;transform:translateX(-50%);
+         background:#122033;border:1px solid #274060;color:#bfe5ff;
+         padding:10px 14px;border-radius:10px;display:none;z-index:30}
+  /* ad modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:40}
+  .modal .box{width:min(520px,92vw);background:#0f1a2c;border:1px solid #243354;border-radius:16px;padding:18px}
+  .progress{height:10px;background:#0c1220;border:1px solid #23324f;border-radius:999px;overflow:hidden}
+  .progress>i{display:block;height:100%;background:linear-gradient(90deg,#36c3ff,#8fe3ff);
+              width:0%}
+  .row-split{display:flex;gap:12px}
+  .row-split .btn{flex:1}
+  .footer{margin-top:24px;text-align:center;color:#7fa7c8;font-size:13px}
 </style>
 </head>
 <body>
-<div class="container">
-  <select id="lang" onchange="setLang(this.value)">
-    <option value="EN">🌐 EN</option>
-    <option value="RU">🇷🇺 RU</option>
-    <option value="CN">🇨🇳 CN</option>
-    <option value="IN">🇮🇳 IN</option>
-    <option value="AM">🇦🇲 AM</option>
-  </select>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="brand-emoji">💎</div>
+      <h1>T21 Play Zone</h1>
+    </div>
+    <div class="topbar">
+      <span>🌐</span>
+      <select id="langSel" title="Language">
+        <option value="en">EN</option>
+        <option value="ru" selected>RU</option>
+        <option value="cn">中文</option>
+        <option value="in">हिन्दी</option>
+        <option value="am">Հայ</option>
+      </select>
+    </div>
+  </header>
 
-  <h1 id="title">💎 T21 Play Zone</h1>
-  <p id="balance-label">Balance: <span id="balance">0</span> T21</p>
-  <p id="plays-label">Plays left: <span id="plays">100</span></p>
+  <div class="card">
+    <div class="row">
+      <div class="pill" id="balanceBox">Balance: 0 T21</div>
+      <div class="pill" id="playsBox">Plays left: 100</div>
+    </div>
 
-  <input id="wallet" placeholder="Enter your TON address"/>
-  <button id="save-btn" onclick="saveWallet()">💾 Save Wallet</button>
-  <button id="ad-btn" onclick="showAd()">🎬 Watch Ad (+10 plays)</button>
-  <button id="share-btn" onclick="share()">🤝 Share (+5 T21)</button>
-  <button id="withdraw-btn" onclick="withdraw()">💸 Withdraw T21</button>
+    <div class="section">
+      <label class="muted" id="enterLbl">Enter your TON address</label>
+      <input id="wallet" type="text" placeholder="EQ... / UQ..." autocomplete="off"/>
+      <div class="note" id="saveNote"></div>
+      <div class="row">
+        <button class="btn" id="saveBtn">Save Wallet</button>
+      </div>
 
-  <h3 id="guess-title">🎯 Guess 1–9 and Win T21</h3>
-  <div id="numbers"></div>
+      <div class="row">
+        <button class="btn" id="adBtn">🎬 Watch Ad (+10 plays)</button>
+      </div>
+
+      <div class="row">
+        <button class="btn secondary" id="shareBtn">🤝 Share (+5 T21)</button>
+      </div>
+
+      <div class="row">
+        <button class="btn secondary" id="withdrawBtn">💸 Withdraw T21</button>
+      </div>
+
+      <div class="section">
+        <h3 class="title" id="guessTitle">🎯 Guess 1–9</h3>
+        <div class="note" id="hintNote"></div>
+        <div class="keys" id="keys"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" id="footerNote">T21 demo: plays stored locally, withdrawals open Tonkeeper link.</div>
 </div>
 
-<div id="flash" class="flash"></div>
+<!-- flash -->
+<div class="flash" id="flash"></div>
+
+<!-- Ad modal -->
+<div class="modal" id="adModal" role="dialog" aria-modal="true">
+  <div class="box">
+    <h3 id="adTitle" style="margin-top:0">Sponsored Video</h3>
+    <p id="adText" class="muted" style="margin:6px 0 12px">Please wait... You can skip after 5 seconds.</p>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="row-split" style="margin-top:14px">
+      <button class="btn secondary" id="skipBtn" disabled>Skip</button>
+      <button class="btn" id="claimBtn" disabled>Close & Claim</button>
+    </div>
+  </div>
+</div>
 
 <script>
-let balance=0, plays=100, lang="EN";
-const texts={
-  EN:{title:"💎 T21 Play Zone",balance:"Balance:",plays:"Plays left:",
-      save:"💾 Save Wallet",watch:"🎬 Watch Ad (+10 plays)",
-      share:"🤝 Share (+5 T21)",withdraw:"💸 Withdraw T21",
-      guess:"🎯 Guess 1–9",saved:"✅ Wallet saved!",
-      noPlays:"🎮 No plays left!",reward:(r)=>`🎯 You won +${r} T21`,
-      wrong:(n)=>`❌ Wrong! It was ${n}`,addPlays:"+10 plays added!",
-      shareReward:"+5 T21 for sharing!",withdrew:(a)=>`💸 Withdrawn ${a} T21!`},
-  RU:{title:"💎 Игровая зона T21",balance:"Баланс:",plays:"Осталось игр:",
-      save:"💾 Сохранить адрес",watch:"🎬 Смотреть рекламу (+10 игр)",
-      share:"🤝 Поделиться (+5 T21)",withdraw:"💸 Вывести T21",
-      guess:"🎯 Угадай число 1–9",saved:"✅ Адрес сохранён!",
-      noPlays:"🎮 Игры закончились!",reward:(r)=>`🎯 Ты выиграл +${r} T21`,
-      wrong:(n)=>`❌ Мимо! Было ${n}`,addPlays:"+10 игр добавлено!",
-      shareReward:"+5 T21 за поделиться!",withdrew:(a)=>`💸 Выведено ${a} T21!`}
+/* ===================== i18n ===================== */
+const t = {
+  en:{
+    title:"T21 Play Zone",
+    balance:(v)=>`Balance: ${v} T21`,
+    plays:(v)=>`Plays left: ${v}`,
+    enter:"Enter your TON address",
+    note:"We will save your address for payouts.",
+    save:"Save Wallet",
+    saved:"✅ Address saved",
+    ad:"+10 plays added!",
+    adBtn:"🎬 Watch Ad (+10 plays)",
+    share:"🤝 Share (+5 T21)",
+    shareDone:"+5 T21 added for share",
+    withdraw:"💸 Withdraw T21",
+    withdrew:(n)=>`Preparing withdrawal of ${n} T21…`,
+    needPlays:"No plays left — watch an ad to get +10.",
+    guessTitle:"🎯 Guess 1–9",
+    hint:"Tap a number. Each try spends 1 play. Win small rewards randomly.",
+    adTitle:"Sponsored Video",
+    adText:"Please wait… You can skip after 5 seconds.",
+    skip:"Skip",
+    claim:"Close & Claim",
+    win:(n)=>`🎉 You won +${n} T21!`,
+    lose:"Miss! Try again.",
+  },
+  ru:{
+    title:"Игровая зона T21",
+    balance:(v)=>`Баланс: ${v} T21`,
+    plays:(v)=>`Осталось игр: ${v}`,
+    enter:"Введите адрес TON",
+    note:"Сохраним адрес для выплат.",
+    save:"Сохранить адрес",
+    saved:"✅ Адрес сохранён",
+    ad:"+10 игр добавлено!",
+    adBtn:"🎬 Смотреть рекламу (+10 игр)",
+    share:"🤝 Поделиться (+5 T21)",
+    shareDone:"+5 T21 за репост",
+    withdraw:"💸 Вывести T21",
+    withdrew:(n)=>`Готовим вывод ${n} T21…`,
+    needPlays:"Игры закончились — посмотри рекламу и получи +10.",
+    guessTitle:"🎯 Угадай 1–9",
+    hint:"Нажимай число. Каждая попытка тратит 1 игру. Призы выдаются случайно.",
+    adTitle:"Рекламный ролик",
+    adText:"Подождите… Пропуск доступен через 5 секунд.",
+    skip:"Пропустить",
+    claim:"Закрыть и получить",
+    win:(n)=>`🎉 Победа! +${n} T21`,
+    lose:"Не угадал. Ещё раз!",
+  },
+  cn:{
+    title:"T21 游戏区",
+    balance:(v)=>`余额: ${v} T21`,
+    plays:(v)=>`剩余次数: ${v}`,
+    enter:"输入你的 TON 地址",
+    note:"我们会保存地址用于发放奖励。",
+    save:"保存地址",
+    saved:"✅ 已保存地址",
+    ad:"+10 次数已添加！",
+    adBtn:"🎬 看广告（+10 次）",
+    share:"🤝 分享（+5 T21）",
+    shareDone:"分享奖励 +5 T21",
+    withdraw:"💸 提现 T21",
+    withdrew:(n)=>`准备提现 ${n} T21…`,
+    needPlays:"次数用完—看广告获得 +10。",
+    guessTitle:"🎯 猜数字 1–9",
+    hint:"点数字，每次消耗 1 次，奖励随机发放。",
+    adTitle:"赞助视频",
+    adText:"请稍等… 5 秒后可跳过。",
+    skip:"跳过",
+    claim:"关闭并领取",
+    win:(n)=>`🎉 获得 +${n} T21`,
+    lose:"没中，再试！",
+  },
+  in:{
+    title:"T21 प्ले ज़ोन",
+    balance:(v)=>`बैलेंस: ${v} T21`,
+    plays:(v)=>`बाकी चालें: ${v}`,
+    enter:"अपना TON पता दर्ज करें",
+    note:"इनाम भेजने के लिए पता सहेजेंगे।",
+    save:"सेव वॉलेट",
+    saved:"✅ पता सेव हो गया",
+    ad:"+10 चालें मिल गईं!",
+    adBtn:"🎬 विज्ञापन देखें (+10)",
+    share:"🤝 शेयर करें (+5 T21)",
+    shareDone:"शेयर बोनस +5 T21",
+    withdraw:"💸 T21 निकालें",
+    withdrew:(n)=>`${n} T21 निकासी तैयार…`,
+    needPlays:"चालें खत्म—+10 पाने के लिए विज्ञापन देखें。",
+    guessTitle:"🎯 1–9 में से चुनें",
+    hint:"हर प्रयास 1 चाल खर्च करता है। इनाम रैंडम है।",
+    adTitle:"प्रायोजित वीडियो",
+    adText:"रुकिए… 5 सेकंड बाद Skip होगा।",
+    skip:"Skip",
+    claim:"Close & Claim",
+    win:(n)=>`🎉 जीते +${n} T21`,
+    lose:"चूक गए, फिर कोशिश करें!",
+  },
+  am:{
+    title:"T21 Խաղային գոտի",
+    balance:(v)=>`Մնացորդ՝ ${v} T21`,
+    plays:(v)=>`Մնացած խաղեր՝ ${v}`,
+    enter:"Մուտքագրեք ձեր TON հասցեն",
+    note:"Հասցեն կպահպանենք վճարումների համար։",
+    save:"Պահպանել հասցեն",
+    saved:"✅ Հասցեն պահպանվեց",
+    ad:"+10 խաղ ավելացվեց!",
+    adBtn:"🎬 Դիտել գովազդը (+10 խաղ)",
+    share:"🤝 Կիսվել (+5 T21)",
+    shareDone:"+5 T21 կիսվելու համար",
+    withdraw:"💸 Դուրս բերել T21",
+    withdrew:(n)=>`Պատրաստում ենք ${n} T21 դուրսբերում…`,
+    needPlays:"Խաղերը վերջացան — դիտիր գովազդ և ստացիր +10։",
+    guessTitle:"🎯 Կռահիր 1–9",
+    hint:"Յուրաքանչյուր փորձը ծախսում է 1 խաղ։ Մրցանակները պատահական են։",
+    adTitle:"Հովանավորի տեսահոլովակ",
+    adText:"Սպասեք… 5 վրկ հետո կարող եք Skip անել։",
+    skip:"Skip",
+    claim:"Փակել և ստանալ",
+    win:(n)=>`🎉 Հաղթանակ +${n} T21`,
+    lose:"Չստացվեց, նորից փորձիր!",
+  }
 };
 
-function setLang(l){lang=l;const t=texts[l];
-  document.getElementById("title").innerText=t.title;
-  document.getElementById("balance-label").firstChild.textContent=t.balance+" ";
-  document.getElementById("plays-label").firstChild.textContent=t.plays+" ";
-  document.getElementById("save-btn").innerText=t.save;
-  document.getElementById("ad-btn").innerText=t.watch;
-  document.getElementById("share-btn").innerText=t.share;
-  document.getElementById("withdraw-btn").innerText=t.withdraw;
-  document.getElementById("guess-title").innerText=t.guess;
+/* ============== state & helpers ============== */
+let lang = localStorage.getItem('t21_lang') || 'ru';
+let balance = Number(localStorage.getItem('t21_balance')||0);
+let plays   = Number(localStorage.getItem('t21_plays')||100);
+let wallet  = localStorage.getItem('t21_wallet') || '';
+let shared  = localStorage.getItem('t21_shared') === '1';
+let target  = (Math.random()*9|0)+1;
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+
+const el = {
+  langSel: $('#langSel'),
+  balanceBox: $('#balanceBox'),
+  playsBox: $('#playsBox'),
+  wallet: $('#wallet'),
+  saveBtn: $('#saveBtn'),
+  saveNote: $('#saveNote'),
+  adBtn: $('#adBtn'),
+  shareBtn: $('#shareBtn'),
+  withdrawBtn: $('#withdrawBtn'),
+  guessTitle: $('#guessTitle'),
+  hintNote: $('#hintNote'),
+  keys: $('#keys'),
+  flash: $('#flash'),
+  adModal: $('#adModal'), bar: $('#bar'),
+  adTitle: $('#adTitle'), adText: $('#adText'),
+  skipBtn: $('#skipBtn'), claimBtn: $('#claimBtn'),
+  enterLbl: $('#enterLbl'), footerNote: $('#footerNote')
+};
+
+function flash(msg, ms=1600){
+  el.flash.textContent = msg;
+  el.flash.style.display='block';
+  setTimeout(()=>el.flash.style.display='none', ms);
 }
 
-function flash(msg){
-  const f=document.getElementById("flash");
-  f.innerText=msg;
-  f.style.display="block";
-  setTimeout(()=>f.style.display="none",1500);
+function saveState(){
+  localStorage.setItem('t21_balance', balance);
+  localStorage.setItem('t21_plays', plays);
+  localStorage.setItem('t21_wallet', wallet);
+  localStorage.setItem('t21_lang', lang);
+  localStorage.setItem('t21_shared', shared?'1':'0');
 }
 
-function saveWallet(){
-  localStorage.setItem("wallet",document.getElementById("wallet").value.trim());
-  flash(texts[lang].saved);
-}
-
-function showAd(){
-  if(plays>0){flash("🎬 Play your current rounds first!");return;}
-  flash("🎞 Watching Ad (30 s)...");
-  setTimeout(()=>{plays+=10;updateUI();flash(texts[lang].addPlays);},3000);
-}
-
-function share(){
-  balance+=5;updateUI();flash(texts[lang].shareReward);
-}
-
-function withdraw(){
-  if(balance<=0){flash("0 T21 to withdraw!");return;}
-  const a=balance;balance=0;updateUI();
-  flash(texts[lang].withdrew(a));
-  // 👉 Для Tonkeeper можно активировать:
-  // window.open(`ton://transfer/UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2?amount=${a*1000000}`);
-}
+function fmt(n){ return (Math.round(n*100)/100).toString(); }
 
 function updateUI(){
-  document.getElementById("balance").innerText=balance;
-  document.getElementById("plays").innerText=plays;
+  const tr=t[lang];
+  document.title = tr.title;
+  $('.brand h1').textContent = tr.title;
+  el.balanceBox.textContent = tr.balance(fmt(balance));
+  el.playsBox.textContent   = tr.plays(plays);
+  el.enterLbl.textContent = tr.enter;
+  el.saveBtn.textContent = tr.save;
+  el.saveNote.textContent = tr.note;
+  el.adBtn.textContent = tr.adBtn;
+  el.shareBtn.textContent = tr.share + (shared?' ✅':'');
+  el.withdrawBtn.textContent = tr.withdraw;
+  el.guessTitle.textContent = tr.guessTitle;
+  el.hintNote.textContent = tr.hint;
+  el.wallet.value = wallet;
+
+  el.adTitle.textContent = tr.adTitle;
+  el.adText.textContent = tr.adText;
+  el.skipBtn.textContent = tr.skip;
+  el.claimBtn.textContent = tr.claim;
+
+  // enable / disable keypad
+  el.keys.classList.toggle('disabled', plays<=0);
+  $$('.key').forEach(k=>{
+    if(plays<=0){ k.classList.add('disabled'); k.style.pointerEvents='none'; k.style.opacity=.45; }
+    else{ k.classList.remove('disabled'); k.style.pointerEvents='auto'; k.style.opacity=1; }
+  });
 }
 
-function makeButtons(){
-  const n=document.getElementById("numbers");
-  n.innerHTML="";
-  for(let i=1;i<=9;i++){
-    const b=document.createElement("button");
-    b.innerText=i;
-    b.onclick=()=>guess(i);
-    n.appendChild(b);
+/* ============== build keypad ============== */
+for(let i=1;i<=9;i++){
+  const b=document.createElement('button');
+  b.className='key';
+  b.textContent=i;
+  b.onclick=()=>onGuess(i);
+  el.keys.appendChild(b);
+}
+
+/* ============== game logic ============== */
+function onGuess(n){
+  if(plays<=0){ flash(t[lang].needPlays); return; }
+  plays--; 
+  let prize = 0;
+  // простая «азартная» шкала
+  const r = Math.random();
+  if(n===target){
+    if(r<0.70) prize=1;        // чаще маленький приз
+    else if(r<0.92) prize=3;
+    else if(r<0.985) prize=5;
+    else if(r<0.997) prize=7;
+    else prize=10;             // редкий джекпот внутри мини-игры
+    balance+=prize;
+    flash(t[lang].win(prize));
+  }else{
+    flash(t[lang].lose, 900);
   }
+  if(plays===0) flash(t[lang].needPlays, 2200);
+  target=(Math.random()*9|0)+1;
+  saveState(); updateUI();
 }
 
-function guess(num){
-  if(plays<=0){flash(texts[lang].noPlays);return;}
-  plays--;
-  const win=Math.floor(Math.random()*9)+1;
-  if(num===win){
-    const reward=[1,2,3,5,7,10][Math.floor(Math.random()*6)];
-    balance+=reward;
-    flash(texts[lang].reward(reward));
-  } else {
-    flash(texts[lang].wrong(win));
+/* ============== wallet save ============== */
+el.saveBtn.onclick=()=>{
+  wallet = el.wallet.value.trim();
+  if(!wallet){ flash('❗');return;}
+  saveState(); updateUI();
+  flash(t[lang].saved);
+};
+
+/* ============== share bonus (once) ============== */
+el.shareBtn.onclick=()=>{
+  if(shared){ flash('✅'); return; }
+  const shareText = "Play & earn T21 in T21 Play Zone!";
+  const shareUrl = location.href;
+  if(navigator.share){
+    navigator.share({title:"T21 Play Zone",text:shareText,url:shareUrl}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(`${shareText} ${shareUrl}`).catch(()=>{});
   }
-  updateUI();
-}
+  shared = true; balance += 5; saveState(); updateUI();
+  flash(t[lang].shareDone);
+};
 
-window.onload=()=>{
-  makeButtons();updateUI();
-  const w=localStorage.getItem("wallet");
-  if(w)document.getElementById("wallet").value=w;
-}
+/* ============== withdraw (Tonkeeper link) ============== */
+el.withdrawBtn.onclick=()=>{
+  if(balance<=0){ flash('❗'); return; }
+  const amount = balance;          // вывести всё
+  balance = 0; saveState(); updateUI();
+  flash(t[lang].withdrew(amount));
+
+  // ВНИМАНИЕ: демо-ссылка; пользователь подтвердит перевод в кошельке.
+  const JETTON_WALLET = "EQBLgiPMly982IMGqauqdX0Fe_N01arD-LhlKSfxBd8rzYRG";
+  const nano = Math.round(amount * 1_000_000); // примерный коэфф. для демо
+  const url = `ton://transfer/${JETTON_WALLET}?amount=${nano}&text=T21%20reward`;
+  setTimeout(()=>{ window.open(url,'_blank'); }, 900);
+};
+
+/* ============== ad simulation ============== */
+el.adBtn.onclick=()=>{
+  // показываем оверлей рекламы на 30с; Skip с 5й сек
+  el.adModal.style.display='flex';
+  let t=0, total=30; el.bar.style.width='0%';
+  el.claimBtn.disabled=true; el.skipBtn.disabled=true;
+  const timer=setInterval(()=>{
+    t++; el.bar.style.width = (t/total*100)+'%';
+    if(t>=5) el.skipBtn.disabled=false;
+    if(t>=30){ clearInterval(timer); el.claimBtn.disabled=false; }
+  },1000);
+
+  function closeClaim(add){
+    el.adModal.style.display='none';
+    el.skipBtn.onclick=null; el.claimBtn.onclick=null;
+    if(add){
+      plays+=10; saveState(); updateUI(); flash(t[lang].ad);
+    }
+  }
+  el.skipBtn.onclick=()=>closeClaim(false);
+  el.claimBtn.onclick=()=>closeClaim(true);
+};
+
+/* ============== language ============== */
+el.langSel.value = lang;
+el.langSel.onchange = ()=>{
+  lang = el.langSel.value;
+  saveState(); updateUI();
+};
+
+/* init */
+updateUI();
 </script>
 </body>
 </html>
