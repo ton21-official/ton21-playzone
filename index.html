@@ -5,61 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <title>T21 Play Zone</title>
 <style>
-  :root {
-    --bg:#0b0f16;--panel:#111724;--gold1:#ffdf88;--gold2:#f0cf6d;
-    --txt:#e8ecf7;--muted:#9fb0c3;
-  }
-  body {
-    margin:0; padding:20px;
-    font-family:system-ui,Segoe UI,Roboto,Arial;
-    background:var(--bg); color:var(--txt);
-    text-align:center;
-  }
-  h2 { color:var(--gold1); margin-top:10px; }
-  select {
-    background:#111724; color:var(--gold1);
-    border:none; border-radius:6px;
-    padding:8px 10px; font-size:16px;
-  }
-  button {
-    background:linear-gradient(90deg,var(--gold1),var(--gold2));
-    color:#111; border:none; border-radius:8px;
-    padding:12px 20px; font-weight:bold;
-    margin:8px auto; width:85%; cursor:pointer;
-  }
-  button[disabled] { opacity:0.5; cursor:not-allowed; }
-  #numbers {
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:10px; justify-content:center; margin-top:20px;
-  }
-  #numbers button {
-    background:#111724; color:var(--gold1);
-    border:1px solid #333; font-size:22px;
-    border-radius:10px; height:60px;
-  }
-  #numbers button:hover { background:#1a2033; }
-  #lang-row {
-    display:flex; justify-content:flex-end;
-    align-items:center; margin-bottom:10px;
-  }
-  input {
-    width:85%; padding:10px; border-radius:8px;
-    background:#111724; color:#fff; border:none;
-    text-align:center;
-  }
-  .flash {
-    position:fixed; bottom:40px; left:50%;
-    transform:translateX(-50%);
-    background:#112b18; border:1px solid #245b2e;
-    color:#c9ffd1; padding:10px 16px;
-    border-radius:10px; display:none;
-    font-weight:bold;
-  }
+:root {
+  --bg:#0b0f16;
+  --panel:#121826;
+  --gold1:#ffdf88;
+  --gold2:#f0cf6d;
+  --txt:#e8ecf7;
+  --accent:#1f2a45;
+}
+body {
+  margin:0;
+  font-family:'Segoe UI', Roboto, system-ui;
+  background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, var(--bg) 80%);
+  color:var(--txt);
+  text-align:center;
+}
+.container {
+  max-width:460px;
+  margin:auto;
+  padding:25px 15px 60px;
+}
+h1 {
+  color:var(--gold1);
+  text-shadow:0 0 10px rgba(255,223,136,0.4);
+  margin:5px 0 15px;
+}
+select {
+  background:var(--accent);
+  color:var(--gold1);
+  border:none;
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:15px;
+  float:right;
+  margin-top:10px;
+}
+p {margin:6px 0;}
+input {
+  width:90%;
+  max-width:400px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #2a2a2a;
+  background:var(--accent);
+  color:#fff;
+  text-align:center;
+  font-size:15px;
+}
+button {
+  width:90%;
+  max-width:400px;
+  margin:6px auto;
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  font-size:16px;
+  color:#111;
+  background:linear-gradient(90deg,var(--gold1),var(--gold2));
+  box-shadow:0 3px 8px rgba(240,207,109,0.25);
+  cursor:pointer;
+  transition:all .2s;
+}
+button:hover {
+  transform:scale(1.03);
+  box-shadow:0 5px 15px rgba(240,207,109,0.4);
+}
+#numbers {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  max-width:400px;
+  margin:20px auto;
+}
+#numbers button {
+  background:var(--accent);
+  color:var(--gold1);
+  border:none;
+  font-size:22px;
+  height:65px;
+  border-radius:10px;
+  transition:.15s;
+}
+#numbers button:hover {background:#1b2236; transform:scale(1.05);}
+.flash {
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(20,45,25,0.9);
+  border:1px solid #2a5d34;
+  color:#b9ffd1;
+  padding:12px 16px;
+  border-radius:10px;
+  font-weight:bold;
+  display:none;
+  z-index:999;
+}
 </style>
 </head>
 <body>
-
-<div id="lang-row">
+<div class="container">
   <select id="lang" onchange="setLang(this.value)">
     <option value="EN">🌐 EN</option>
     <option value="RU">🇷🇺 RU</option>
@@ -67,64 +113,43 @@
     <option value="IN">🇮🇳 IN</option>
     <option value="AM">🇦🇲 AM</option>
   </select>
+
+  <h1 id="title">💎 T21 Play Zone</h1>
+  <p id="balance-label">Balance: <span id="balance">0</span> T21</p>
+  <p id="plays-label">Plays left: <span id="plays">100</span></p>
+
+  <input id="wallet" placeholder="Enter your TON address"/>
+  <button id="save-btn" onclick="saveWallet()">💾 Save Wallet</button>
+  <button id="ad-btn" onclick="showAd()">🎬 Watch Ad (+10 plays)</button>
+  <button id="share-btn" onclick="share()">🤝 Share (+5 T21)</button>
+  <button id="withdraw-btn" onclick="withdraw()">💸 Withdraw T21</button>
+
+  <h3 id="guess-title">🎯 Guess 1–9 and Win T21</h3>
+  <div id="numbers"></div>
 </div>
-
-<h2 id="title">💎 T21 Play Zone</h2>
-<p id="balance-label">Balance: <span id="balance">0</span> T21</p>
-<p id="plays-label">Plays left: <span id="plays">100</span></p>
-
-<input id="wallet" placeholder="Enter your TON address"/>
-<button id="save-btn" onclick="saveWallet()">Save Wallet</button>
-<button id="ad-btn" onclick="showAd()">🎬 Watch Ad (+10 plays)</button>
-<button id="share-btn" onclick="share()">🤝 Share (+5 T21)</button>
-<button id="withdraw-btn" onclick="withdraw()">💸 Withdraw T21</button>
-
-<h3 id="guess-title">🎯 Guess 1–9</h3>
-<div id="numbers"></div>
 
 <div id="flash" class="flash"></div>
 
 <script>
-let balance = 0, plays = 100, lang = "EN";
-const texts = {
+let balance=0, plays=100, lang="EN";
+const texts={
   EN:{title:"💎 T21 Play Zone",balance:"Balance:",plays:"Plays left:",
-      save:"Save Wallet",watch:"🎬 Watch Ad (+10 plays)",
+      save:"💾 Save Wallet",watch:"🎬 Watch Ad (+10 plays)",
       share:"🤝 Share (+5 T21)",withdraw:"💸 Withdraw T21",
       guess:"🎯 Guess 1–9",saved:"✅ Wallet saved!",
       noPlays:"🎮 No plays left!",reward:(r)=>`🎯 You won +${r} T21`,
       wrong:(n)=>`❌ Wrong! It was ${n}`,addPlays:"+10 plays added!",
       shareReward:"+5 T21 for sharing!",withdrew:(a)=>`💸 Withdrawn ${a} T21!`},
-  RU:{title:"💎 T21 Игровая Зона",balance:"Баланс:",plays:"Осталось игр:",
-      save:"Сохранить адрес",watch:"🎬 Смотреть рекламу (+10 игр)",
+  RU:{title:"💎 Игровая зона T21",balance:"Баланс:",plays:"Осталось игр:",
+      save:"💾 Сохранить адрес",watch:"🎬 Смотреть рекламу (+10 игр)",
       share:"🤝 Поделиться (+5 T21)",withdraw:"💸 Вывести T21",
-      guess:"🎯 Угадай 1–9",saved:"✅ Адрес сохранён!",
+      guess:"🎯 Угадай число 1–9",saved:"✅ Адрес сохранён!",
       noPlays:"🎮 Игры закончились!",reward:(r)=>`🎯 Ты выиграл +${r} T21`,
       wrong:(n)=>`❌ Мимо! Было ${n}`,addPlays:"+10 игр добавлено!",
-      shareReward:"+5 T21 за поделиться!",withdrew:(a)=>`💸 Выведено ${a} T21!`},
-  CN:{title:"💎 T21 游戏区",balance:"余额:",plays:"剩余次数:",
-      save:"保存钱包",watch:"🎬 看广告 (+10 次)",
-      share:"🤝 分享 (+5 T21)",withdraw:"💸 提现 T21",
-      guess:"🎯 猜 1–9",saved:"✅ 钱包已保存!",noPlays:"🎮 没有次数了!",
-      reward:(r)=>`🎯 赢得 +${r} T21`,wrong:(n)=>`❌ 错误! 是 ${n}`,
-      addPlays:"+10 次 已添加!",shareReward:"+5 T21 分享奖励!",
-      withdrew:(a)=>`💸 提现 ${a} T21!`},
-  IN:{title:"💎 T21 खेल ज़ोन",balance:"बैलेंस:",plays:"बाकी खेल:",
-      save:"वॉलेट सेव करें",watch:"🎬 विज्ञापन देखें (+10 खेल)",
-      share:"🤝 शेयर करें (+5 T21)",withdraw:"💸 T21 निकालें",
-      guess:"🎯 1–9 चुनें",saved:"✅ वॉलेट सेव हुआ!",
-      noPlays:"🎮 खेल समाप्त!",reward:(r)=>`🎯 आप जीते +${r} T21`,
-      wrong:(n)=>`❌ गलत! यह ${n} था`,addPlays:"+10 खेल जोड़े गए!",
-      shareReward:"+5 T21 शेयर रिवॉर्ड!",withdrew:(a)=>`💸 ${a} T21 निकाले!`},
-  AM:{title:"💎 T21 Խաղային Գոտի",balance:"Մնացորդ:",plays:"Մնացած խաղեր:",
-      save:"Պահպանել հասցեն",watch:"🎬 Դիտել գովազդ (+10 խաղ)",
-      share:"🤝 Կիսվել (+5 T21)",withdraw:"💸 Դուրս բերել T21",
-      guess:"🎯 Կռահիր 1–9",saved:"✅ Հասցեն պահպանվեց!",
-      noPlays:"🎮 Խաղերը վերջացան!",reward:(r)=>`🎯 Հաղթեցիր +${r} T21`,
-      wrong:(n)=>`❌ Սխալ! ${n} էր`,addPlays:"+10 խաղ ավելացվեց!",
-      shareReward:"+5 T21 կիսվելու համար!",withdrew:(a)=>`💸 Դուրս բերվեց ${a} T21!`}
+      shareReward:"+5 T21 за поделиться!",withdrew:(a)=>`💸 Выведено ${a} T21!`}
 };
 
-function setLang(l){ lang=l; const t=texts[l];
+function setLang(l){lang=l;const t=texts[l];
   document.getElementById("title").innerText=t.title;
   document.getElementById("balance-label").firstChild.textContent=t.balance+" ";
   document.getElementById("plays-label").firstChild.textContent=t.plays+" ";
@@ -134,33 +159,45 @@ function setLang(l){ lang=l; const t=texts[l];
   document.getElementById("withdraw-btn").innerText=t.withdraw;
   document.getElementById("guess-title").innerText=t.guess;
 }
+
 function flash(msg){
   const f=document.getElementById("flash");
-  f.innerText=msg; f.style.display="block";
+  f.innerText=msg;
+  f.style.display="block";
   setTimeout(()=>f.style.display="none",1500);
 }
+
 function saveWallet(){
   localStorage.setItem("wallet",document.getElementById("wallet").value.trim());
   flash(texts[lang].saved);
 }
+
 function showAd(){
-  if(plays>0){flash("❗ Spend your plays first!");return;}
-  plays+=10; updateUI(); flash(texts[lang].addPlays);
+  if(plays>0){flash("🎬 Play your current rounds first!");return;}
+  flash("🎞 Watching Ad (30 s)...");
+  setTimeout(()=>{plays+=10;updateUI();flash(texts[lang].addPlays);},3000);
 }
+
 function share(){
-  balance+=5; updateUI(); flash(texts[lang].shareReward);
+  balance+=5;updateUI();flash(texts[lang].shareReward);
 }
+
 function withdraw(){
   if(balance<=0){flash("0 T21 to withdraw!");return;}
-  const a=balance; balance=0; updateUI();
+  const a=balance;balance=0;updateUI();
   flash(texts[lang].withdrew(a));
+  // 👉 Для Tonkeeper можно активировать:
+  // window.open(`ton://transfer/UQAqZ3e_Qf1zX3AxcaLyjf7mOSDa-yfCi9ee9shKXIskdUs2?amount=${a*1000000}`);
 }
+
 function updateUI(){
   document.getElementById("balance").innerText=balance;
   document.getElementById("plays").innerText=plays;
 }
+
 function makeButtons(){
-  const n=document.getElementById("numbers"); n.innerHTML="";
+  const n=document.getElementById("numbers");
+  n.innerHTML="";
   for(let i=1;i<=9;i++){
     const b=document.createElement("button");
     b.innerText=i;
@@ -168,6 +205,7 @@ function makeButtons(){
     n.appendChild(b);
   }
 }
+
 function guess(num){
   if(plays<=0){flash(texts[lang].noPlays);return;}
   plays--;
@@ -176,10 +214,17 @@ function guess(num){
     const reward=[1,2,3,5,7,10][Math.floor(Math.random()*6)];
     balance+=reward;
     flash(texts[lang].reward(reward));
-  } else flash(texts[lang].wrong(win));
+  } else {
+    flash(texts[lang].wrong(win));
+  }
   updateUI();
 }
-window.onload=()=>{ makeButtons(); updateUI(); }
+
+window.onload=()=>{
+  makeButtons();updateUI();
+  const w=localStorage.getItem("wallet");
+  if(w)document.getElementById("wallet").value=w;
+}
 </script>
 </body>
 </html>
