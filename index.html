@@ -1,81 +1,142 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>T21 Play Zone</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <style>
-    body {
-      margin: 0;
-      background: #0b0f16;
-      font-family: Arial, sans-serif;
-      color: #e8ecf7;
-      text-align: center;
-      padding: 20px;
-    }
-    .panel {
-      background: #111724;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    button {
-      width: 100%;
-      padding: 16px;
-      margin: 6px 0;
-      border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      background: #ffdf88;
-      color: #000;
-      font-weight: bold;
-    }
-    button.secondary {
-      background: #1e2735;
-      color: #e8ecf7;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
-    .grid button {
-      background: #1d2633;
-      font-size: 22px;
-      padding: 18px;
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>T21 Play Zone</title>
+<style>
+:root {
+  --bg:#0b0f16;
+  --panel:#111724;
+  --gold1:#ffe8a8;
+  --gold2:#d9b65c;
+  --txt:#eef2fa;
+  --muted:#9fb0c3;
+}
+body {
+  margin:0; background:var(--bg);
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color:var(--txt); text-align:center;
+}
+.container {
+  max-width:480px; margin:0 auto; padding:16px;
+}
+.card {
+  background:var(--panel);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:18px;
+  box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
+input {
+  width:100%; padding:14px;
+  background:#0d131f; border:1px solid #202a3e;
+  border-radius:12px; color:var(--txt);
+  margin-top:12px; font-size:15px;
+}
+button {
+  width:100%; padding:14px;
+  background:linear-gradient(180deg, var(--gold1), var(--gold2));
+  color:#000; font-weight:600;
+  font-size:16px; border-radius:12px;
+  border:none; margin-top:10px;
+}
+.secondary {
+  background:none; border:2px solid var(--gold2);
+  color:var(--gold1);
+}
+.grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; margin-top:15px;
+}
+.key {
+  background:#0e1420; padding:16px;
+  border-radius:10px; font-size:22px;
+  border:1px solid #1c2435; cursor:pointer;
+}
+</style>
 </head>
 
 <body>
+<div class="container">
+  <h1>💎 T21 Play Zone</h1>
 
-  <h2>Ton21 PlayZone 💎</h2>
-
-  <div class="panel">
-    <h3>Баланс T21: <span id="balance">0</span></h3>
-    <p>Игры: <span id="plays">0</span> — Лимит: <span id="limit">100</span></p>
-
-    <button onclick="watchAd(100)">Смотреть рекламу (+100 T21)</button>
-    <button onclick="watchAd(10)" class="secondary">Смотреть рекламу (+10 T21)</button>
+  <div class="card">
+    <p>💰 Balance: <span id="balance">0</span> T21</p>
+    <p>🎮 Plays: <span id="plays">0</span></p>
+    <input id="wallet" placeholder="Enter your TON address" />
+    <button onclick="saveWallet()">Save Wallet</button>
   </div>
 
-  <h3>Угадай число от 1 до 9 🔮</h3>
-
-  <div class="grid">
-    <button onclick="play(1)">1</button>
-    <button onclick="play(2)">2</button>
-    <button onclick="play(3)">3</button>
-    <button onclick="play(4)">4</button>
-    <button onclick="play(5)">5</button>
-    <button onclick="play(6)">6</button>
-    <button onclick="play(7)">7</button>
-    <button onclick="play(8)">8</button>
-    <button onclick="play(9)">9</button>
+  <div class="card">
+    <h3>🎬 Watch Ads</h3>
+    <button onclick="watchAd(10)">Watch Ad (+10)</button>
+    <button onclick="watchAd(100)" class="secondary">Watch Premium Ad (+100)</button>
   </div>
 
-  <script src="main.js"></script>
+  <div class="card">
+    <h3>🎯 Guess 1–9</h3>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
 
+<script>
+const API = "https://t21playzone-api.t21playzone.workers.dev";
+
+// --- load player data ---
+async function loadState(wallet) {
+  if(!wallet) return;
+  const res = await fetch(`${API}/state?wallet=${wallet}`);
+  const data = await res.json();
+  document.getElementById("balance").textContent = data.balance ?? 0;
+  document.getElementById("plays").textContent = data.plays ?? 0;
+}
+
+// --- save wallet ---
+function saveWallet() {
+  const wallet = document.getElementById("wallet").value.trim();
+  if(!wallet) { alert("Enter TON address"); return; }
+  localStorage.setItem("wallet", wallet);
+  loadState(wallet);
+}
+
+// --- ad reward ---
+async function watchAd(amount) {
+  const wallet = localStorage.getItem("wallet");
+  if(!wallet) { alert("Save wallet first"); return; }
+  const res = await fetch(`${API}/ad/amount-${amount}`);
+  const data = await res.json();
+  document.getElementById("balance").textContent = data.balance ?? 0;
+}
+
+// --- play game ---
+async function play(num) {
+  const wallet = localStorage.getItem("wallet");
+  if(!wallet) { alert("Save wallet first"); return; }
+  const res = await fetch(`${API}/play/number-${num}`);
+  const data = await res.json();
+  if(data.win) alert(`🎉 You won ${data.reward} T21!`);
+  else alert("😢 Try again!");
+  document.getElementById("balance").textContent = data.balance ?? 0;
+  document.getElementById("plays").textContent = data.plays ?? 0;
+}
+
+// --- buttons 1–9 ---
+function buildGrid() {
+  const grid = document.getElementById("grid");
+  for(let i=1;i<=9;i++){
+    const b = document.createElement("div");
+    b.className = "key";
+    b.innerText = i;
+    b.onclick = () => play(i);
+    grid.appendChild(b);
+  }
+}
+
+// --- start ---
+buildGrid();
+const saved = localStorage.getItem("wallet");
+if(saved){ document.getElementById("wallet").value = saved; loadState(saved); }
+</script>
 </body>
 </html>
