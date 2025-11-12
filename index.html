@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>T21 Play Zone</title>
 <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
+<meta name="color-scheme" content="dark light">
+
 <style>
   :root{
     --bg:#0b0f16;--panel:#121827;--muted:#9fb0c3;
@@ -12,20 +14,26 @@
     --button-shadow:0 8px 20px rgba(240,207,109,.25);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, #0b0f16 60%),
-                   radial-gradient(800px 500px at 120% 110%, #132033 0%, transparent 60%);
-       color:var(--txt);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, #0b0f16 60%),
+               radial-gradient(800px 500px at 120% 110%, #132033 0%, transparent 60%);
+    color:var(--txt);
+    font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial
+  }
   .wrap{max-width:960px;margin:24px auto;padding:16px}
   header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
   .brand{display:flex;align-items:center;gap:12px}
   .brand-emoji{font-size:26px}
   .brand h1{font-size:20px;margin:0}
-  .card{background:linear-gradient(180deg,#0f1524 0%, #0c1220 100%);border:1px solid #1c2742;border-radius:16px;padding:18px}
+  .card{background:linear-gradient(180deg,#0f1524 0%, #0c1220 100%);
+        border:1px solid #1c2742;border-radius:16px;padding:18px}
   .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
   .pill{flex:1;min-width:160px;background:#0f1a2c;border:1px solid #1e2a45;color:var(--txt);
         border-radius:12px;padding:12px 14px;font-weight:600}
   .muted{color:var(--muted);font-weight:500}
-  input[type=text]{width:100%;padding:14px 16px;border-radius:12px;border:1px solid #273553;background:#0f1a2c;color:var(--txt)}
+  input[type=text]{width:100%;padding:14px 16px;border-radius:12px;
+                   border:1px solid #273553;background:#0f1a2c;color:var(--txt)}
   .btn{display:block;width:100%;padding:14px 18px;border-radius:12px;border:0;cursor:pointer;
        background:linear-gradient(180deg,var(--gold1),var(--gold2));color:#2b1f06;font-weight:800;
        box-shadow:var(--button-shadow);transition:transform .06s ease}
@@ -45,15 +53,6 @@
   .flash{position:fixed;top:18px;left:50%;transform:translateX(-50%);
          background:#122033;border:1px solid #274060;color:#bfe5ff;
          padding:10px 14px;border-radius:10px;display:none;z-index:30}
-  /* ad modal */
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:40}
-  .modal .box{width:min(520px,92vw);background:#0f1a2c;border:1px solid #243354;border-radius:16px;padding:18px}
-  .progress{height:10px;background:#0c1220;border:1px solid #23324f;border-radius:999px;overflow:hidden}
-  .progress>i{display:block;height:100%;background:linear-gradient(90deg,#36c3ff,#8fe3ff);
-              width:0%}
-  .row-split{display:flex;gap:12px}
-  .row-split .btn{flex:1}
-  .footer{margin-top:24px;text-align:center;color:#7fa7c8;font-size:13px}
 </style>
 </head>
 <body>
@@ -68,9 +67,6 @@
       <select id="langSel" title="Language">
         <option value="en">EN</option>
         <option value="ru" selected>RU</option>
-        <option value="cn">中文</option>
-        <option value="in">हिन्दी</option>
-        <option value="am">Հայ</option>
       </select>
     </div>
   </header>
@@ -90,198 +86,39 @@
       </div>
 
       <div class="row">
-        <button class="btn" id="adBtn">🎬 Watch Ad (+10 plays)</button>
-      </div>
-
-      <div class="row">
-        <button class="btn secondary" id="shareBtn">🤝 Share (+5 T21)</button>
-      </div>
-
-      <div class="row">
-        <button class="btn secondary" id="withdrawBtn">💸 Withdraw T21</button>
+        <button class="btn" id="claimBtn" onclick="claimReward()">💰 Claim Reward</button>
       </div>
 
       <div class="section">
         <h3 class="title" id="guessTitle">🎯 Guess 1–9</h3>
-        <div class="note" id="hintNote"></div>
         <div class="keys" id="keys"></div>
       </div>
     </div>
   </div>
 
-  <div class="footer" id="footerNote">T21 demo: plays stored locally, withdrawals open Tonkeeper link.</div>
-</div>
-
-<!-- flash -->
-<div class="flash" id="flash"></div>
-
-<!-- Ad modal -->
-<div class="modal" id="adModal" role="dialog" aria-modal="true">
-  <div class="box">
-    <h3 id="adTitle" style="margin-top:0">Sponsored Video</h3>
-    <p id="adText" class="muted" style="margin:6px 0 12px">Please wait... You can skip after 5 seconds.</p>
-    <div class="progress"><i id="bar"></i></div>
-    <div class="row-split" style="margin-top:14px">
-      <button class="btn secondary" id="skipBtn" disabled>Skip</button>
-      <button class="btn" id="claimBtn" disabled>Close & Claim</button>
-    </div>
+  <div class="footer" style="margin-top:20px;text-align:center;color:#7fa7c8;font-size:13px">
+    Powered by <b>Ton21 Project</b> ⚡️
   </div>
 </div>
 
-<script>
-/* ===================== i18n ===================== */
-const t = {
-  en:{
-    title:"T21 Play Zone",
-    balance:(v)=>`Balance: ${v} T21`,
-    plays:(v)=>`Plays left: ${v}`,
-    enter:"Enter your TON address",
-    note:"We will save your address for payouts.",
-    save:"Save Wallet",
-    saved:"✅ Address saved",
-    ad:"+10 plays added!",
-    adBtn:"🎬 Watch Ad (+10 plays)",
-    share:"🤝 Share (+5 T21)",
-    shareDone:"+5 T21 added for share",
-    withdraw:"💸 Withdraw T21",
-    withdrew:(n)=>`Preparing withdrawal of ${n} T21…`,
-    needPlays:"No plays left — watch an ad to get +10.",
-    guessTitle:"🎯 Guess 1–9",
-    hint:"Tap a number. Each try spends 1 play. Win small rewards randomly.",
-    adTitle:"Sponsored Video",
-    adText:"Please wait… You can skip after 5 seconds.",
-    skip:"Skip",
-    claim:"Close & Claim",
-    win:(n)=>`🎉 You won +${n} T21!`,
-    lose:"Miss! Try again.",
-  },
-  ru:{
-    title:"Игровая зона T21",
-    balance:(v)=>`Баланс: ${v} T21`,
-    plays:(v)=>`Осталось игр: ${v}`,
-    enter:"Введите адрес TON",
-    note:"Сохраним адрес для выплат.",
-    save:"Сохранить адрес",
-    saved:"✅ Адрес сохранён",
-    ad:"+10 игр добавлено!",
-    adBtn:"🎬 Смотреть рекламу (+10 игр)",
-    share:"🤝 Поделиться (+5 T21)",
-    shareDone:"+5 T21 за репост",
-    withdraw:"💸 Вывести T21",
-    withdrew:(n)=>`Готовим вывод ${n} T21…`,
-    needPlays:"Игры закончились — посмотри рекламу и получи +10.",
-    guessTitle:"🎯 Угадай 1–9",
-    hint:"Нажимай число. Каждая попытка тратит 1 игру. Призы выдаются случайно.",
-    adTitle:"Рекламный ролик",
-    adText:"Подождите… Пропуск доступен через 5 секунд.",
-    skip:"Пропустить",
-    claim:"Закрыть и получить",
-    win:(n)=>`🎉 Победа! +${n} T21`,
-    lose:"Не угадал. Ещё раз!",
-  },
-  cn:{
-    title:"T21 游戏区",
-    balance:(v)=>`余额: ${v} T21`,
-    plays:(v)=>`剩余次数: ${v}`,
-    enter:"输入你的 TON 地址",
-    note:"我们会保存地址用于发放奖励。",
-    save:"保存地址",
-    saved:"✅ 已保存地址",
-    ad:"+10 次数已添加！",
-    adBtn:"🎬 看广告（+10 次）",
-    share:"🤝 分享（+5 T21）",
-    shareDone:"分享奖励 +5 T21",
-    withdraw:"💸 提现 T21",
-    withdrew:(n)=>`准备提现 ${n} T21…`,
-    needPlays:"次数用完—看广告获得 +10。",
-    guessTitle:"🎯 猜数字 1–9",
-    hint:"点数字，每次消耗 1 次，奖励随机发放。",
-    adTitle:"赞助视频",
-    adText:"请稍等… 5 秒后可跳过。",
-    skip:"跳过",
-    claim:"关闭并领取",
-    win:(n)=>`🎉 获得 +${n} T21`,
-    lose:"没中，再试！",
-  },
-  in:{
-    title:"T21 प्ले ज़ोन",
-    balance:(v)=>`बैलेंस: ${v} T21`,
-    plays:(v)=>`बाकी चालें: ${v}`,
-    enter:"अपना TON पता दर्ज करें",
-    note:"इनाम भेजने के लिए पता सहेजेंगे।",
-    save:"सेव वॉलेट",
-    saved:"✅ पता सेव हो गया",
-    ad:"+10 चालें मिल गईं!",
-    adBtn:"🎬 विज्ञापन देखें (+10)",
-    share:"🤝 शेयर करें (+5 T21)",
-    shareDone:"शेयर बोनस +5 T21",
-    withdraw:"💸 T21 निकालें",
-    withdrew:(n)=>`${n} T21 निकासी तैयार…`,
-    needPlays:"चालें खत्म—+10 पाने के लिए विज्ञापन देखें。",
-    guessTitle:"🎯 1–9 में से चुनें",
-    hint:"हर प्रयास 1 चाल खर्च करता है। इनाम रैंडम है।",
-    adTitle:"प्रायोजित वीडियो",
-    adText:"रुकिए… 5 सेकंड बाद Skip होगा।",
-    skip:"Skip",
-    claim:"Close & Claim",
-    win:(n)=>`🎉 जीते +${n} T21`,
-    lose:"चूक गए, फिर कोशिश करें!",
-  },
-  am:{
-    title:"T21 Խաղային գոտի",
-    balance:(v)=>`Մնացորդ՝ ${v} T21`,
-    plays:(v)=>`Մնացած խաղեր՝ ${v}`,
-    enter:"Մուտքագրեք ձեր TON հասցեն",
-    note:"Հասցեն կպահպանենք վճարումների համար։",
-    save:"Պահպանել հասցեն",
-    saved:"✅ Հասցեն պահպանվեց",
-    ad:"+10 խաղ ավելացվեց!",
-    adBtn:"🎬 Դիտել գովազդը (+10 խաղ)",
-    share:"🤝 Կիսվել (+5 T21)",
-    shareDone:"+5 T21 կիսվելու համար",
-    withdraw:"💸 Դուրս բերել T21",
-    withdrew:(n)=>`Պատրաստում ենք ${n} T21 դուրսբերում…`,
-    needPlays:"Խաղերը վերջացան — դիտիր գովազդ և ստացիր +10։",
-    guessTitle:"🎯 Կռահիր 1–9",
-    hint:"Յուրաքանչյուր փորձը ծախսում է 1 խաղ։ Մրցանակները պատահական են։",
-    adTitle:"Հովանավորի տեսահոլովակ",
-    adText:"Սպասեք… 5 վրկ հետո կարող եք Skip անել։",
-    skip:"Skip",
-    claim:"Փակել և ստանալ",
-    win:(n)=>`🎉 Հաղթանակ +${n} T21`,
-    lose:"Չստացվեց, նորից փորձիր!",
-  }
-};
+<div class="flash" id="flash"></div>
 
-/* ============== state & helpers ============== */
-let lang = localStorage.getItem('t21_lang') || 'ru';
+<script>
+let lang = 'ru';
 let balance = Number(localStorage.getItem('t21_balance')||0);
 let plays   = Number(localStorage.getItem('t21_plays')||100);
 let wallet  = localStorage.getItem('t21_wallet') || '';
-let shared  = localStorage.getItem('t21_shared') === '1';
 let target  = (Math.random()*9|0)+1;
 
 const $ = sel => document.querySelector(sel);
-const $$ = sel => document.querySelectorAll(sel);
-
 const el = {
-  langSel: $('#langSel'),
   balanceBox: $('#balanceBox'),
   playsBox: $('#playsBox'),
   wallet: $('#wallet'),
   saveBtn: $('#saveBtn'),
-  saveNote: $('#saveNote'),
-  adBtn: $('#adBtn'),
-  shareBtn: $('#shareBtn'),
-  withdrawBtn: $('#withdrawBtn'),
-  guessTitle: $('#guessTitle'),
-  hintNote: $('#hintNote'),
+  claimBtn: $('#claimBtn'),
   keys: $('#keys'),
   flash: $('#flash'),
-  adModal: $('#adModal'), bar: $('#bar'),
-  adTitle: $('#adTitle'), adText: $('#adText'),
-  skipBtn: $('#skipBtn'), claimBtn: $('#claimBtn'),
-  enterLbl: $('#enterLbl'), footerNote: $('#footerNote')
 };
 
 function flash(msg, ms=1600){
@@ -294,42 +131,59 @@ function saveState(){
   localStorage.setItem('t21_balance', balance);
   localStorage.setItem('t21_plays', plays);
   localStorage.setItem('t21_wallet', wallet);
-  localStorage.setItem('t21_lang', lang);
-  localStorage.setItem('t21_shared', shared?'1':'0');
 }
-
-function fmt(n){ return (Math.round(n*100)/100).toString(); }
 
 function updateUI(){
-  const tr=t[lang];
-  document.title = tr.title;
-  $('.brand h1').textContent = tr.title;
-  el.balanceBox.textContent = tr.balance(fmt(balance));
-  el.playsBox.textContent   = tr.plays(plays);
-  el.enterLbl.textContent = tr.enter;
-  el.saveBtn.textContent = tr.save;
-  el.saveNote.textContent = tr.note;
-  el.adBtn.textContent = tr.adBtn;
-  el.shareBtn.textContent = tr.share + (shared?' ✅':'');
-  el.withdrawBtn.textContent = tr.withdraw;
-  el.guessTitle.textContent = tr.guessTitle;
-  el.hintNote.textContent = tr.hint;
+  el.balanceBox.textContent = `Balance: ${balance} T21`;
+  el.playsBox.textContent = `Plays left: ${plays}`;
   el.wallet.value = wallet;
-
-  el.adTitle.textContent = tr.adTitle;
-  el.adText.textContent = tr.adText;
-  el.skipBtn.textContent = tr.skip;
-  el.claimBtn.textContent = tr.claim;
-
-  // enable / disable keypad
-  el.keys.classList.toggle('disabled', plays<=0);
-  $$('.key').forEach(k=>{
-    if(plays<=0){ k.classList.add('disabled'); k.style.pointerEvents='none'; k.style.opacity=.45; }
-    else{ k.classList.remove('disabled'); k.style.pointerEvents='auto'; k.style.opacity=1; }
-  });
 }
 
-/* ============== build keypad ============== */
+/* ---------- Кнопка Claim Reward ---------- */
+async function claimReward() {
+  const button = el.claimBtn;
+  button.disabled = true;
+  button.innerText = "Processing... ⏳";
+  wallet = el.wallet.value.trim();
+
+  if (!wallet) {
+    alert("❗ Please enter your TON wallet first!");
+    button.disabled = false;
+    button.innerText = "💰 Claim Reward";
+    return;
+  }
+
+  try {
+    const response = await fetch("https://t21-playzone-api.t21playzone.workers.dev/api/claim", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address: wallet,
+        reward: 100
+      })
+    });
+
+    const data = await response.json();
+    if (data.ok) {
+      flash("✅ Reward sent! Check your Tonkeeper wallet.");
+      balance += 100;
+      saveState();
+      updateUI();
+      button.innerText = "Reward Claimed ✅";
+    } else {
+      flash("⚠️ Error: " + data.error);
+      button.innerText = "Try Again 💎";
+    }
+  } catch (err) {
+    console.error(err);
+    flash("❌ Connection error. Try again later.");
+    button.innerText = "Try Again 💎";
+  } finally {
+    button.disabled = false;
+  }
+}
+
+/* ---------- Клавиатура (Guess 1–9) ---------- */
 for(let i=1;i<=9;i++){
   const b=document.createElement('button');
   b.className='key';
@@ -338,96 +192,27 @@ for(let i=1;i<=9;i++){
   el.keys.appendChild(b);
 }
 
-/* ============== game logic ============== */
 function onGuess(n){
-  if(plays<=0){ flash(t[lang].needPlays); return; }
-  plays--; 
-  let prize = 0;
-  // простая «азартная» шкала
-  const r = Math.random();
+  if(plays<=0){ flash("No plays left — watch an ad!"); return; }
+  plays--;
+  let prize=0;
+  const r=Math.random();
   if(n===target){
-    if(r<0.70) prize=1;        // чаще маленький приз
-    else if(r<0.92) prize=3;
-    else if(r<0.985) prize=5;
-    else if(r<0.997) prize=7;
-    else prize=10;             // редкий джекпот внутри мини-игры
-    balance+=prize;
-    flash(t[lang].win(prize));
-  }else{
-    flash(t[lang].lose, 900);
-  }
-  if(plays===0) flash(t[lang].needPlays, 2200);
+    if(r<0.7) prize=1; else if(r<0.9) prize=3; else if(r<0.98) prize=5; else prize=10;
+    balance+=prize; flash(`🎉 You won +${prize} T21!`);
+  } else flash("❌ Miss! Try again.");
   target=(Math.random()*9|0)+1;
   saveState(); updateUI();
 }
 
-/* ============== wallet save ============== */
+/* ---------- Сохранение адреса ---------- */
 el.saveBtn.onclick=()=>{
   wallet = el.wallet.value.trim();
-  if(!wallet){ flash('❗');return;}
-  saveState(); updateUI();
-  flash(t[lang].saved);
+  if(!wallet){ flash("❗ Invalid address"); return; }
+  saveState();
+  flash("✅ Wallet saved");
 };
 
-/* ============== share bonus (once) ============== */
-el.shareBtn.onclick=()=>{
-  if(shared){ flash('✅'); return; }
-  const shareText = "Play & earn T21 in T21 Play Zone!";
-  const shareUrl = location.href;
-  if(navigator.share){
-    navigator.share({title:"T21 Play Zone",text:shareText,url:shareUrl}).catch(()=>{});
-  }else{
-    navigator.clipboard.writeText(`${shareText} ${shareUrl}`).catch(()=>{});
-  }
-  shared = true; balance += 5; saveState(); updateUI();
-  flash(t[lang].shareDone);
-};
-
-/* ============== withdraw (Tonkeeper link) ============== */
-el.withdrawBtn.onclick=()=>{
-  if(balance<=0){ flash('❗'); return; }
-  const amount = balance;          // вывести всё
-  balance = 0; saveState(); updateUI();
-  flash(t[lang].withdrew(amount));
-
-  // ВНИМАНИЕ: демо-ссылка; пользователь подтвердит перевод в кошельке.
-  const JETTON_WALLET = "EQBLgiPMly982IMGqauqdX0Fe_N01arD-LhlKSfxBd8rzYRG";
-  const nano = Math.round(amount * 1_000_000); // примерный коэфф. для демо
-  const url = `ton://transfer/${JETTON_WALLET}?amount=${nano}&text=T21%20reward`;
-  setTimeout(()=>{ window.open(url,'_blank'); }, 900);
-};
-
-/* ============== ad simulation ============== */
-el.adBtn.onclick=()=>{
-  // показываем оверлей рекламы на 30с; Skip с 5й сек
-  el.adModal.style.display='flex';
-  let t=0, total=30; el.bar.style.width='0%';
-  el.claimBtn.disabled=true; el.skipBtn.disabled=true;
-  const timer=setInterval(()=>{
-    t++; el.bar.style.width = (t/total*100)+'%';
-    if(t>=5) el.skipBtn.disabled=false;
-    if(t>=30){ clearInterval(timer); el.claimBtn.disabled=false; }
-  },1000);
-
-  function closeClaim(add){
-    el.adModal.style.display='none';
-    el.skipBtn.onclick=null; el.claimBtn.onclick=null;
-    if(add){
-      plays+=10; saveState(); updateUI(); flash(t[lang].ad);
-    }
-  }
-  el.skipBtn.onclick=()=>closeClaim(false);
-  el.claimBtn.onclick=()=>closeClaim(true);
-};
-
-/* ============== language ============== */
-el.langSel.value = lang;
-el.langSel.onchange = ()=>{
-  lang = el.langSel.value;
-  saveState(); updateUI();
-};
-
-/* init */
 updateUI();
 </script>
 </body>
