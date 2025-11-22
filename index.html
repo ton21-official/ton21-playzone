@@ -342,6 +342,25 @@
   var AD_SECONDS = 30;
   var DAY_MS = 24 * 60 * 60 * 1000;
 
+  // ---------- backend config ----------
+  const API = "https://t21-playzone-api.t21playzone.workers.dev";
+  const USER_ID_KEY = "t21m_userId";
+
+  // unique user id (stored locally, used on backend)
+  var userId = localStorage.getItem(USER_ID_KEY);
+  if (!userId) {
+    try {
+      if (window.crypto && crypto.randomUUID) {
+        userId = crypto.randomUUID();
+      } else {
+        userId = "u_" + Date.now() + "_" + Math.floor(Math.random() * 1e9);
+      }
+    } catch(e){
+      userId = "u_" + Date.now() + "_" + Math.floor(Math.random() * 1e9);
+    }
+    localStorage.setItem(USER_ID_KEY, userId);
+  }
+
   // ---------- translations ----------
   var T = {
     en:{
@@ -541,7 +560,7 @@
       mineNext:"Հաջորդ բոնուսը՝",
       adBtn:"🎬 Դիտել գովազդ (+5 T21)",
       adInfo:function(used){return "Գովազդի բոնուս՝ այսօր "+used+" / 10 օգտագործված";},
-      adLimit:"Այսօրվա գովազդային բոնուսների սահմանը լրացած է (10 / 10)։",
+      adLimit:"Այսօրվա գովազդային բոնուսների սահմանը լրացված է (10 / 10)։",
       walletTitle:"Ձեր TON հասցեն (ապագա վճարումների համար)",
       walletText1:"Հիմա ամեն ինչ վիրտուալ է։ Հետագայում ակտիվ մայներներին կարող եք ուղարկել իրական T21։",
       walletText2:"Մենք պահպանում ենք հասցեն, որպեսզի իմանանք՝ սկսելուց հետո ում որքան հատկացնել։",
@@ -629,6 +648,81 @@
   var adTimer = null;
   var adLeft = 0;
 
+  // ---------- backend helpers ----------
+
+  async function apiGetUser(){
+    try{
+      const res = await fetch(API + "/user?id=" + encodeURIComponent(userId));
+      if(!res.ok) return null;
+      return await res.json();
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function apiSaveAddress(addr){
+    try{
+      await fetch(API + "/save_address", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ id:userId, address:addr })
+      });
+    }catch(e){}
+  }
+
+  async function apiAddMining(){
+    try{
+      await fetch(API + "/add_mining", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ id:userId, amount:DAILY_REWARD })
+      });
+    }catch(e){}
+  }
+
+  async function apiAddAdReward(){
+    try{
+      const res = await fetch(API + "/add_ad_reward", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ id:userId, amount:AD_REWARD })
+      });
+      if(res.ok){
+        const data = await res.json().catch(()=>null);
+        if(data && typeof data.balance === "number"){
+          balance = data.balance;
+        }
+        if(data && typeof data.adsToday === "number"){
+          adsUsed = data.adsToday;
+          adsDate = todayKey();
+        }
+        saveState();
+        updateBalanceUI();
+        updateAdInfo();
+      }
+    }catch(e){}
+  }
+
+  async function syncFromServer(){
+    const data = await apiGetUser();
+    if(!data) return;
+    if(typeof data.balance === "number") balance = data.balance;
+    if(typeof data.lastMining === "number") lastMine = data.lastMining;
+    if(data.address){
+      wallet = data.address;
+      if(walletInput) walletInput.value = wallet;
+    }
+    if(typeof data.adsToday === "number" && data.lastAdDay){
+      adsUsed = data.adsToday;
+      adsDate = data.lastAdDay;
+    }
+    saveState();
+    updateBalanceUI();
+    updateAdInfo();
+    updateMineUI();
+  }
+
+  // ---------- helpers ----------
   function todayKey(){
     return (new Date()).toISOString().slice(0,10);
   }
@@ -817,6 +911,7 @@
       updateBalanceUI();
       updateMineUI();
       flashMsg(tr.flashMine, 2200);
+      apiAddMining(); // fire-and-forget
     }else if(adContext === "ad"){
       ensureAdDay();
       if(adsUsed >= MAX_ADS_PER_DAY){
@@ -829,6 +924,7 @@
       updateBalanceUI();
       updateAdInfo();
       flashMsg(tr.flashAd, 2000);
+      apiAddAdReward(); // fire-and-forget, syncs real balance/adsToday
     }
     adContext = null;
   }
@@ -852,11 +948,11 @@
     }
     wallet = v;
     saveState();
+    apiSaveAddress(wallet);
     flashMsg(tr.flashSaved, 1800);
   });
 
   mineBtn.addEventListener("click", function(){
-    var tr = T[lang] || T.en;
     var now = Date.now();
     var left = lastMine ? (lastMine + DAY_MS - now) : -1;
     if(lastMine && left > 0){
@@ -899,6 +995,7 @@
   ensureAdDay();
   updateBalanceUI();
   applyLang();
+  syncFromServer(); // подтягиваем данные из Cloudflare KV
 </script>
 </body>
 </html>
