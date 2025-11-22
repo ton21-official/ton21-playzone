@@ -1,660 +1,904 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>T21 Mining</title>
-  <meta name="color-scheme" content="dark light" />
-  <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <title>T21 Play Zone — Mining</title>
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
 
   <style>
     :root{
-      --bg:#050815;
-      --panel:#0c1222;
-      --panel2:#111a2b;
-      --accent:#4fc3ff;
-      --accent2:#7cf7d8;
+      --bg:#050814;
+      --panel:#0f1524;
+      --panel2:#0b1020;
+      --border:#1e2942;
       --txt:#e9f0ff;
-      --muted:#9fb2d0;
-      --danger:#ff6b81;
-      --gold:#ffd76a;
+      --muted:#9fb0c3;
+      --accent:#46b2ff;
+      --green:#35d49b;
+      --orange:#ffb458;
+      --red:#ff5c7a;
+      --gold1:#ffdf88;
+      --gold2:#f0cf6d;
     }
-    *{box-sizing:border-box;}
-    html,body{height:100%;}
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
       background:
-        radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, #050815 60%),
-        radial-gradient(900px 500px at 120% 110%, #18243a 0%, transparent 60%);
+        radial-gradient(1200px 700px at 50% -10%, #1b2232 0%, #050814 60%),
+        radial-gradient(800px 500px at 120% 110%, #132033 0%, transparent 60%);
       color:var(--txt);
+      font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     }
-    .wrap{
-      max-width:420px;
-      margin:0 auto;
-      padding:16px 16px 32px;
+    .wrap{max-width:960px;margin:0 auto;padding:16px 14px 32px;}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:32px;height:32px;border-radius:999px;
+      background:#02040a url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/cover no-repeat;
+      box-shadow:0 0 18px rgba(70,178,255,.6);
     }
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:14px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .logo{
-      width:32px;height:32px;
-      border-radius:50%;
-      background:#0b1426;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid #1c2d4a;
-      font-size:18px;
-    }
-    .brand-title{
-      display:flex;
-      flex-direction:column;
-    }
-    .brand-title span:first-child{
-      font-weight:700;
-      font-size:16px;
-    }
-    .brand-title span:last-child{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .lang{
-      font-size:13px;
-      color:var(--muted);
-      display:flex;
-      gap:6px;
-      align-items:center;
-    }
-    .lang select{
-      background:#0b1426;
+    .brand-title{display:flex;flex-direction:column}
+    .brand-title span:first-child{font-weight:700;font-size:17px}
+    .brand-title span:last-child{font-size:12px;color:var(--muted)}
+    .topbar{display:flex;gap:8px;align-items:center}
+    select{
+      appearance:none;
+      background:#0b1326;
+      border:1px solid #253354;
+      color:var(--txt);
+      padding:8px 26px 8px 10px;
       border-radius:999px;
-      padding:4px 10px;
-      border:1px solid #223553;
-      color:var(--txt);
-      font-size:12px;
+      font-size:13px;
     }
 
     .card{
-      background:linear-gradient(145deg,#10182a,#0b1220);
+      background:linear-gradient(180deg,#11172a 0%, #090f20 100%);
       border-radius:18px;
-      border:1px solid #1f2d47;
-      padding:16px 14px 14px;
-      box-shadow:0 16px 40px rgba(0,0,0,.45);
-      margin-bottom:12px;
+      border:1px solid #1e2942;
+      padding:16px 14px 18px;
+      box-shadow:0 18px 40px rgba(0,0,0,.6);
     }
-    .balance-main{
+    .title-main{text-align:center;margin:0 0 10px;font-weight:700;font-size:18px}
+    .subtitle{text-align:center;margin:0 0 16px;font-size:13px;color:var(--muted)}
+
+    .balance-box{
       text-align:center;
-      margin-bottom:10px;
+      padding:10px 8px 14px;
+      border-radius:14px;
+      background:radial-gradient(circle at 50% 0,#1e2740 0, #0b1020 55%);
+      border:1px solid #222c48;
+      margin-bottom:14px;
     }
-    .label{
+    .balance-label{font-size:13px;color:var(--muted);margin-bottom:4px}
+    .balance-value{font-size:28px;font-weight:800;letter-spacing:0.03em}
+
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+    .pill{
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid #1e2942;
+      background:#0b1224;
       font-size:12px;
-      color:var(--muted);
     }
-    .main-balance{
-      margin-top:4px;
-      font-size:26px;
-      font-weight:700;
-    }
-    .stats-row{
-      display:flex;
-      gap:8px;
-      margin-top:10px;
-    }
-    .stat{
-      flex:1;
-      border-radius:12px;
-      padding:10px;
-      background:#0b1424;
-      border:1px solid #182640;
-      font-size:13px;
-    }
-    .stat-title{
-      color:var(--muted);
-      font-size:11px;
-      margin-bottom:4px;
-    }
-    .stat-value{
-      font-weight:600;
-      font-size:14px;
-    }
-    .stat-tag{
-      margin-top:2px;
-      font-size:11px;
-      color:var(--accent2);
-    }
+    .pill-label{color:var(--muted);margin-bottom:4px}
+    .pill-value{font-weight:600}
 
     .btn{
       width:100%;
-      padding:12px 14px;
       border-radius:999px;
       border:none;
-      margin-top:10px;
-      font-weight:600;
+      padding:12px 16px;
       font-size:15px;
+      font-weight:700;
       cursor:pointer;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:6px;
-      transition:transform .06s ease, box-shadow .06s ease, opacity .06s ease;
+      margin-bottom:8px;
+      transition:transform .05s ease, box-shadow .05s ease, opacity .2s;
     }
-    .btn-primary{
-      background:linear-gradient(135deg,#4fc3ff,#7cf7d8);
-      color:#021320;
-      box-shadow:0 6px 16px rgba(79,195,255,.4);
+    .btn:active{transform:translateY(1px);box-shadow:none}
+    .btn[disabled]{opacity:.55;cursor:default}
+    .btn-main{
+      background:linear-gradient(90deg,#20c6ff,#6af0c4);
+      color:#031018;
+      box-shadow:0 10px 26px rgba(65,199,255,.4);
+    }
+    .btn-ad{
+      background:linear-gradient(90deg,#ffb458,#ff7e5a);
+      color:#1a0700;
+      box-shadow:0 10px 26px rgba(255,168,82,.42);
     }
     .btn-secondary{
       background:transparent;
       color:var(--accent);
-      border:1px solid #30466e;
+      border:1px solid #274066;
     }
-    .btn-warning{
-      background:linear-gradient(135deg,#ffd76a,#ff9a5e);
-      color:#2b1305;
-      box-shadow:0 6px 16px rgba(255,173,94,.4);
-    }
-    .btn:active{transform:translateY(1px);box-shadow:none;}
-    .btn:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-      box-shadow:none;
-    }
-
-    .timer{
-      margin-top:6px;
-      text-align:center;
-      font-size:12px;
-      color:var(--muted);
-    }
+    .hint{font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;}
 
     .section{
-      margin-top:18px;
-      padding:12px 12px 10px;
-      border-radius:16px;
-      background:#0b1324;
-      border:1px solid #1b2842;
+      margin-top:16px;
+      padding:12px 10px;
+      border-radius:14px;
+      background:var(--panel2);
+      border:1px solid #1a2440;
     }
-    .section-title{
+    .section h3{
+      margin:0 0 8px;
       font-size:14px;
-      font-weight:600;
-      margin-bottom:6px;
       display:flex;
-      justify-content:space-between;
       align-items:center;
+      justify-content:space-between;
+      gap:8px;
     }
-    .section-title span small{
-      font-weight:400;
-      color:var(--muted);
-      font-size:11px;
-    }
-    .section p{
-      margin:4px 0 0;
-      font-size:12px;
-      color:var(--muted);
-    }
+    .section p{margin:4px 0;font-size:13px;color:var(--muted);}
 
-    .wallet-box{
-      margin-top:8px;
-      border-radius:12px;
-      background:#050b17;
-      border:1px dashed #233553;
-      padding:10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .wallet-box input{
-      margin-top:6px;
+    .wallet-input{
       width:100%;
-      padding:8px 10px;
+      padding:10px 12px;
       border-radius:10px;
-      border:1px solid #223553;
-      background:#050b17;
+      border:1px solid #273553;
+      background:#050a18;
       color:var(--txt);
       font-size:13px;
+      margin-bottom:8px;
+    }
+    .wallet-note{font-size:11px;color:var(--muted);margin-bottom:6px;}
+    .info-small{font-size:11px;color:var(--muted);}
+
+    .row-inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .row-inline .btn{margin-bottom:0;}
+
+    .timer-text{font-size:12px;color:var(--muted);text-align:center;margin-bottom:6px;}
+    .tag{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:2px 8px;border-radius:999px;
+      font-size:11px;border:1px solid #28436a;color:var(--muted);
     }
 
     .footer{
-      margin-top:20px;
+      margin-top:14px;
+      text-align:center;
       font-size:11px;
       color:var(--muted);
-      text-align:center;
     }
+
+    /* fake ad modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.65);
+      z-index:50;
+    }
+    .modal-box{
+      width:min(420px,92vw);
+      background:#0a1020;
+      border-radius:16px;
+      border:1px solid #283759;
+      padding:16px 14px;
+    }
+    .modal-title{margin:0 0 6px;font-size:15px;font-weight:600;}
+    .modal-text{margin:0 0 12px;font-size:13px;color:var(--muted);}
+    .progress{
+      height:10px;border-radius:999px;
+      background:#050814;
+      border:1px solid #1f2c49;
+      overflow:hidden;
+      margin-bottom:10px;
+    }
+    .progress>i{
+      display:block;height:100%;
+      width:0;
+      background:linear-gradient(90deg,#20c6ff,#6af0c4);
+      transition:width 1s linear;
+    }
+    .modal-actions{display:flex;gap:8px;margin-top:6px;}
+    .modal-actions .btn{flex:1;margin-bottom:0;font-size:14px;}
 
     /* flash */
     .flash{
       position:fixed;
-      top:14px;
-      left:50%;
+      top:14px;left:50%;
       transform:translateX(-50%);
       background:#101a30;
-      border-radius:999px;
-      padding:8px 14px;
-      border:1px solid #2b4473;
-      font-size:12px;
-      color:#d8ebff;
+      border-radius:12px;
+      border:1px solid #274066;
+      color:#cbe6ff;
+      padding:7px 14px;
+      font-size:13px;
       display:none;
-      z-index:30;
+      z-index:60;
     }
-
-    /* simple modal "Ad" */
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.6);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:40;
-    }
-    .modal{
-      width:min(360px,92vw);
-      border-radius:16px;
-      background:#0b1424;
-      padding:14px 16px 12px;
-      border:1px solid #203357;
-    }
-    .modal h3{
-      margin:2px 0 4px;
-      font-size:15px;
-    }
-    .modal p{
-      margin:4px 0 10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .progress{
-      height:8px;
-      border-radius:999px;
-      background:#050b16;
-      border:1px solid #223553;
-      overflow:hidden;
-    }
-    .progress-inner{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,#4fc3ff,#7cf7d8);
-    }
-    .modal-actions{
-      display:flex;
-      gap:8px;
-      margin-top:10px;
-    }
-    .modal-actions .btn{
-      margin-top:0;
-      flex:1;
+    @media (max-width:480px){
+      .wrap{padding:12px 10px 20px;}
+      .card{padding:14px 12px 16px;}
+      .title-main{font-size:17px;}
     }
   </style>
 </head>
 <body>
-<div class="flash" id="flash"></div>
-
-<div class="modal-backdrop" id="adModal">
-  <div class="modal">
-    <h3 id="adTitle">Sponsored video</h3>
-    <p id="adText">Watch the promo to get your T21 reward.</p>
-    <div class="progress"><div class="progress-inner" id="adBar"></div></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" id="adSkip" disabled>Skip</button>
-      <button class="btn btn-primary" id="adOk" disabled>Get reward</button>
-    </div>
-  </div>
-</div>
-
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo">T</div>
+      <div class="logo"></div>
       <div class="brand-title">
         <span>Ton21 Mining</span>
-        <span>Virtual pre-mine like Pi Network</span>
+        <span id="subtitle">Virtual pre-mine like Pi Network</span>
       </div>
     </div>
-    <div class="lang">
-      <span>🌐</span>
+    <div class="topbar">
+      <span style="font-size:14px">🌐</span>
       <select id="langSel">
         <option value="en">EN</option>
         <option value="ru" selected>RU</option>
+        <option value="cn">中文</option>
+        <option value="in">हिन्दी</option>
+        <option value="am">Հայ</option>
       </select>
     </div>
   </header>
 
   <div class="card">
-    <div class="balance-main">
-      <div class="label" id="labelBalance">Ваш баланс</div>
-      <div class="main-balance"><span id="balance">0</span> T21</div>
+    <h2 class="title-main" id="mainTitle">T21 Play Zone — Mining</h2>
+    <div class="subtitle" id="subNote">Virtual pre-mine. Balance is not on-chain yet.</div>
+
+    <div class="balance-box">
+      <div class="balance-label" id="balLabel">Your balance</div>
+      <div class="balance-value"><span id="balanceValue">0</span> T21</div>
     </div>
 
-    <div class="stats-row">
-      <div class="stat">
-        <div class="stat-title" id="labelMiningPower">Майнинг-скорость</div>
-        <div class="stat-value">+20 T21 / day</div>
-        <div class="stat-tag" id="labelDailyMining">Daily mining</div>
+    <div class="grid2">
+      <div class="pill">
+        <div class="pill-label" id="rateLabel">Mining speed</div>
+        <div class="pill-value" id="rateValue">+20 T21 / day</div>
       </div>
-      <div class="stat">
-        <div class="stat-title" id="labelBoost">Рекламный буст</div>
-        <div class="stat-value">+5 T21 / ad</div>
-        <div class="stat-tag" id="labelBoostHint">up to many times</div>
+      <div class="pill">
+        <div class="pill-label" id="adRateLabel">Ad bonus</div>
+        <div class="pill-value" id="adRateValue">+5 T21 / ad • 10/day</div>
       </div>
     </div>
 
-    <button class="btn btn-primary" id="dailyBtn">Start / Claim 20 T21</button>
-    <div class="timer" id="dailyTimer">Next daily claim: ready</div>
-
-    <button class="btn btn-warning" id="ad5Btn">🎬 Watch ad (+5 T21)</button>
-    <div class="timer" id="ad5Timer">Ad reward: ready</div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <span id="labelWalletTitle">Your TON address (for future payouts)</span>
+    <div class="hint">
+      <span class="tag" id="virtualTag">Virtual pre-mine</span>
+      <span id="noPayoutYet"> No real payouts yet — only internal stats.</span>
     </div>
-    <p id="labelWalletHelp">Только для записи, выплаты сейчас виртуальные. Позже ты вручную переведёшь T21 тем, кто играл.</p>
-    <div class="wallet-box">
-      <div id="labelWalletText">Сохраним адрес, чтобы знать кому сколько начислено.</div>
-      <input id="walletInput" placeholder="EQ... или UQ..." />
-      <button class="btn btn-secondary" id="walletSave" style="margin-top:8px;">Save address</button>
+
+    <button class="btn btn-main" id="mineBtn">▶ Start / Claim 20 T21</button>
+    <div class="timer-text" id="mineTimer">Next daily bonus in 24:00:00</div>
+
+    <button class="btn btn-ad" id="adBtn">🎬 Watch ad (+5 T21)</button>
+    <div class="timer-text" id="adInfo">Ad bonus: 0 / 10 used today</div>
+
+    <div class="section">
+      <h3>
+        <span id="walletTitle">Your TON address (future payouts)</span>
+      </h3>
+      <p id="walletText1">Now everything is virtual. Later you will manually send T21 to active miners.</p>
+      <p id="walletText2" class="info-small">
+        We save the address to know how much each user mined when real payouts start.
+      </p>
+      <input id="walletInput" class="wallet-input" placeholder="EQ... / UQ..." autocomplete="off"/>
+      <div class="wallet-note" id="walletNote">Address is stored locally in this browser.</div>
+      <button class="btn btn-secondary" id="saveWalletBtn">Save address</button>
+    </div>
+
+    <div class="section">
+      <h3>
+        <span id="aboutTitle">About Ton21</span>
+      </h3>
+      <p id="aboutP1"></p>
+      <p id="aboutP2"></p>
+      <p id="aboutP3"></p>
+    </div>
+
+    <div class="section">
+      <h3>
+        <span id="howTitle">How mining works</span>
+      </h3>
+      <p id="howP1"></p>
+      <p id="howP2"></p>
+      <p id="howP3"></p>
+    </div>
+
+    <div class="section">
+      <h3>
+        <span id="shareTitle">Invite & Share</span>
+      </h3>
+      <p id="shareText"></p>
+      <div class="row-inline">
+        <button class="btn btn-secondary" id="shareBtn">Share Ton21 Mining</button>
+      </div>
+    </div>
+
+    <div class="footer" id="footerText">
+      Powered by Ton21 Project • v0.2 virtual pre-mine • Balance stored in browser (localStorage)
     </div>
   </div>
+</div>
 
-  <div class="section">
-    <div class="section-title">
-      <span id="labelInfoTitle">How it works</span>
+<div class="flash" id="flash"></div>
+
+<!-- Fake Ad modal -->
+<div class="modal" id="adModal">
+  <div class="modal-box">
+    <h3 class="modal-title" id="adModalTitle">Sponsored video</h3>
+    <p class="modal-text" id="adModalText">Please wait 30 seconds to receive your bonus.</p>
+    <div class="progress"><i id="adBar"></i></div>
+    <div class="timer-text" id="adCountdownText">00:30</div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="adCloseBtn" disabled>Close</button>
+      <button class="btn btn-main" id="adClaimBtn" disabled>Get reward</button>
     </div>
-    <p id="labelInfoText">
-      Это виртуальный майнинг T21, как Pi Network. Баланс хранится локально и на сервере (в будущем).
-      Реальных выплат пока нет — когда T21 будет готов, ты вручную отправишь награды активным игрокам.
-    </p>
-  </div>
-
-  <div class="footer">
-    Powered by <b>Ton21 Project</b> • v0.1 virtual pre-mine
   </div>
 </div>
 
 <script>
-  // ======= CONFIG =======
-  const DAILY_REWARD = 20;          // ежедневный бонус
-  const DAILY_COOLDOWN = 24 * 60 * 60 * 1000; // 24 часа
-  const AD5_REWARD = 5;             // награда за рекламу
-  const AD5_COOLDOWN = 30 * 60 * 1000;        // 30 минут
+  // ---------- settings ----------
+  var DAILY_REWARD = 20;
+  var AD_REWARD = 5;
+  var MAX_ADS_PER_DAY = 10;
+  var AD_SECONDS = 30;
+  var DAY_MS = 24 * 60 * 60 * 1000;
 
-  // ======= STATE (localStorage) =======
-  let balance = Number(localStorage.getItem("t21_mining_balance") || "0");
-  let lastDaily = Number(localStorage.getItem("t21_last_daily") || "0");
-  let lastAd5   = Number(localStorage.getItem("t21_last_ad5") || "0");
-  let wallet    = localStorage.getItem("t21_wallet") || "";
-  let lang      = localStorage.getItem("t21_lang") || "ru";
-
-  // ======= TEXTS (EN/RU) =======
-  const texts = {
+  // ---------- translations ----------
+  var T = {
     en:{
-      balance:"Your balance",
-      miningPowerTitle:"Mining power",
-      dailyMining:"Daily mining",
-      boostTitle:"Ad boost",
-      boostHint:"+5 per ad",
-      dailyReady:"Next daily claim: ready",
-      dailyWait:(s)=>`Next daily claim in: ${s}`,
-      ad5Ready:"Ad reward: ready",
-      ad5Wait:(s)=>`Ad reward in: ${s}`,
-      dailyBtn:"Start / Claim 20 T21",
-      ad5Btn:"🎬 Watch ad (+5 T21)",
+      subtitle:"Virtual pre-mine like Pi Network",
+      mainTitle:"T21 Play Zone — Mining",
+      subNote:"Virtual pre-mine. Balance is off-chain and stored locally (later — on server).",
+      balLabel:"Your balance",
+      rateLabel:"Mining speed",
+      rateValue:"+20 T21 / day",
+      adRateLabel:"Ad boost",
+      adRateValue:"+5 T21 / ad • up to 10 per day",
+      virtualTag:"Virtual pre-mine",
+      noPayoutYet:" No real payouts yet — internal stats only.",
+      mineBtnReady:"▶ Start / Claim 20 T21",
+      mineBtnBusy:"Processing...",
+      mineReady:"Daily bonus is available now.",
+      mineNext:"Next daily bonus in",
+      adBtn:"🎬 Watch ad (+5 T21)",
+      adInfo:function(used){return "Ad bonus: "+used+" / 10 used today";},
+      adLimit:"Daily ad limit reached (10 / 10).",
       walletTitle:"Your TON address (for future payouts)",
-      walletHelp:"Record address only. Rewards are virtual now. Later you will send real T21 to active miners.",
-      walletText:"We save your address to know who earned how much.",
-      walletSaved:"Address saved",
-      walletBad:"Looks like not a TON address",
-      infoTitle:"How it works",
-      infoText:"This is a virtual T21 mining like Pi Network. Balance is stored locally (and later on the server). No real payouts yet.",
-      cantDaily:"Daily reward is not ready yet.",
-      cantAd5:"Ad reward is on cooldown.",
-      adTitle:"Sponsored video",
-      adText:"Watch short promo to unlock T21 reward.",
-      adSkip:"Skip",
-      adGet:"Get reward",
-      adDone:"+5 T21 added",
-      dailyDone:"+20 T21 added"
+      walletText1:"Right now everything is virtual. Later you will manually send real T21 to active miners.",
+      walletText2:"We save the address to know how much each miner earned when payouts start.",
+      walletNote:"The address is stored locally in this browser (and later can be synced to server).",
+      aboutTitle:"About Ton21",
+      aboutP1:"Ton21 (T21) is a community-driven token with a fixed supply on the TON blockchain — inspired by Bitcoin’s 21M idea.",
+      aboutP2:"The mission is to build a long-term ecosystem: games, airdrops, rewards, and tools for the TON community.",
+      aboutP3:"Virtual mining in this mini-app helps distribute attention and future rewards among early supporters.",
+      howTitle:"How mining works",
+      howP1:"Once per 24 hours you can tap the Mining button and receive +20 T21 to your virtual balance.",
+      howP2:"+5 T21 for each ad view, up to 10 times per day. Ads can be rewarded or our own promos.",
+      howP3:"Later balances may be exported and matched with your TON address for manual airdrops or rewards.",
+      shareTitle:"Invite & Share",
+      shareText:"Share the mining app with friends. The more active miners we have, the stronger the Ton21 ecosystem becomes.",
+      flashSaved:"✅ Address saved",
+      flashBadAddr:"⚠️ Enter a valid TON address (starts with EQ or UQ).",
+      flashMine:"+20 T21 added to your balance.",
+      flashAd:"+5 T21 added for watching the ad.",
+      flashAdStart:"Ad started — please wait 30 seconds…",
+      modalMineTitle:"Mining bonus — watch first",
+      modalMineText:"Watch this short sponsored video (30 seconds). After that your +20 T21 daily bonus will be credited.",
+      modalAdTitle:"Ad reward",
+      modalAdText:"+5 T21 will be credited after 30 seconds of viewing.",
+      modalBtnClose:"Close",
+      modalBtnGet:"Get reward",
+      needOnline:"If sharing does not open, copy the link manually."
     },
     ru:{
-      balance:"Ваш баланс",
-      miningPowerTitle:"Майнинг-скорость",
-      dailyMining:"Ежедневный майнинг",
-      boostTitle:"Рекламный буст",
-      boostHint:"+5 за просмотр",
-      dailyReady:"Следующий ежедневный бонус: доступен",
-      dailyWait:(s)=>`Следующий бонус через: ${s}`,
-      ad5Ready:"Рекламный бонус: доступен",
-      ad5Wait:(s)=>`Рекламный бонус через: ${s}`,
-      dailyBtn:"Запустить / Получить 20 T21",
-      ad5Btn:"🎬 Смотреть рекламу (+5 T21)",
+      subtitle:"Виртуальный pre-mine как Pi Network",
+      mainTitle:"T21 Play Zone — Майнинг",
+      subNote:"Виртуальный майнинг. Баланс вне блокчейна, хранится локально (позже — на сервере).",
+      balLabel:"Ваш баланс",
+      rateLabel:"Скорость майнинга",
+      rateValue:"+20 T21 / день",
+      adRateLabel:"Рекламный буст",
+      adRateValue:"+5 T21 за рекламу • до 10 в сутки",
+      virtualTag:"Виртуальный pre-mine",
+      noPayoutYet:" Пока реальных выплат нет — только внутренняя статистика.",
+      mineBtnReady:"▶ Запустить / Получить 20 T21",
+      mineBtnBusy:"Обработка...",
+      mineReady:"Ежедневный бонус доступен.",
+      mineNext:"Следующий бонус через",
+      adBtn:"🎬 Смотреть рекламу (+5 T21)",
+      adInfo:function(used){return "Рекламный бонус: "+used+" / 10 использовано за сегодня";},
+      adLimit:"Лимит рекламных бонусов на сегодня (10 / 10).",
       walletTitle:"Ваш TON-адрес (для будущих выплат)",
-      walletHelp:"Сейчас всё виртуально. Позже ты вручную отправишь T21 активным майнерам.",
-      walletText:"Сохраним адрес, чтобы понимать, кому сколько начислено.",
-      walletSaved:"Адрес сохранён",
-      walletBad:"Похоже, это не TON-адрес",
-      infoTitle:"Как это работает",
-      infoText:"Это виртуальный майнинг T21 как Pi Network. Баланс хранится локально (и позже на сервере). Пока реальных выплат нет.",
-      cantDaily:"Ежедневный бонус пока недоступен.",
-      cantAd5:"Рекламный бонус ещё на перезарядке.",
-      adTitle:"Рекламный ролик",
-      adText:"Посмотри короткий ролик, чтобы получить T21.",
-      adSkip:"Пропустить",
-      adGet:"Получить награду",
-      adDone:"+5 T21 начислено",
-      dailyDone:"+20 T21 начислено"
+      walletText1:"Сейчас всё виртуально. Позже ты вручную отправишь реальные T21 активным майнерам.",
+      walletText2:"Мы сохраняем адрес, чтобы понимать, кому и сколько начислять при старте выплат.",
+      walletNote:"Адрес хранится локально в этом браузере (позже можем добавить синхронизацию с сервером).",
+      aboutTitle:"О Ton21",
+      aboutP1:"Ton21 (T21) — токен сообщества с фиксированной эмиссией в сети TON, вдохновлён идеей 21M как у Bitcoin.",
+      aboutP2:"Наша миссия — долгосрочная экосистема: игры, airdrop-кампании, награды и инструменты для сообщества TON.",
+      aboutP3:"Виртуальный майнинг в мини-приложении помогает честно распределить будущее вознаграждение между ранними участниками.",
+      howTitle:"Как работает майнинг",
+      howP1:"Раз в 24 часа можно нажать кнопку Майнинг и получить +20 T21 на виртуальный баланс.",
+      howP2:"+5 T21 за просмотр рекламы, до 10 раз в сутки. Это могут быть реальные рекламные ролики или наши промо.",
+      howP3:"Позже эти балансы можно будет экспортировать и связать с TON-адресом для ручных airdrop-выплат.",
+      shareTitle:"Пригласи друзей",
+      shareText:"Поделись мини-приложением с друзьями. Чем больше активных майнеров — тем сильнее экосистема Ton21.",
+      flashSaved:"✅ Адрес сохранён",
+      flashBadAddr:"⚠️ Введите корректный TON-адрес (начинается с EQ или UQ).",
+      flashMine:"+20 T21 добавлено на баланс.",
+      flashAd:"+5 T21 за просмотр рекламы.",
+      flashAdStart:"Реклама запущена — подождите 30 секунд…",
+      modalMineTitle:"Ежедневный бонус — сначала реклама",
+      modalMineText:"Посмотрите короткий ролик (30 сек). После просмотра будет начислено +20 T21.",
+      modalAdTitle:"Рекламный бонус",
+      modalAdText:"+5 T21 будет начислено после 30 секунд просмотра.",
+      modalBtnClose:"Закрыть",
+      modalBtnGet:"Получить",
+      needOnline:"Если окно не открылось — скопируйте ссылку вручную."
+    },
+    cn:{
+      subtitle:"类似 Pi Network 的虚拟预挖",
+      mainTitle:"T21 Play Zone — 挖矿",
+      subNote:"虚拟挖矿，余额暂时不在链上，先保存在本地（以后同步服务器）。",
+      balLabel:"你的余额",
+      rateLabel:"挖矿速度",
+      rateValue:"+20 T21 / 天",
+      adRateLabel:"广告奖励",
+      adRateValue:"+5 T21 / 广告 • 每天最多 10 次",
+      virtualTag:"虚拟预挖",
+      noPayoutYet:" 目前没有真实发放，只是内部统计。",
+      mineBtnReady:"▶ 开始 / 领取 20 T21",
+      mineBtnBusy:"处理中...",
+      mineReady:"每日奖励可领取。",
+      mineNext:"下次奖励倒计时",
+      adBtn:"🎬 看广告 (+5 T21)",
+      adInfo:function(used){return "广告奖励：今天已使用 "+used+" / 10";},
+      adLimit:"今日广告奖励次数已满 (10 / 10)。",
+      walletTitle:"你的 TON 地址（未来发放用）",
+      walletText1:"现在一切都是虚拟的。以后会根据活跃度向矿工发放真实 T21。",
+      walletText2:"我们保存地址，是为了在开始发放时知道每位矿工的份额。",
+      walletNote:"地址只保存在本地浏览器中（以后可同步到服务器）。",
+      aboutTitle:"关于 Ton21",
+      aboutP1:"Ton21 (T21) 是基于 TON 链的社区代币，总量固定，灵感来自比特币 2100 万。",
+      aboutP2:"目标是打造长期生态：游戏、空投奖励和社区工具。",
+      aboutP3:"这个虚拟挖矿 Mini App 用来在早期用户之间公平分配未来奖励。",
+      howTitle:"挖矿规则",
+      howP1:"每 24 小时可点击一次挖矿按钮，获得 +20 T21 虚拟余额。",
+      howP2:"每次看广告 +5 T21，每天最多 10 次。可以是真实广告或者项目宣传。",
+      howP3:"以后会根据本地余额和 TON 地址，手动发放空投或奖励。",
+      shareTitle:"邀请好友",
+      shareText:"把 Ton21 挖矿分享给朋友，人越多，生态越强。",
+      flashSaved:"✅ 地址已保存",
+      flashBadAddr:"⚠️ 请输入有效的 TON 地址（以 EQ 或 UQ 开头）。",
+      flashMine:"+20 T21 已加入余额。",
+      flashAd:"+5 T21 广告奖励已加入余额。",
+      flashAdStart:"广告开始，请等待 30 秒…",
+      modalMineTitle:"每日奖励 — 先观看广告",
+      modalMineText:"观看 30 秒短视频后，你将获得 +20 T21。",
+      modalAdTitle:"广告奖励",
+      modalAdText:"观看 30 秒后将获得 +5 T21。",
+      modalBtnClose:"关闭",
+      modalBtnGet:"领取奖励",
+      needOnline:"如果分享窗口没打开，请手动复制链接。"
+    },
+    in:{
+      subtitle:"Pi Network जैसा वर्चुअल प्री-माइन",
+      mainTitle:"T21 Play Zone — Mining",
+      subNote:"यह वर्चुअल माइनिंग है। बैलेंस अभी ब्लॉकचेन पर नहीं, लोकल स्टोरेज में सेव होता है।",
+      balLabel:"आपका बैलेंस",
+      rateLabel:"माइनिंग स्पीड",
+      rateValue:"+20 T21 / दिन",
+      adRateLabel:"ऐड बोनस",
+      adRateValue:"+5 T21 / ऐड • दिन में 10 बार",
+      virtualTag:"वर्चुअल प्री-माइन",
+      noPayoutYet:" अभी असली पेमेंट नहीं — सिर्फ आंतरिक स्टैट्स।",
+      mineBtnReady:"▶ स्टार्ट / 20 T21 लें",
+      mineBtnBusy:"प्रोसेस हो रहा है...",
+      mineReady:"डेली बोनस उपलब्ध है।",
+      mineNext:"अगला बोनस इतने समय बाद:",
+      adBtn:"🎬 ऐड देखें (+5 T21)",
+      adInfo:function(used){return "ऐड बोनस: आज "+used+" / 10 इस्तेमाल";},
+      adLimit:"आज के लिए ऐड बोनस लिमिट पूरी हो गई (10 / 10)।",
+      walletTitle:"आपका TON पता (फ्यूचर पेमेंट के लिए)",
+      walletText1:"अभी सब कुछ वर्चुअल है। बाद में सक्रिय माइनर्स को असली T21 भेजे जा सकते हैं।",
+      walletText2:"हम पता सेव करते हैं ताकि पेमेंट शुरू होने पर पता हो किसे कितना देना है।",
+      walletNote:"पता सिर्फ इस ब्राउज़र में लोकली सेव होता है (बाद में सर्वर पर भी भेज सकते हैं)।",
+      aboutTitle:"Ton21 के बारे में",
+      aboutP1:"Ton21 (T21) — TON ब्लॉकचेन पर फिक्स्ड सप्लाई वाला कम्युनिटी टोकन है, जो Bitcoin के 21M कॉन्सेप्ट से प्रेरित है।",
+      aboutP2:"हमारा फोकस लॉन्ग-टर्म इकोसिस्टम है: गेम्स, एयरड्रॉप, रिवॉर्ड और कम्युनिटी टूल्स।",
+      aboutP3:"इस Mini App में वर्चुअल माइनिंग शुरुआती सपोर्टर्स के बीच फ्यूचर रिवॉर्ड बांटने का तरीका है।",
+      howTitle:"माइनिंग कैसे काम करता है",
+      howP1:"हर 24 घंटे में आप एक बार माइनिंग बटन दबाकर +20 T21 वर्चुअल बैलेंस ले सकते हैं।",
+      howP2:"हर ऐड पर +5 T21, दिन में अधिकतम 10 बार। यह रीयल ऐड या हमारे स्वयं के प्रमो हो सकते हैं।",
+      howP3:"आगे चलकर इन्हीं बैलेंस को TON पते से लिंक करके मैनुअल एयरड्रॉप किया जा सकता है।",
+      shareTitle:"दोस्तों को आमंत्रित करें",
+      shareText:"Ton21 माइनिंग अपने दोस्तों के साथ शेयर करें — जितने ज्यादा यूज़र, उतना मजबूत इकोसिस्टम।",
+      flashSaved:"✅ पता सेव हो गया",
+      flashBadAddr:"⚠️ सही TON पता दर्ज करें (EQ या UQ से शुरू)।",
+      flashMine:"+20 T21 बैलेंस में जोड़ दिए गए।",
+      flashAd:"+5 T21 ऐड बोनस जोड़ दिया गया।",
+      flashAdStart:"ऐड शुरू हो गया — 30 सेकंड इंतज़ार करें…",
+      modalMineTitle:"डेली बोनस — पहले ऐड देखें",
+      modalMineText:"30 सेकंड का छोटा वीडियो देखें, उसके बाद +20 T21 मिलेंगे।",
+      modalAdTitle:"ऐड बोनस",
+      modalAdText:"30 सेकंड देखने के बाद +5 T21 मिलेंगे।",
+      modalBtnClose:"Close",
+      modalBtnGet:"Reward लें",
+      needOnline:"अगर शेयर विंडो नहीं खुला तो लिंक कॉपी कर लें।"
+    },
+    am:{
+      subtitle:"Վիրտուալ pre-mine՝ ինչպես Pi Network-ը",
+      mainTitle:"T21 Play Zone — Մայնինգ",
+      subNote:"Վիրտուալ մայնինգ է․ մնացորդը դեռ բլոկչեյնում չէ, պահվում է localStorage-ում (հետո՝ սերվերում)։",
+      balLabel:"Ձեր մնացորդը",
+      rateLabel:"Մայնինգի արագություն",
+      rateValue:"+20 T21 / օր",
+      adRateLabel:"Գովազդային բոնուս",
+      adRateValue:"+5 T21 / գովազդ • օրական մինչև 10 անգամ",
+      virtualTag:"Վիրտուալ pre-mine",
+      noPayoutYet:" Այժմ իրական վճարումներ չկան — միայն ներքին վիճակագրություն։",
+      mineBtnReady:"▶ Սկսել / Ստանալ 20 T21",
+      mineBtnBusy:"Մշակվում է...",
+      mineReady:"Օրյա բոնուսը հասանելի է։",
+      mineNext:"Հաջորդ բոնուսը՝",
+      adBtn:"🎬 Դիտել գովազդ (+5 T21)",
+      adInfo:function(used){return "Գովազդի բոնուս՝ այսօր "+used+" / 10 օգտագործված";},
+      adLimit:"Այսօրվա գովազդային բոնուսների սահմանը լրացած է (10 / 10)։",
+      walletTitle:"Ձեր TON հասցեն (ապագա վճարումների համար)",
+      walletText1:"Հիմա ամեն ինչ վիրտուալ է։ Հետագայում ակտիվ մայներներին կարող եք ուղարկել իրական T21։",
+      walletText2:"Մենք պահպանում ենք հասցեն, որպեսզի իմանանք՝ սկսելուց հետո ում որքան հատկացնել։",
+      walletNote:"Հասցեն պահվում է միայն այս բրաուզերում (հետագայում կարելի է ուղարկել սերվեր)։",
+      aboutTitle:"Ton21 նախագծի մասին",
+      aboutP1:"Ton21 (T21)՝ սահմանափակ թողարկմամբ թոքեն TON բլոկչեյնում՝ ներշնչված Bitcoin-ի 21M գաղափարից։",
+      aboutP2:"Նպատակը երկարաժամկետ էկոհամակարգ է՝ խաղեր, airdrop-ներ, մրցանակներ և գործիքներ TON համայնքի համար։",
+      aboutP3:"Այս mini-app-ի վիրտուալ մայնինգը օգնում է ապագա պարգևները բաժանել վաղ աջակցողների միջև։",
+      howTitle:"Ինչպե՞ս է աշխատում մայնինգը",
+      howP1:"Ամեն 24 ժամը մեկ կարող եք սեղմել «Մայնինգ» կոճակը և ստանալ +20 T21 վիրտուալ մնացորդ։",
+      howP2:"+5 T21 յուրաքանչյուր գովազդի համար, օրական մինչև 10 անգամ։ Կարող են լինել իրական գովազդներ կամ մեր պրոմոները։",
+      howP3:"Ապագայում այս մնացորդները կկապվեն TON հասցեի հետ և կարող են օգտագործվել ձեռքով airdrop-ների համար։",
+      shareTitle:"Կիսվիր Ton21-ով",
+      shareText:"Կիսվիր այս մայնինգի հավելվածով ընկերներիդ հետ․ որքան շատ ակտիվ օգտատերեր, այնքան ուժեղ Ton21 էկոհամակարգ։",
+      flashSaved:"✅ Հասցեն պահպանվել է",
+      flashBadAddr:"⚠️ Մուտքագրեք ճիշտ TON հասցե (սկսվում է EQ կամ UQ-ով)։",
+      flashMine:"+20 T21 ավելացվեց Ձեր մնացորդին։",
+      flashAd:"+5 T21՝ գովազդի դիտման համար։",
+      flashAdStart:"Գովազդը մեկնարկեց — սպասեք 30 վայրկյան…",
+      modalMineTitle:"Օրյա բոնուս — նախ գովազդ",
+      modalMineText:"Դիտեք 30 վայրկյան տևողությամբ հոլովակը, ապա կստանաք +20 T21։",
+      modalAdTitle:"Գովազդային բոնուս",
+      modalAdText:"+5 T21 կստանաք 30 վայրկյան դիտումից հետո։",
+      modalBtnClose:"Փակել",
+      modalBtnGet:"Ստանալ",
+      needOnline:"Եթե share պատուհանը չբացվեց, պատճենեք հղումը։"
     }
   };
 
-  // ======= DOM =======
-  const $ = s => document.querySelector(s);
+  // ---------- state ----------
+  var lang = localStorage.getItem("t21m_lang") || "ru";
+  var balance = Number(localStorage.getItem("t21m_balance") || "0");
+  var lastMine = Number(localStorage.getItem("t21m_lastMine") || "0");
+  var wallet = localStorage.getItem("t21m_wallet") || "";
+  var adsDate = localStorage.getItem("t21m_adsDate") || "";
+  var adsUsed = Number(localStorage.getItem("t21m_adsUsed") || "0");
 
-  const elBalance = $("#balance");
-  const elLabelBalance = $("#labelBalance");
-  const elMiningPowerTitle = $("#labelMiningPower");
-  const elDailyMining = $("#labelDailyMining");
-  const elBoostTitle = $("#labelBoost");
-  const elBoostHint = $("#labelBoostHint");
-  const elDailyBtn = $("#dailyBtn");
-  const elDailyTimer = $("#dailyTimer");
-  const elAd5Btn = $("#ad5Btn");
-  const elAd5Timer = $("#ad5Timer");
-  const elLangSel = $("#langSel");
-  const elWalletTitle = $("#labelWalletTitle");
-  const elWalletHelp = $("#labelWalletHelp");
-  const elWalletText = $("#labelWalletText");
-  const elWalletInput = $("#walletInput");
-  const elWalletSave = $("#walletSave");
-  const elInfoTitle = $("#labelInfoTitle");
-  const elInfoText = $("#labelInfoText");
-  const elFlash = $("#flash");
+  // ---------- dom ----------
+  var $ = function(id){return document.getElementById(id);};
+  var langSel = $("langSel");
+  var subtitle = $("subtitle");
+  var mainTitle = $("mainTitle");
+  var subNote = $("subNote");
+  var balanceValue = $("balanceValue");
+  var balLabel = $("balLabel");
+  var rateLabel = $("rateLabel");
+  var rateValue = $("rateValue");
+  var adRateLabel = $("adRateLabel");
+  var adRateValue = $("adRateValue");
+  var virtualTag = $("virtualTag");
+  var noPayoutYet = $("noPayoutYet");
+  var mineBtn = $("mineBtn");
+  var mineTimer = $("mineTimer");
+  var adBtn = $("adBtn");
+  var adInfo = $("adInfo");
+  var walletTitle = $("walletTitle");
+  var walletText1 = $("walletText1");
+  var walletText2 = $("walletText2");
+  var walletNote = $("walletNote");
+  var walletInput = $("walletInput");
+  var saveWalletBtn = $("saveWalletBtn");
+  var aboutTitle = $("aboutTitle");
+  var aboutP1 = $("aboutP1");
+  var aboutP2 = $("aboutP2");
+  var aboutP3 = $("aboutP3");
+  var howTitle = $("howTitle");
+  var howP1 = $("howP1");
+  var howP2 = $("howP2");
+  var howP3 = $("howP3");
+  var shareTitle = $("shareTitle");
+  var shareText = $("shareText");
+  var shareBtn = $("shareBtn");
+  var footerText = $("footerText");
+  var flash = $("flash");
 
-  const adModal = $("#adModal");
-  const adBar = $("#adBar");
-  const adTitle = $("#adTitle");
-  const adText = $("#adText");
-  const adSkip = $("#adSkip");
-  const adOk = $("#adOk");
+  var adModal = $("adModal");
+  var adBar = $("adBar");
+  var adCountdownText = $("adCountdownText");
+  var adModalTitle = $("adModalTitle");
+  var adModalText = $("adModalText");
+  var adCloseBtn = $("adCloseBtn");
+  var adClaimBtn = $("adClaimBtn");
 
-  // ======= HELPERS =======
-  function flash(msg, ms=1600){
-    elFlash.textContent = msg;
-    elFlash.style.display = "block";
-    setTimeout(()=>{ elFlash.style.display = "none"; }, ms);
+  var adContext = null; // "mine" or "ad"
+  var adTimer = null;
+  var adLeft = 0;
+
+  function todayKey(){
+    return (new Date()).toISOString().slice(0,10);
   }
 
-  function formatRemain(ms){
-    if(ms < 0) ms = 0;
-    const sec = Math.floor(ms/1000);
-    const h = Math.floor(sec/3600);
-    const m = Math.floor((sec%3600)/60);
-    const s = sec%60;
-    const hh = String(h).padStart(2,"0");
-    const mm = String(m).padStart(2,"0");
-    const ss = String(s).padStart(2,"0");
-    return `${hh}:${mm}:${ss}`;
+  function ensureAdDay(){
+    var today = todayKey();
+    if(adsDate !== today){
+      adsDate = today;
+      adsUsed = 0;
+      localStorage.setItem("t21m_adsDate", adsDate);
+      localStorage.setItem("t21m_adsUsed", String(adsUsed));
+    }
   }
 
-  function isTonAddress(a){
-    return /^E[Q]/.test(a) || /^UQ/.test(a);
+  function fmt2(n){return n<10?"0"+n:String(n);}
+
+  function humanLeft(ms){
+    if(ms <= 0) return "00:00:00";
+    var s = Math.floor(ms/1000);
+    var h = Math.floor(s/3600); s-=h*3600;
+    var m = Math.floor(s/60); s-=m*60;
+    return fmt2(h)+":"+fmt2(m)+":"+fmt2(s);
+  }
+
+  function flashMsg(text, ms){
+    if(ms === undefined) ms = 1800;
+    flash.textContent = text;
+    flash.style.display = "block";
+    setTimeout(function(){ flash.style.display="none"; }, ms);
   }
 
   function saveState(){
-    localStorage.setItem("t21_mining_balance", String(balance));
-    localStorage.setItem("t21_last_daily", String(lastDaily));
-    localStorage.setItem("t21_last_ad5", String(lastAd5));
-    localStorage.setItem("t21_wallet", wallet);
-    localStorage.setItem("t21_lang", lang);
+    localStorage.setItem("t21m_lang", lang);
+    localStorage.setItem("t21m_balance", String(balance));
+    localStorage.setItem("t21m_lastMine", String(lastMine));
+    localStorage.setItem("t21m_wallet", wallet);
+    localStorage.setItem("t21m_adsDate", adsDate);
+    localStorage.setItem("t21m_adsUsed", String(adsUsed));
   }
 
-  // ======= UI UPDATE =======
-  function updateTexts(){
-    const tr = texts[lang];
-    elLabelBalance.textContent = tr.balance;
-    elMiningPowerTitle.textContent = tr.miningPowerTitle;
-    elDailyMining.textContent = tr.dailyMining;
-    elBoostTitle.textContent = tr.boostTitle;
-    elBoostHint.textContent = tr.boostHint;
-    elDailyBtn.textContent = tr.dailyBtn;
-    elAd5Btn.textContent = tr.ad5Btn;
-    elWalletTitle.textContent = tr.walletTitle;
-    elWalletHelp.textContent = tr.walletHelp;
-    elWalletText.textContent = tr.walletText;
-    elInfoTitle.textContent = tr.infoTitle;
-    elInfoText.textContent = tr.infoText;
-    adTitle.textContent = tr.adTitle;
-    adText.textContent = tr.adText;
-    adSkip.textContent = tr.adSkip;
-    adOk.textContent = tr.adGet;
+  function isValidTon(a){
+    a = (a || "").trim();
+    return /^E[Q]/.test(a) || /^UQ/.test(a);
   }
 
-  function updateUI(){
-    const tr = texts[lang];
-    elBalance.textContent = balance.toFixed(4).replace(/0+$/,"").replace(/\.$/,"");
-    elWalletInput.value = wallet;
+  function applyLang(){
+    var tr = T[lang] || T.en;
+    document.documentElement.lang = lang === "cn" ? "zh" : lang;
+    subtitle.textContent = tr.subtitle;
+    mainTitle.textContent = tr.mainTitle;
+    subNote.textContent = tr.subNote;
+    balLabel.textContent = tr.balLabel;
+    rateLabel.textContent = tr.rateLabel;
+    rateValue.textContent = tr.rateValue;
+    adRateLabel.textContent = tr.adRateLabel;
+    adRateValue.textContent = tr.adRateValue;
+    virtualTag.textContent = tr.virtualTag;
+    noPayoutYet.textContent = tr.noPayoutYet;
+    adBtn.textContent = tr.adBtn;
+    walletTitle.textContent = tr.walletTitle;
+    walletText1.textContent = tr.walletText1;
+    walletText2.textContent = tr.walletText2;
+    walletNote.textContent = tr.walletNote;
+    aboutTitle.textContent = tr.aboutTitle;
+    aboutP1.textContent = tr.aboutP1;
+    aboutP2.textContent = tr.aboutP2;
+    aboutP3.textContent = tr.aboutP3;
+    howTitle.textContent = tr.howTitle;
+    howP1.textContent = tr.howP1;
+    howP2.textContent = tr.howP2;
+    howP3.textContent = tr.howP3;
+    shareTitle.textContent = tr.shareTitle;
+    shareText.textContent = tr.shareText;
+    shareBtn.textContent = "🔗 " + tr.shareTitle;
+    adCloseBtn.textContent = tr.modalBtnClose;
+    adClaimBtn.textContent = tr.modalBtnGet;
+    footerText.textContent = "Powered by Ton21 Project • v0.2 virtual pre-mine • Balance stored in browser (localStorage)";
+    updateAdInfo();
+    updateMineUI();
+  }
 
-    const now = Date.now();
-    const dailyRemain = DAILY_COOLDOWN - (now - lastDaily);
-    if(dailyRemain <= 0){
-      elDailyBtn.disabled = false;
-      elDailyTimer.textContent = tr.dailyReady;
+  function updateBalanceUI(){
+    balanceValue.textContent = balance.toFixed(2).replace(/\.00$/,"");
+  }
+
+  function updateAdInfo(){
+    ensureAdDay();
+    var tr = T[lang] || T.en;
+    if(typeof tr.adInfo === "function"){
+      adInfo.textContent = tr.adInfo(adsUsed);
     }else{
-      elDailyBtn.disabled = true;
-      elDailyTimer.textContent = tr.dailyWait(formatRemain(dailyRemain));
+      adInfo.textContent = tr.adInfo;
     }
-
-    const adRemain = AD5_COOLDOWN - (now - lastAd5);
-    if(adRemain <= 0){
-      elAd5Btn.disabled = false;
-      elAd5Timer.textContent = tr.ad5Ready;
+    if(adsUsed >= MAX_ADS_PER_DAY){
+      adBtn.disabled = true;
     }else{
-      elAd5Btn.disabled = true;
-      elAd5Timer.textContent = tr.ad5Wait(formatRemain(adRemain));
+      adBtn.disabled = false;
     }
   }
 
-  // ======= EVENTS =======
-  elLangSel.value = lang;
-  elLangSel.onchange = ()=>{
-    lang = elLangSel.value;
-    saveState();
-    updateTexts();
-    updateUI();
-  };
+  function updateMineUI(){
+    var tr = T[lang] || T.en;
+    var now = Date.now();
+    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
+    if(!lastMine || left <= 0){
+      mineBtn.disabled = false;
+      mineBtn.textContent = tr.mineBtnReady;
+      mineTimer.textContent = tr.mineReady;
+    }else{
+      mineBtn.disabled = true;
+      mineBtn.textContent = tr.mineBtnReady;
+      mineTimer.textContent = tr.mineNext + " " + humanLeft(left);
+    }
+  }
 
-  elDailyBtn.onclick = ()=>{
-    const tr = texts[lang];
-    const now = Date.now();
-    const remain = DAILY_COOLDOWN - (now - lastDaily);
-    if(remain > 0){
-      flash(tr.cantDaily);
+  setInterval(function(){
+    updateMineUI();
+  }, 1000);
+
+  // ---------- fake ad flow ----------
+  function startAdFlow(context){
+    ensureAdDay();
+    var tr = T[lang] || T.en;
+
+    if(context === "ad" && adsUsed >= MAX_ADS_PER_DAY){
+      flashMsg(tr.adLimit, 2000);
       return;
     }
-    lastDaily = now;
-    balance += DAILY_REWARD;
-    saveState();
-    updateUI();
-    flash(tr.dailyDone);
-  };
 
-  function showAdModal(onDone){
-    const tr = texts[lang];
-    adTitle.textContent = tr.adTitle;
-    adText.textContent = tr.adText;
-    adSkip.textContent = tr.adSkip;
-    adOk.textContent = tr.adGet;
+    adContext = context;
+    adBar.style.width = "0%";
+    adCountdownText.textContent = "00:"+fmt2(AD_SECONDS);
+    adCloseBtn.disabled = true;
+    adClaimBtn.disabled = true;
+
+    if(context === "mine"){
+      adModalTitle.textContent = tr.modalMineTitle;
+      adModalText.textContent = tr.modalMineText;
+    }else{
+      adModalTitle.textContent = tr.modalAdTitle;
+      adModalText.textContent = tr.modalAdText;
+    }
 
     adModal.style.display = "flex";
-    adBar.style.width = "0%";
-    adSkip.disabled = true;
-    adOk.disabled = true;
+    flashMsg(tr.flashAdStart, 1600);
 
-    let t = 0;
-    const total = 10; // 10 секунд "ролик"
-    const timer = setInterval(()=>{
-      t++;
-      adBar.style.width = (t/total*100) + "%";
-      if(t >= 4) adSkip.disabled = false;   // skip после 4 сек
-      if(t >= total){
-        clearInterval(timer);
-        adOk.disabled = false;
+    var elapsed = 0;
+    if(adTimer){ clearInterval(adTimer); }
+    adTimer = setInterval(function(){
+      elapsed += 1;
+      var left = AD_SECONDS - elapsed;
+      if(left < 0) left = 0;
+      adCountdownText.textContent = "00:"+fmt2(left);
+      var pct = Math.min(100, Math.floor(elapsed / AD_SECONDS * 100));
+      adBar.style.width = pct + "%";
+
+      if(elapsed >= AD_SECONDS){
+        clearInterval(adTimer);
+        adTimer = null;
+        adClaimBtn.disabled = false;
+        adCloseBtn.disabled = false;
       }
-    },1000);
-
-    adSkip.onclick = ()=>{
-      clearInterval(timer);
-      adModal.style.display = "none";
-      adSkip.onclick = null;
-      adOk.onclick = null;
-    };
-    adOk.onclick = ()=>{
-      clearInterval(timer);
-      adModal.style.display = "none";
-      adSkip.onclick = null;
-      adOk.onclick = null;
-      onDone();
-    };
+    }, 1000);
   }
 
-  elAd5Btn.onclick = ()=>{
-    const tr = texts[lang];
-    const now = Date.now();
-    const remain = AD5_COOLDOWN - (now - lastAd5);
-    if(remain > 0){
-      flash(tr.cantAd5);
-      return;
-    }
-    showAdModal(()=>{
-      lastAd5 = Date.now();
-      balance += AD5_REWARD;
-      saveState();
-      updateUI();
-      flash(tr.adDone);
-    });
-  };
+  function closeAdModal(){
+    adModal.style.display = "none";
+    if(adTimer){ clearInterval(adTimer); adTimer = null; }
+  }
 
-  elWalletSave.onclick = ()=>{
-    const tr = texts[lang];
-    const v = elWalletInput.value.trim();
-    if(v && !isTonAddress(v)){
-      flash(tr.walletBad);
+  function finishAdReward(){
+    var tr = T[lang] || T.en;
+    closeAdModal();
+
+    if(adContext === "mine"){
+      // give daily reward
+      var now = Date.now();
+      var left = lastMine ? (lastMine + DAY_MS - now) : -1;
+      if(lastMine && left > 0){
+        updateMineUI();
+        return;
+      }
+      lastMine = now;
+      balance += DAILY_REWARD;
+      saveState();
+      updateBalanceUI();
+      updateMineUI();
+      flashMsg(tr.flashMine, 2200);
+    }else if(adContext === "ad"){
+      ensureAdDay();
+      if(adsUsed >= MAX_ADS_PER_DAY){
+        updateAdInfo();
+        return;
+      }
+      adsUsed += 1;
+      balance += AD_REWARD;
+      saveState();
+      updateBalanceUI();
+      updateAdInfo();
+      flashMsg(tr.flashAd, 2000);
+    }
+    adContext = null;
+  }
+
+  // ---------- events ----------
+  langSel.value = lang;
+  langSel.addEventListener("change", function(){
+    lang = langSel.value;
+    saveState();
+    applyLang();
+  });
+
+  walletInput.value = wallet;
+
+  saveWalletBtn.addEventListener("click", function(){
+    var tr = T[lang] || T.en;
+    var v = walletInput.value.trim();
+    if(!isValidTon(v)){
+      flashMsg(tr.flashBadAddr, 2200);
       return;
     }
     wallet = v;
     saveState();
-    flash(tr.walletSaved);
-  };
+    flashMsg(tr.flashSaved, 1800);
+  });
 
-  // ======= INIT =======
-  updateTexts();
-  updateUI();
-  setInterval(updateUI, 1000); // обновляем таймеры раз в секунду
+  mineBtn.addEventListener("click", function(){
+    var tr = T[lang] || T.en;
+    var now = Date.now();
+    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
+    if(lastMine && left > 0){
+      updateMineUI();
+      return;
+    }
+    startAdFlow("mine");
+  });
+
+  adBtn.addEventListener("click", function(){
+    startAdFlow("ad");
+  });
+
+  adCloseBtn.addEventListener("click", function(){
+    closeAdModal();
+  });
+
+  adClaimBtn.addEventListener("click", function(){
+    finishAdReward();
+  });
+
+  shareBtn.addEventListener("click", function(){
+    var tr = T[lang] || T.en;
+    var url = window.location.href;
+    var text = "T21 Mining — virtual pre-mine like Pi Network. Join early: " + url;
+    if(navigator.share){
+      navigator.share({title:"T21 Play Zone — Mining", text:text, url:url}).catch(function(){});
+    }else if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        flashMsg("Link copied to clipboard", 1600);
+      }).catch(function(){
+        flashMsg(tr.needOnline, 1800);
+      });
+    }else{
+      flashMsg(tr.needOnline, 1800);
+    }
+  });
+
+  // ---------- init ----------
+  ensureAdDay();
+  updateBalanceUI();
+  applyLang();
 </script>
 </body>
 </html>
