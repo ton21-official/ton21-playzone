@@ -7,6 +7,9 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
 
+  <!-- TonPlay rewarded ads SDK (реальная реклама) -->
+  <script src="https://sdk.tonplay.io/sdk.js"></script>
+
   <style>
     :root{
       --bg:#050814;
@@ -322,7 +325,7 @@
 
 <div class="flash" id="flash"></div>
 
-<!-- Fake Ad modal -->
+<!-- Fake Ad modal (fallback, если TonPlay недоступен) -->
 <div class="modal" id="adModal">
   <div class="modal-box">
     <h3 class="modal-title" id="adModalTitle">Sponsored video</h3>
@@ -648,7 +651,6 @@
 
   var adContext = null; // "mine" or "ad"
   var adTimer = null;
-  var adLeft = 0;
 
   // ---------- backend helpers ----------
 
@@ -767,7 +769,7 @@
 
   function isValidTon(a){
     a = (a || "").trim();
-    return /^E[Q]/.test(a) || /^UQ/.test(a);
+    return /^EQ/.test(a) || /^UQ/.test(a);
   }
 
   function applyLang(){
@@ -844,7 +846,41 @@
     updateMineUI();
   }, 1000);
 
-  // ---------- fake ad flow ----------
+  // ---------- Награда (одна логика для TonPlay и для фейка) ----------
+  function rewardDaily(){
+    var tr = T[lang] || T.en;
+    var now = Date.now();
+    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
+    if(lastMine && left > 0){
+      updateMineUI();
+      return;
+    }
+    lastMine = now;
+    balance += DAILY_REWARD;
+    saveState();
+    updateBalanceUI();
+    updateMineUI();
+    flashMsg(tr.flashMine, 2200);
+    apiAddMining(); // fire-and-forget
+  }
+
+  function rewardAd(){
+    var tr = T[lang] || T.en;
+    ensureAdDay();
+    if(adsUsed >= MAX_ADS_PER_DAY){
+      updateAdInfo();
+      return;
+    }
+    adsUsed += 1;
+    balance += AD_REWARD;
+    saveState();
+    updateBalanceUI();
+    updateAdInfo();
+    flashMsg(tr.flashAd, 2000);
+    apiAddAdReward(); // fire-and-forget
+  }
+
+  // ---------- fake ad flow (fallback) ----------
   function startAdFlow(context){
     ensureAdDay();
     var tr = T[lang] || T.en;
@@ -896,39 +932,45 @@
   }
 
   function finishAdReward(){
-    var tr = T[lang] || T.en;
     closeAdModal();
-
     if(adContext === "mine"){
-      // give daily reward
-      var now = Date.now();
-      var left = lastMine ? (lastMine + DAY_MS - now) : -1;
-      if(lastMine && left > 0){
-        updateMineUI();
-        return;
-      }
-      lastMine = now;
-      balance += DAILY_REWARD;
-      saveState();
-      updateBalanceUI();
-      updateMineUI();
-      flashMsg(tr.flashMine, 2200);
-      apiAddMining(); // fire-and-forget
+      rewardDaily();
     }else if(adContext === "ad"){
-      ensureAdDay();
-      if(adsUsed >= MAX_ADS_PER_DAY){
-        updateAdInfo();
-        return;
-      }
-      adsUsed += 1;
-      balance += AD_REWARD;
-      saveState();
-      updateBalanceUI();
-      updateAdInfo();
-      flashMsg(tr.flashAd, 2000);
-      apiAddAdReward(); // fire-and-forget, syncs real balance/adsToday
+      rewardAd();
     }
     adContext = null;
+  }
+
+  // ---------- ОБЁРТКА: попытаться показать реальную TonPlay рекламу ----------
+  function startAd(context){
+    var tr = T[lang] || T.en;
+
+    // ❗ Здесь должен быть реальный вызов из кабинета TonPlay.
+    // Я поставил пример с проверкой, чтобы код не ломался, если TonPlay недоступен.
+    if (window.TonPlay && typeof TonPlay.showRewardedAd === "function") {
+      flashMsg(tr.flashAdStart, 1600);
+      try{
+        // Пример: TonPlay.showRewardedAd может вернуть Promise
+        TonPlay.showRewardedAd()
+          .then(function(){
+            if(context === "mine"){
+              rewardDaily();
+            }else if(context === "ad"){
+              rewardAd();
+            }
+          })
+          .catch(function(err){
+            console.warn("TonPlay ad error, fallback to fake timer", err);
+            startAdFlow(context); // фейковый таймер
+          });
+      }catch(e){
+        console.warn("TonPlay exception, fallback to fake timer", e);
+        startAdFlow(context);
+      }
+    } else {
+      // SDK нет или метод не найден — работаем по старой схеме с таймером
+      startAdFlow(context);
+    }
   }
 
   // ---------- events ----------
@@ -961,11 +1003,13 @@
       updateMineUI();
       return;
     }
-    startAdFlow("mine");
+    // сначала реклама → потом +20 T21
+    startAd("mine");
   });
 
   adBtn.addEventListener("click", function(){
-    startAdFlow("ad");
+    // реклама → потом +5 T21 (если не превышен лимит)
+    startAd("ad");
   });
 
   adCloseBtn.addEventListener("click", function(){
