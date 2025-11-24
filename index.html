@@ -1020,22 +1020,44 @@
     finishAdReward();
   });
 
-  shareBtn.addEventListener("click", function(){
-    var tr = T[lang] || T.en;
-    var url = window.location.href;
-    var text = "T21 Mining — early T21 mining phase on TON. Join before payouts start in 2026: " + url;
-    if(navigator.share){
-      navigator.share({title:"T21 Play Zone — Mining", text:text, url:url}).catch(function(){});
-    }else if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){
-        flashMsg("Link copied to clipboard", 1600);
-      }).catch(function(){
-        flashMsg(tr.needOnline, 1800);
-      });
-    }else{
-      flashMsg(tr.needOnline, 1800);
-    }
-  });
+  // ---------- SHARE (clean link, no tgWebAppData) ----------
+shareBtn.addEventListener("click", function(){
+  var tr = T[lang] || T.en;
+
+  // ЧИСТАЯ ССЫЛКА — фиксированная
+  const cleanUrl = "https://ton21-official.github.io/ton21-playzone/";
+
+  const shareText = {
+      en: "Join T21 Mining — early access before payouts in 2026!",
+      ru: "Присоединяйся к T21 Mining — ранний доступ до выплат 2026!",
+      cn: "加入 T21 Mining——2026 前的早期挖矿！",
+      am: "Միացիր T21 Mining — վաղ մայնինգ մինչև 2026!",
+      in: "T21 Mining में शामिल हों — 2026 से पहले!"
+  }[lang] || "T21 Mining is live!";
+
+  const shareData = {
+      title: "T21 Play Zone — Mining",
+      text: shareText,
+      url: cleanUrl
+  };
+
+  // Нативный share
+  if (navigator.share) {
+      navigator.share(shareData).catch(()=>{});
+      return;
+  }
+
+  // Копирование ссылки если share недоступен
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(cleanUrl)
+          .then(()=> flashMsg("🔗 Link copied", 1800))
+          .catch(()=> flashMsg(tr.needOnline, 1800));
+      return;
+  }
+
+  flashMsg(tr.needOnline, 1800);
+});
+
 
   // ---------- init ----------
   ensureAdDay();
