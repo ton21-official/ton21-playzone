@@ -7,8 +7,23 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
 
-  <!-- TonPlay rewarded ads SDK (реальная реклама) -->
-  <script src="https://sdk.tonplay.io/sdk.js"></script>
+  <!-- TonPlay rewarded ads SDK (рекламная реклама) -->
+<script src="https://sdk.tonplay.io/sdk.js"></script>
+
+<!-- GameMonetize SDK -->
+<script src="https://html5.api.gamemonetize.com/sdk.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (typeof GameMonetize !== "undefined") {
+            console.log("GameMonetize SDK loaded");
+            GameMonetize.init();
+        } else {
+            console.error("GameMonetize SDK not loaded!");
+        }
+    });
+</script>
+
+
 
   <style>
     :root{
