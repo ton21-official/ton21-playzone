@@ -1,29 +1,27 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>T21 Play Zone — Mining</title>
   <meta name="color-scheme" content="dark light">
-  <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"/>
+  <link rel="icon" href="https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png">
 
   <!-- TonPlay rewarded ads SDK (рекламная реклама) -->
-<script src="https://sdk.tonplay.io/sdk.js"></script>
+  <script src="https://sdk.tonplay.io/sdk.js"></script>
 
-<!-- GameMonetize SDK -->
-<script src="https://html5.api.gamemonetize.com/sdk.js"></script>
-<script>
+  <!-- GameMonetize SDK -->
+  <script src="https://html5.api.gamemonetize.com/sdk.js"></script>
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
-        if (typeof GameMonetize !== "undefined") {
-            console.log("GameMonetize SDK loaded");
-            GameMonetize.init();
-        } else {
-            console.error("GameMonetize SDK not loaded!");
-        }
+      if (typeof GameMonetize !== "undefined") {
+        console.log("GameMonetize SDK loaded");
+        GameMonetize.init();
+      } else {
+        console.error("GameMonetize SDK not loaded!");
+      }
     });
-</script>
-
-
+  </script>
 
   <style>
     :root{
@@ -40,8 +38,8 @@
       --gold1:#ffdf88;
       --gold2:#f0cf6d;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
     body{
       margin:0;
       background:
@@ -51,16 +49,16 @@
       font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     }
     .wrap{max-width:960px;margin:0 auto;padding:16px 14px 32px;}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .brand{display:flex;align-items:center;gap:10px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .brand{display:flex;align-items:center;gap:10px;}
     .logo{width:32px;height:32px;border-radius:999px;
       background:#02040a url("https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png") center/cover no-repeat;
       box-shadow:0 0 18px rgba(70,178,255,.6);
     }
-    .brand-title{display:flex;flex-direction:column}
-    .brand-title span:first-child{font-weight:700;font-size:17px}
-    .brand-title span:last-child{font-size:12px;color:var(--muted)}
-    .topbar{display:flex;gap:8px;align-items:center}
+    .brand-title{display:flex;flex-direction:column;}
+    .brand-title span:first-child{font-weight:700;font-size:17px;}
+    .brand-title span:last-child{font-size:12px;color:var(--muted);}
+    .topbar{display:flex;gap:8px;align-items:center;}
     select{
       appearance:none;
       background:#0b1326;
@@ -78,8 +76,8 @@
       padding:16px 14px 18px;
       box-shadow:0 18px 40px rgba(0,0,0,.6);
     }
-    .title-main{text-align:center;margin:0 0 10px;font-weight:700;font-size:18px}
-    .subtitle{text-align:center;margin:0 0 16px;font-size:13px;color:var(--muted)}
+    .title-main{text-align:center;margin:0 0 10px;font-weight:700;font-size:18px;}
+    .subtitle{text-align:center;margin:0 0 16px;font-size:13px;color:var(--muted);}
 
     .balance-box{
       text-align:center;
@@ -89,10 +87,10 @@
       border:1px solid #222c48;
       margin-bottom:14px;
     }
-    .balance-label{font-size:13px;color:var(--muted);margin-bottom:4px}
-    .balance-value{font-size:28px;font-weight:800;letter-spacing:0.03em}
+    .balance-label{font-size:13px;color:var(--muted);margin-bottom:4px;}
+    .balance-value{font-size:28px;font-weight:800;letter-spacing:0.03em;}
 
-    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px;}
     .pill{
       padding:10px 10px;
       border-radius:14px;
@@ -100,8 +98,8 @@
       background:#0b1224;
       font-size:12px;
     }
-    .pill-label{color:var(--muted);margin-bottom:4px}
-    .pill-value{font-weight:600}
+    .pill-label{color:var(--muted);margin-bottom:4px;}
+    .pill-value{font-weight:600;}
 
     .btn{
       width:100%;
@@ -114,8 +112,8 @@
       margin-bottom:8px;
       transition:transform .05s ease, box-shadow .05s ease, opacity .2s;
     }
-    .btn:active{transform:translateY(1px);box-shadow:none}
-    .btn[disabled]{opacity:.55;cursor:default}
+    .btn:active{transform:translateY(1px);box-shadow:none;}
+    .btn[disabled]{opacity:.55;cursor:default;}
     .btn-main{
       background:linear-gradient(90deg,#20c6ff,#6af0c4);
       color:#031018;
@@ -165,6 +163,21 @@
 
     .row-inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
     .row-inline .btn{margin-bottom:0;}
+
+    /* ссылки Telegram / Partners */
+    .links-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      font-size:13px;
+    }
+    .link-btn{
+      color:var(--accent);
+      text-decoration:none;
+    }
+    .link-btn:hover{
+      text-decoration:underline;
+    }
 
     .timer-text{font-size:12px;color:var(--muted);text-align:center;margin-bottom:6px;}
     .tag{
@@ -299,27 +312,18 @@
       <p id="walletText2" class="info-small">
         We save the address to know how much each user mined when payouts start. First planned wave: March–April 2026.
       </p>
-      <input id="walletInput" class="wallet-input" placeholder="EQ... / UQ..." autocomplete="off"/>
+      <input id="walletInput" class="wallet-input" placeholder="EQ... / UQ..." autocomplete="off">
       <div class="wallet-note" id="walletNote">Address is stored locally in this browser and can be synced with Ton21 backend.</div>
       <button class="btn btn-secondary" id="saveWalletBtn">Save address</button>
     </div>
 
+    <!-- Новый блок с ссылками Telegram / Partners -->
     <div class="section">
-      <h3>
-        <span id="aboutTitle">About Ton21</span>
-      </h3>
-      <p id="aboutP1"></p>
-      <p id="aboutP2"></p>
-      <p id="aboutP3"></p>
-    </div>
-
-    <div class="section">
-      <h3>
-        <span id="howTitle">How mining works</span>
-      </h3>
-      <p id="howP1"></p>
-      <p id="howP2"></p>
-      <p id="howP3"></p>
+      <h3><span>Links</span></h3>
+      <p class="links-row">
+        <a class="link-btn" href="https://t.me/Ton21_Army" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a class="link-btn" href="https://tonplay.fo/hUWcgtAr3L3x3W?click_id=%7Bclick_id%7D" target="_blank" rel="noopener noreferrer">Partners</a>
+      </p>
     </div>
 
     <div class="section">
@@ -591,7 +595,7 @@
       aboutP3:"Վաղ մայնինգի այս փուլի միջոցով ակտիվ օգտատերերը արդեն հիմա կարող են կուտակել T21 միավորներ, որոնք կզգացվեն ապագա պարգևներում՝ 2026-ին սկսվող վճարումների փուլում։",
       howTitle:"Ինչպե՞ս է աշխատում մայնինգը",
       howP1:"Ամեն 24 ժամը մեկ կարող եք սեղմել «Մայնինգ» կոճակը և այս վաղ փուլում Ձեր off-chain մնացորդին ավելացնել +20 T21։",
-      howP2:"+5 T21 յուրաքանչյուր գովազդի համար, օրական մինչև 10 անգամ։ Կարող են լինել հովանավորչական հոլովակներ կամ Ton21 էկոհամակարգի պրոմոներ։",
+      howP2:"+5 T21 յուրաքանչյուր գովազդի համար, օրական մինչև 10 անգամ։ Կարող են լինել հովանավորական հոլովակներ կամ Ton21 էկոհամակարգի պրոմոներ։",
       howP3:"Երբ կմեկնարկի վճարումների փուլը (առաջին ալիքը նախատեսված է 2026-ի մարտ–ապրիլին), Ձեր off-chain մնացորդը կօգտագործվի ապագա պարգևների հաշվարկի համար։",
       shareTitle:"Կիսվիր Ton21-ով",
       shareText:"Կիսվիր այս մայնինգի հավելվածով ընկերներիդ հետ․ որքան շատ ակտիվ մայներներ հիմա, այնքան ուժեղ Ton21 էկոհամակարգ՝ վճարումների մեկնարկին։",
@@ -642,14 +646,6 @@
   var walletNote = $("walletNote");
   var walletInput = $("walletInput");
   var saveWalletBtn = $("saveWalletBtn");
-  var aboutTitle = $("aboutTitle");
-  var aboutP1 = $("aboutP1");
-  var aboutP2 = $("aboutP2");
-  var aboutP3 = $("aboutP3");
-  var howTitle = $("howTitle");
-  var howP1 = $("howP1");
-  var howP2 = $("howP2");
-  var howP3 = $("howP3");
   var shareTitle = $("shareTitle");
   var shareText = $("shareText");
   var shareBtn = $("shareBtn");
@@ -805,14 +801,6 @@
     walletText1.textContent = tr.walletText1;
     walletText2.textContent = tr.walletText2;
     walletNote.textContent = tr.walletNote;
-    aboutTitle.textContent = tr.aboutTitle;
-    aboutP1.textContent = tr.aboutP1;
-    aboutP2.textContent = tr.aboutP2;
-    aboutP3.textContent = tr.aboutP3;
-    howTitle.textContent = tr.howTitle;
-    howP1.textContent = tr.howP1;
-    howP2.textContent = tr.howP2;
-    howP3.textContent = tr.howP3;
     shareTitle.textContent = tr.shareTitle;
     shareText.textContent = tr.shareText;
     shareBtn.textContent = "🔗 " + tr.shareTitle;
@@ -960,12 +948,9 @@
   function startAd(context){
     var tr = T[lang] || T.en;
 
-    // ❗ Здесь должен быть реальный вызов из кабинета TonPlay.
-    // Я поставил пример с проверкой, чтобы код не ломался, если TonPlay недоступен.
     if (window.TonPlay && typeof TonPlay.showRewardedAd === "function") {
       flashMsg(tr.flashAdStart, 1600);
       try{
-        // Пример: TonPlay.showRewardedAd может вернуть Promise
         TonPlay.showRewardedAd()
           .then(function(){
             if(context === "mine"){
@@ -976,14 +961,13 @@
           })
           .catch(function(err){
             console.warn("TonPlay ad error, fallback to fake timer", err);
-            startAdFlow(context); // фейковый таймер
+            startAdFlow(context);
           });
       }catch(e){
         console.warn("TonPlay exception, fallback to fake timer", e);
         startAdFlow(context);
       }
     } else {
-      // SDK нет или метод не найден — работаем по старой схеме с таймером
       startAdFlow(context);
     }
   }
@@ -1036,43 +1020,39 @@
   });
 
   // ---------- SHARE (clean link, no tgWebAppData) ----------
-shareBtn.addEventListener("click", function(){
-  var tr = T[lang] || T.en;
+  shareBtn.addEventListener("click", function(){
+    var tr = T[lang] || T.en;
 
-  // ЧИСТАЯ ССЫЛКА — фиксированная
-  const cleanUrl = "https://ton21-official.github.io/ton21-playzone/";
+    const cleanUrl = "https://ton21-official.github.io/ton21-playzone/";
 
-  const shareText = {
+    const shareText = {
       en: "Join T21 Mining — early access before payouts in 2026!",
       ru: "Присоединяйся к T21 Mining — ранний доступ до выплат 2026!",
       cn: "加入 T21 Mining——2026 前的早期挖矿！",
       am: "Միացիր T21 Mining — վաղ մայնինգ մինչև 2026!",
       in: "T21 Mining में शामिल हों — 2026 से पहले!"
-  }[lang] || "T21 Mining is live!";
+    }[lang] || "T21 Mining is live!";
 
-  const shareData = {
+    const shareData = {
       title: "T21 Play Zone — Mining",
       text: shareText,
       url: cleanUrl
-  };
+    };
 
-  // Нативный share
-  if (navigator.share) {
+    if (navigator.share) {
       navigator.share(shareData).catch(()=>{});
       return;
-  }
+    }
 
-  // Копирование ссылки если share недоступен
-  if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(cleanUrl)
-          .then(()=> flashMsg("🔗 Link copied", 1800))
-          .catch(()=> flashMsg(tr.needOnline, 1800));
+        .then(()=> flashMsg("🔗 Link copied", 1800))
+        .catch(()=> flashMsg(tr.needOnline, 1800));
       return;
-  }
+    }
 
-  flashMsg(tr.needOnline, 1800);
-});
-
+    flashMsg(tr.needOnline, 1800);
+  });
 
   // ---------- init ----------
   ensureAdDay();
