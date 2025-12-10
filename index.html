@@ -280,8 +280,8 @@
     <div class="topbar">
       <span style="font-size:14px">🌐</span>
       <select id="langSel">
-        <option value="en">EN</option>
-        <option value="ru" selected>RU</option>
+        <option value="en" selected>EN</option>
+        <option value="ru">RU</option>
         <option value="cn">中文</option>
         <option value="in">हिन्दी</option>
         <option value="am">Հայ</option>
@@ -595,7 +595,7 @@
       adRateLabel:"Գովազդային բոնուս",
       adRateValue:"+5 T21 / գովազդ • օրական մինչև 10 անգամ",
       virtualTag:"Վաղ մայնինգի փուլ",
-      noPayoutYet:" Առաջին վճարումների ալիքը նախատեսված է 2026-ի մարտ–ապրիլ ամիսներին։",
+      noPayoutYet:" Առաջին վճարումների ալիքը նախատեսված է 2026-ის մարտ–ապրիլ ամիսներին։",
       mineBtnReady:"▶ Սկսել / Ստանալ 20 T21",
       mineBtnBusy:"Մշակվում է...",
       mineReady:"Օրյա բոնուսը հասանելի է։",
@@ -633,7 +633,7 @@
   };
 
   // ---------- state ----------
-  var lang = localStorage.getItem("t21m_lang") || "ru";
+  var lang = localStorage.getItem("t21m_lang") || "en";
   var balance = Number(localStorage.getItem("t21m_balance") || "0");
   var lastMine = Number(localStorage.getItem("t21m_lastMine") || "0");
   var wallet = localStorage.getItem("t21m_wallet") || "";
