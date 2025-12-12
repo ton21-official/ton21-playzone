@@ -184,7 +184,7 @@
       border-radius:10px;
       border:1px solid #273553;
       background:#050a18;
-      color:var(--txt);
+      color:#txt;
       font-size:13px;
       margin-bottom:8px;
     }
@@ -291,7 +291,7 @@
   <div class="card">
     <h2 class="title-main" id="mainTitle">T21 Play Zone — Mining</h2>
     <div class="subtitle" id="subNote">
-      Early mining phase for T21. Your balance is off-chain now, but will be counted for future rewards.
+      This is the early mining phase for T21. Your balance is off-chain now, but will be counted for future rewards.
     </div>
 
     <div class="balance-box">
@@ -305,8 +305,8 @@
         <div class="pill-value" id="rateValue">+20 T21 / day</div>
       </div>
       <div class="pill">
-        <div class="pill-label" id="adRateLabel">Ad bonus</div>
-        <div class="pill-value" id="adRateValue">+5 T21 / ad • 10/day</div>
+        <div class="pill-label" id="adRateLabel">Ad boost</div>
+        <div class="pill-value" id="adRateValue">+5 T21 / ad • up to 10 per day</div>
       </div>
     </div>
 
@@ -360,7 +360,7 @@
 
 <div class="flash" id="flash"></div>
 
-<!-- Fake Ad modal (fallback if TonPlay / GameMonetize rewarded not available) -->
+<!-- Fake Ad modal (fallback) -->
 <div class="modal" id="adModal">
   <div class="modal-box">
     <h3 class="modal-title" id="adModalTitle">Sponsored video</h3>
@@ -433,8 +433,6 @@
       flashMine:"+20 T21 added to your balance.",
       flashAd:"+5 T21 added for watching the ad.",
       flashAdStart:"Ad started — please wait 30 seconds…",
-      modalMineTitle:"Mining bonus — watch first",
-      modalMineText:"Watch this short sponsored video (30 seconds). After that your +20 T21 daily bonus will be credited.",
       modalAdTitle:"Ad reward",
       modalAdText:"+5 T21 will be credited after 30 seconds of viewing.",
       modalBtnClose:"Close",
@@ -470,8 +468,6 @@
       flashMine:"+20 T21 добавлено на баланс.",
       flashAd:"+5 T21 за просмотр рекламы.",
       flashAdStart:"Реклама запущена — подождите 30 секунд…",
-      modalMineTitle:"Ежедневный бонус — сначала реклама",
-      modalMineText:"Посмотрите короткий ролик (30 сек). После просмотра будет начислено +20 T21.",
       modalAdTitle:"Рекламный бонус",
       modalAdText:"+5 T21 будет начислено после 30 секунд просмотра.",
       modalBtnClose:"Закрыть",
@@ -507,8 +503,6 @@
       flashMine:"+20 T21 已加入余额。",
       flashAd:"+5 T21 广告奖励已加入余额。",
       flashAdStart:"广告已开始，请等待 30 秒…",
-      modalMineTitle:"每日奖励 — 先观看广告",
-      modalMineText:"观看 30 秒短视频后，你将获得 +20 T21。",
       modalAdTitle:"广告奖励",
       modalAdText:"观看 30 秒后将获得 +5 T21。",
       modalBtnClose:"关闭",
@@ -544,8 +538,6 @@
       flashMine:"+20 T21 बैलेंस में जोड़ दिए गए।",
       flashAd:"+5 T21 ऐड बोनस जोड़ दिया गया।",
       flashAdStart:"ऐड शुरू हो गया — 30 सेकंड इंतज़ार करें…",
-      modalMineTitle:"डेली बोनस — पहले ऐड देखें",
-      modalMineText:"30 सेकंड का छोटा वीडियो देखें, उसके बाद +20 T21 मिलेंगे।",
       modalAdTitle:"ऐड बोनस",
       modalAdText:"30 सेकंड देखने के बाद +5 T21 मिलेंगे।",
       modalBtnClose:"Close",
@@ -581,8 +573,6 @@
       flashMine:"+20 T21 ավելացվեց Ձեր մնացորդին։",
       flashAd:"+5 T21՝ գովազդի դիտման համար։",
       flashAdStart:"Գովազդը մեկնարկեց — սպասեք 30 վայրկյան…",
-      modalMineTitle:"Օրյա բոնուս — նախ գովազդ",
-      modalMineText:"Դիտեք 30 վայրկյան տևողությամբ հոլովակը, ապա կստանաք +20 T21։",
       modalAdTitle:"Գովազդային բոնուս",
       modalAdText:"+5 T21 կստանաք 30 վայրկյան դիտումից հետո։",
       modalBtnClose:"Փակել",
@@ -592,7 +582,8 @@
   };
 
   // ---------- state ----------
-  var lang = localStorage.getItem("t21m_lang") || "en";
+  // ВАЖНО: язык всегда по умолчанию EN, не берем из localStorage
+  var lang = "en";
   var balance = Number(localStorage.getItem("t21m_balance") || "0");
   var lastMine = Number(localStorage.getItem("t21m_lastMine") || "0");
   var wallet = localStorage.getItem("t21m_wallet") || "";
@@ -640,7 +631,7 @@
   var tgBtn = $("tgBtn");
   var partnersBtn = $("partnersBtn");
 
-  var adContext = null; // "mine" or "ad"
+  var adContext = null; // only "ad" now
   var adTimer = null;
 
   // ---------- backend helpers ----------
@@ -749,7 +740,6 @@
   }
 
   function saveState(){
-    localStorage.setItem("t21m_lang", lang);
     localStorage.setItem("t21m_balance", String(balance));
     localStorage.setItem("t21m_lastMine", String(lastMine));
     localStorage.setItem("t21m_wallet", wallet);
@@ -877,28 +867,23 @@
   }
 
   // ---------- fake ad flow (fallback) ----------
-  function startAdFlow(context){
+  function startAdFlow(){
     ensureAdDay();
     var tr = T[lang] || T.en;
 
-    if(context === "ad" && adsUsed >= MAX_ADS_PER_DAY){
+    if(adsUsed >= MAX_ADS_PER_DAY){
       flashMsg(tr.adLimit, 2000);
       return;
     }
 
-    adContext = context;
+    adContext = "ad";
     adBar.style.width = "0%";
     adCountdownText.textContent = "00:"+fmt2(AD_SECONDS);
     adCloseBtn.disabled = true;
     adClaimBtn.disabled = true;
 
-    if(context === "mine"){
-      adModalTitle.textContent = tr.modalMineTitle;
-      adModalText.textContent = tr.modalMineText;
-    }else{
-      adModalTitle.textContent = tr.modalAdTitle;
-      adModalText.textContent = tr.modalAdText;
-    }
+    adModalTitle.textContent = tr.modalAdTitle;
+    adModalText.textContent = tr.modalAdText;
 
     adModal.style.display = "flex";
     flashMsg(tr.flashAdStart, 1600);
@@ -929,16 +914,14 @@
 
   function finishAdReward(){
     closeAdModal();
-    if(adContext === "mine"){
-      rewardDaily();
-    }else if(adContext === "ad"){
+    if(adContext === "ad"){
       rewardAd();
     }
     adContext = null;
   }
 
   // ---------- wrapper for external ads + fallback ----------
-  function startAd(context){
+  function startAd(){
     var tr = T[lang] || T.en;
 
     // Try GameMonetize banner (for SDK validation)
@@ -958,28 +941,26 @@
       try{
         TonPlay.showRewardedAd()
           .then(function(){
-            if(context === "mine"){ rewardDaily(); }
-            else if(context === "ad"){ rewardAd(); }
+            rewardAd();
           })
           .catch(function(err){
             console.warn("TonPlay ad error, fallback to fake timer", err);
-            startAdFlow(context);
+            startAdFlow();
           });
       }catch(e){
         console.warn("TonPlay exception, fallback to fake timer", e);
-        startAdFlow(context);
+        startAdFlow();
       }
     } else {
       // No external rewarded ad – use local timer
-      startAdFlow(context);
+      startAdFlow();
     }
   }
 
   // ---------- events ----------
-  langSel.value = lang;
+  langSel.value = "en";
   langSel.addEventListener("change", function(){
     lang = langSel.value;
-    saveState();
     applyLang();
   });
 
@@ -998,18 +979,14 @@
     flashMsg(tr.flashSaved, 1800);
   });
 
+  // DAILY REWARD — БЕЗ РЕКЛАМЫ
   mineBtn.addEventListener("click", function(){
-    var now = Date.now();
-    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
-    if(lastMine && left > 0){
-      updateMineUI();
-      return;
-    }
-    startAd("mine");
+    rewardDaily();
   });
 
+  // РЕКЛАМА ТОЛЬКО НА ОТДЕЛЬНОЙ КНОПКЕ
   adBtn.addEventListener("click", function(){
-    startAd("ad");
+    startAd();
   });
 
   adCloseBtn.addEventListener("click", closeAdModal);
@@ -1063,7 +1040,7 @@
   function init(){
     ensureAdDay();
     updateBalanceUI();
-    applyLang();
+    applyLang();       // сразу применяем EN
     syncFromServer();
     askNotificationPermission();
     showDailyNotificationIfNeeded();
