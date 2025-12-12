@@ -16,12 +16,8 @@
       gameId: "s1mkppmusp8ukxo9citp0uh39ckv28nk",
       onEvent: function (a) {
         switch (a.name) {
-          case "SDK_GAME_PAUSE":
-            // pause game / mute sound here
-            break;
-          case "SDK_GAME_START":
-            // ad finished, resume game / unmute sound here
-            break;
+          case "SDK_GAME_PAUSE": break;
+          case "SDK_GAME_START": break;
           case "SDK_READY":
             console.log("GameMonetize SDK READY");
             break;
@@ -50,8 +46,6 @@
       --green:#35d49b;
       --orange:#ffb458;
       --red:#ff5c7a;
-      --gold1:#ffdf88;
-      --gold2:#f0cf6d;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -74,12 +68,11 @@
     .brand-title span:first-child{font-weight:700;font-size:17px}
     .brand-title span:last-child{font-size:12px;color:var(--muted)}
     .topbar{display:flex;gap:8px;align-items:center}
-    select{
-      appearance:none;
-      background:#0b1326;
+    .topbar .pill-mini{
       border:1px solid #253354;
+      background:#0b1326;
       color:var(--txt);
-      padding:8px 26px 8px 10px;
+      padding:8px 12px;
       border-radius:999px;
       font-size:13px;
     }
@@ -184,7 +177,7 @@
       border-radius:10px;
       border:1px solid #273553;
       background:#050a18;
-      color:#txt;
+      color:var(--txt); /* FIXED */
       font-size:13px;
       margin-bottom:8px;
     }
@@ -210,7 +203,6 @@
       color:var(--muted);
     }
 
-    /* fake ad modal */
     .modal{
       position:fixed;
       inset:0;
@@ -245,7 +237,6 @@
     .modal-actions{display:flex;gap:8px;margin-top:6px;}
     .modal-actions .btn{flex:1;margin-bottom:0;font-size:14px;}
 
-    /* flash */
     .flash{
       position:fixed;
       top:14px;left:50%;
@@ -259,13 +250,9 @@
       display:none;
       z-index:60;
     }
-    @media (max-width:480px){
-      .wrap{padding:12px 10px 20px;}
-      .card{padding:14px 12px 16px;}
-      .title-main{font-size:17px;}
-    }
   </style>
 </head>
+
 <body>
 <div class="wrap">
   <header>
@@ -273,64 +260,55 @@
       <div class="logo"></div>
       <div class="brand-title">
         <span>Ton21 Mining</span>
-        <span id="subtitle">Early access to T21 mining</span>
+        <span>Early access to T21 mining</span>
       </div>
     </div>
     <div class="topbar">
-      <span style="font-size:14px">🌐</span>
-      <select id="langSel">
-        <option value="en" selected>EN</option>
-        <option value="ru">RU</option>
-        <option value="cn">中文</option>
-        <option value="in">हिन्दी</option>
-        <option value="am">Հայ</option>
-      </select>
+      <div class="pill-mini">EN</div>
     </div>
   </header>
 
   <div class="card">
-    <h2 class="title-main" id="mainTitle">T21 Play Zone — Mining</h2>
-    <div class="subtitle" id="subNote">
+    <h2 class="title-main">T21 Play Zone — Mining</h2>
+    <div class="subtitle">
       This is the early mining phase for T21. Your balance is off-chain now, but will be counted for future rewards.
     </div>
 
     <div class="balance-box">
-      <div class="balance-label" id="balLabel">Your balance</div>
+      <div class="balance-label">Your balance</div>
       <div class="balance-value"><span id="balanceValue">0</span> T21</div>
     </div>
 
     <div class="grid2">
       <div class="pill">
-        <div class="pill-label" id="rateLabel">Mining speed</div>
-        <div class="pill-value" id="rateValue">+20 T21 / day</div>
+        <div class="pill-label">Mining speed</div>
+        <div class="pill-value">+20 T21 / day</div>
       </div>
       <div class="pill">
-        <div class="pill-label" id="adRateLabel">Ad boost</div>
-        <div class="pill-value" id="adRateValue">+5 T21 / ad • up to 10 per day</div>
+        <div class="pill-label">Ad boost</div>
+        <div class="pill-value">+5 T21 / ad • up to 10 per day</div>
       </div>
     </div>
 
     <div class="hint">
-      <span class="tag" id="virtualTag">Early mining phase</span>
-      <span id="noPayoutYet"> Planned first payout wave: March–April 2026.</span>
+      <span class="tag">Early mining phase</span>
+      <span> Planned first payout wave: March–April 2026.</span>
     </div>
 
-    <button class="btn btn-main" id="mineBtn">▶ Start / Claim 20 T21</button>
-    <div class="timer-text" id="mineTimer">Next daily bonus in 24:00:00</div>
+    <button class="btn btn-main" id="mineBtn">▶ Claim daily +20 T21</button>
+    <div class="timer-text" id="mineTimer">Daily bonus is available now.</div>
 
     <button class="btn btn-ad" id="adBtn">🎬 Watch ad (+5 T21)</button>
     <div class="timer-text" id="adInfo">Ad bonus: 0 / 10 used today</div>
 
     <div class="section">
-      <h3>
-        <span id="walletTitle">Your TON address (future payouts)</span>
-      </h3>
-      <p id="walletText1">This is an early mining phase. Later you will be able to receive real T21 to your TON address.</p>
-      <p id="walletText2" class="info-small">
+      <h3><span>Your TON address (future payouts)</span></h3>
+      <p>This is an early mining phase. Later you will be able to receive real T21 to your TON address.</p>
+      <p class="info-small">
         We save the address to know how much each user mined when payouts start. First planned wave: March–April 2026.
       </p>
       <input id="walletInput" class="wallet-input" placeholder="EQ... / UQ..." autocomplete="off"/>
-      <div class="wallet-note" id="walletNote">Address is stored locally in this browser and can be synced with Ton21 backend.</div>
+      <div class="wallet-note">Address is stored locally in this browser and can be synced with Ton21 backend.</div>
       <button class="btn btn-secondary" id="saveWalletBtn">Save address</button>
     </div>
 
@@ -343,16 +321,17 @@
     </div>
 
     <div class="section">
-      <h3>
-        <span id="shareTitle">Invite & Share</span>
-      </h3>
-      <p id="shareText">Share the mining app with friends. The more active miners we have now, the stronger the Ton21 ecosystem becomes at launch.</p>
-      <div class="row-inline">
-        <button class="btn btn-secondary" id="shareBtn">Share Ton21 Mining</button>
+      <h3><span>Invite & Share</span></h3>
+      <p>Share the mining app with friends. The more active miners we have now, the stronger the Ton21 ecosystem becomes at launch.</p>
+
+      <div class="row-inline" style="margin-top:8px;">
+        <button class="btn btn-secondary" id="notifyBtn">🔔 Enable notifications</button>
+        <button class="btn btn-secondary" id="shareBtn">🔗 Share Ton21 Mining</button>
       </div>
+      <p class="info-small" id="notifyStatus" style="margin-top:6px;"></p>
     </div>
 
-    <div class="footer" id="footerText">
+    <div class="footer">
       Powered by Ton21 Project • v0.3 Early Mining Phase • Balance stored locally + synced with backend
     </div>
   </div>
@@ -375,266 +354,66 @@
 </div>
 
 <script>
-  // ---------- settings ----------
+  // Settings
   var DAILY_REWARD = 20;
   var AD_REWARD = 5;
   var MAX_ADS_PER_DAY = 10;
   var AD_SECONDS = 30;
   var DAY_MS = 24 * 60 * 60 * 1000;
 
-  // ---------- backend config ----------
+  // Backend
   const API = "https://t21-playzone-api.t21playzone.workers.dev";
   const USER_ID_KEY = "t21m_userId";
-  const NOTIFY_KEY = "t21m_lastNotify";
 
-  // unique user id (stored locally, used on backend)
+  // Notifications
+  const NOTIFY_KEY = "t21m_lastNotify";
+  const NOTIFY_ENABLED_KEY = "t21m_notifyEnabled";
+
+  // Unique user id
   var userId = localStorage.getItem(USER_ID_KEY);
   if (!userId) {
     try {
-      if (window.crypto && crypto.randomUUID) {
-        userId = crypto.randomUUID();
-      } else {
-        userId = "u_" + Date.now() + "_" + Math.floor(Math.random() * 1e9);
-      }
+      userId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ("u_" + Date.now() + "_" + Math.floor(Math.random() * 1e9));
     } catch(e){
       userId = "u_" + Date.now() + "_" + Math.floor(Math.random() * 1e9);
     }
     localStorage.setItem(USER_ID_KEY, userId);
   }
 
-  // ---------- translations ----------
-  var T = {
-    en:{
-      subtitle:"Early access to T21 mining",
-      mainTitle:"T21 Play Zone — Mining",
-      subNote:"This is the early mining phase for T21. Your balance is off-chain now, but will be counted for future rewards.",
-      balLabel:"Your balance",
-      rateLabel:"Mining speed",
-      rateValue:"+20 T21 / day",
-      adRateLabel:"Ad boost",
-      adRateValue:"+5 T21 / ad • up to 10 per day",
-      virtualTag:"Early mining phase",
-      noPayoutYet:" Planned first payout wave: March–April 2026.",
-      mineBtnReady:"▶ Start / Claim 20 T21",
-      mineBtnBusy:"Processing...",
-      mineReady:"Daily bonus is available now.",
-      mineNext:"Next daily bonus in",
-      adBtn:"🎬 Watch ad (+5 T21)",
-      adInfo:function(used){return "Ad bonus: "+used+" / 10 used today";},
-      adLimit:"Daily ad limit reached (10 / 10).",
-      walletTitle:"Your TON address (for future payouts)",
-      walletText1:"This is an early mining phase. Later you will be able to receive real T21 to your TON address.",
-      walletText2:"We save the address to know how much each miner earned when payouts start. First planned wave: March–April 2026.",
-      walletNote:"The address is stored locally in this browser and can be synced with the Ton21 backend.",
-      shareTitle:"Invite & Share",
-      shareText:"Share the mining app with friends. The more active miners we have now, the stronger the Ton21 ecosystem becomes at launch.",
-      flashSaved:"✅ Address saved",
-      flashBadAddr:"⚠️ Enter a valid TON address (starts with EQ or UQ).",
-      flashMine:"+20 T21 added to your balance.",
-      flashAd:"+5 T21 added for watching the ad.",
-      flashAdStart:"Ad started — please wait 30 seconds…",
-      modalAdTitle:"Ad reward",
-      modalAdText:"+5 T21 will be credited after 30 seconds of viewing.",
-      modalBtnClose:"Close",
-      modalBtnGet:"Get reward",
-      needOnline:"If sharing does not open, copy the link manually."
-    },
-    ru:{
-      subtitle:"Ранний доступ к майнингу T21",
-      mainTitle:"T21 Play Zone — Майнинг",
-      subNote:"Сейчас идёт ранняя фаза майнинга T21. Баланс пока вне блокчейна, но будет учитываться для будущих наград.",
-      balLabel:"Ваш баланс",
-      rateLabel:"Скорость майнинга",
-      rateValue:"+20 T21 / день",
-      adRateLabel:"Рекламный буст",
-      adRateValue:"+5 T21 за рекламу • до 10 в сутки",
-      virtualTag:"Ранняя фаза майнинга",
-      noPayoutYet:" Первую волну выплат планируем на март–апрель 2026 года.",
-      mineBtnReady:"▶ Запустить / Получить 20 T21",
-      mineBtnBusy:"Обработка...",
-      mineReady:"Ежедневный бонус доступен.",
-      mineNext:"Следующий бонус через",
-      adBtn:"🎬 Смотреть рекламу (+5 T21)",
-      adInfo:function(used){return "Рекламный бонус: "+used+" / 10 использовано за сегодня";},
-      adLimit:"Лимит рекламных бонусов на сегодня (10 / 10).",
-      walletTitle:"Ваш TON-адрес (для будущих выплат)",
-      walletText1:"Сейчас это ранняя фаза майнинга. Позже на этот TON-адрес можно будет получать реальные T21.",
-      walletText2:"Мы сохраняем адрес, чтобы понимать, кому и сколько начислять при старте выплат. Первая волна — март–апрель 2026.",
-      walletNote:"Адрес хранится локально в этом браузере и может синхронизироваться с бэкендом Ton21.",
-      shareTitle:"Пригласи друзей",
-      shareText:"Поделись приложением с друзьями. Чем больше активных майнеров сейчас, тем сильнее будет экосистема Ton21 на старте.",
-      flashSaved:"✅ Адрес сохранён",
-      flashBadAddr:"⚠️ Введите корректный TON-адрес (начинается с EQ или UQ).",
-      flashMine:"+20 T21 добавлено на баланс.",
-      flashAd:"+5 T21 за просмотр рекламы.",
-      flashAdStart:"Реклама запущена — подождите 30 секунд…",
-      modalAdTitle:"Рекламный бонус",
-      modalAdText:"+5 T21 будет начислено после 30 секунд просмотра.",
-      modalBtnClose:"Закрыть",
-      modalBtnGet:"Получить",
-      needOnline:"Если окно не открылось — скопируйте ссылку вручную."
-    },
-    cn:{
-      subtitle:"T21 挖矿早期体验",
-      mainTitle:"T21 Play Zone — 挖矿",
-      subNote:"当前处于 T21 挖矿早期阶段。余额暂时不在链上，但会在未来 T21 奖励中计算。",
-      balLabel:"你的余额",
-      rateLabel:"挖矿速度",
-      rateValue:"+20 T21 / 天",
-      adRateLabel:"广告加成",
-      adRateValue:"+5 T21 / 广告 • 每天最多 10 次",
-      virtualTag:"早期挖矿阶段",
-      noPayoutYet:" 计划首轮发放时间：2026 年 3–4 月。",
-      mineBtnReady:"▶ 开始 / 领取 20 T21",
-      mineBtnBusy:"处理中...",
-      mineReady:"每日奖励可领取。",
-      mineNext:"下次奖励倒计时",
-      adBtn:"🎬 看广告 (+5 T21)",
-      adInfo:function(used){return "广告奖励：今天已使用 "+used+" / 10";},
-      adLimit:"今日广告奖励次数已满 (10 / 10)。",
-      walletTitle:"你的 TON 地址（未来发放用）",
-      walletText1:"现在是 T21 挖矿的早期阶段。之后可以把真实的 T21 发到你的 TON 地址。",
-      walletText2:"我们保存地址，用于在发放开始时统计每位用户的权益。首轮计划时间：2026 年 3–4 月。",
-      walletNote:"地址只保存在本地浏览器中，并可与 Ton21 后端同步。",
-      shareTitle:"邀请好友",
-      shareText:"把 Ton21 挖矿分享给朋友。现在的活跃用户越多，Ton21 生态在正式发放时就越强。",
-      flashSaved:"✅ 地址已保存",
-      flashBadAddr:"⚠️ 请输入有效的 TON 地址（以 EQ 或 UQ 开头）。",
-      flashMine:"+20 T21 已加入余额。",
-      flashAd:"+5 T21 广告奖励已加入余额。",
-      flashAdStart:"广告已开始，请等待 30 秒…",
-      modalAdTitle:"广告奖励",
-      modalAdText:"观看 30 秒后将获得 +5 T21。",
-      modalBtnClose:"关闭",
-      modalBtnGet:"领取奖励",
-      needOnline:"如果分享窗口没打开，请手动复制链接。"
-    },
-    in:{
-      subtitle:"T21 माइनिंग का शुरुआती एक्सेस",
-      mainTitle:"T21 Play Zone — Mining",
-      subNote:"यह T21 माइनिंग का शुरुआती चरण है। बैलेंस अभी ऑन-चेन नहीं है, लेकिन आगे आने वाले T21 रिवॉर्ड के लिए गिना जाएगा।",
-      balLabel:"आपका बैलेंस",
-      rateLabel:"माइनिंग स्पीड",
-      rateValue:"+20 T21 / दिन",
-      adRateLabel:"ऐड बोनस",
-      adRateValue:"+5 T21 / ऐड • दिन में 10 बार",
-      virtualTag:"शुरुआती माइनिंग चरण",
-      noPayoutYet:" पहली पेआउट वेव मार्च–अप्रैल 2026 के लिए प्लान है।",
-      mineBtnReady:"▶ स्टार्ट / 20 T21 लें",
-      mineBtnBusy:"प्रोसेस हो रहा है...",
-      mineReady:"डेली बोनस उपलब्ध है।",
-      mineNext:"अगला बोनस इतने समय बाद:",
-      adBtn:"🎬 ऐड देखें (+5 T21)",
-      adInfo:function(used){return "ऐड बोनस: आज "+used+" / 10 इस्तेमाल";},
-      adLimit:"आज के लिए ऐड बोनस लिमिट पूरी हो गई (10 / 10)।",
-      walletTitle:"आपका TON पता (भविष्य की पेआउट के लिए)",
-      walletText1:"अभी यह T21 माइनिंग का शुरुआती फेज है। बाद में इसी TON पते पर असली T21 भेजे जा सकते हैं।",
-      walletText2:"हम पता सेव करते हैं ताकि पेआउट शुरू होने पर हर यूज़र की कमाई पता हो सके। पहली वेव: मार्च–अप्रैल 2026।",
-      walletNote:"पता सिर्फ इस ब्राउज़र में लोकली सेव होता है और Ton21 बैकएंड के साथ सिंक हो सकता है।",
-      shareTitle:"दोस्तों को आमंत्रित करें",
-      shareText:"Ton21 माइनिंग अपने दोस्तों के साथ शेयर करें — जितने ज्यादा एक्टिव माइनर्स, उतना मजबूत Ton21 इकोसिस्टम लॉन्च पर होगा।",
-      flashSaved:"✅ पता सेव हो गया",
-      flashBadAddr:"⚠️ सही TON पता दर्ज करें (EQ या UQ से शुरू)।",
-      flashMine:"+20 T21 बैलेंस में जोड़ दिए गए।",
-      flashAd:"+5 T21 ऐड बोनस जोड़ दिया गया।",
-      flashAdStart:"ऐड शुरू हो गया — 30 सेकंड इंतज़ार करें…",
-      modalAdTitle:"ऐड बोनस",
-      modalAdText:"30 सेकंड देखने के बाद +5 T21 मिलेंगे।",
-      modalBtnClose:"Close",
-      modalBtnGet:"Reward लें",
-      needOnline:"अगर शेयर विंडो नहीं खुला तो लिंक कॉपी कर लें।"
-    },
-    am:{
-      subtitle:"T21 մայնինգի վաղ հասանելիություն",
-      mainTitle:"T21 Play Zone — Մայնինգ",
-      subNote:"Հիմա T21 մայնինգի վաղ փուլն է․ մնացորդը դեռ բլոկչեյնում չէ, բայց կհաշվարկվի ապագա T21 պարգևների համար։",
-      balLabel:"Ձեր մնացորդը",
-      rateLabel:"Մայնինգի արագություն",
-      rateValue:"+20 T21 / օր",
-      adRateLabel:"Գովազդային բոնուս",
-      adRateValue:"+5 T21 / գովազդ • օրական մինչև 10 անգամ",
-      virtualTag:"Վաղ մայնինգի փուլ",
-      noPayoutYet:" Առաջին վճարումների ալիքը նախատեսված է 2026-ի մարտ–ապրիլ ամիսներին։",
-      mineBtnReady:"▶ Սկսել / Ստանալ 20 T21",
-      mineBtnBusy:"Մշակվում է...",
-      mineReady:"Օրյա բոնուսը հասանելի է։",
-      mineNext:"Հաջորդ բոնուսը՝",
-      adBtn:"🎬 Դիտել գովազդ (+5 T21)",
-      adInfo:function(used){return "Գովազդի բոնուս՝ " + used + " / 10 օգտագործված";},
-      adLimit:"Այսօրվա գովազդային բոնուսների սահմանը լրացված է (10 / 10)։",
-      walletTitle:"Ձեր TON հասցեն (ապագա վճարումների համար)",
-      walletText1:"Սա T21 մայնինգի վաղ փուլն է։ Ավելի ուշ իրական T21-ը հնարավոր կլինի ուղարկել Ձեր TON հասցեին։",
-      walletText2:"Մենք պահպանում ենք հասցեն, որպեսզի վճարումների մեկնարկին իմանանք՝ ով որքան է մայնինգ արել։ Առաջին ալիք՝ 2026-ի մարտ–ապրիլ։",
-      walletNote:"Հասցեն պահվում է տեղային (բրաուզերում) և կարող է համաժամացվել Ton21 backend-ի հետ։",
-      shareTitle:"Կիսվիր Ton21-ով",
-      shareText:"Կիսվիր այս մայնինգի հավելվածով ընկերներիդ հետ․ որքան շատ ակտիվ մայներներ հիմա, այնքան ուժեղ Ton21 էկոհամակարգ՝ վճարումների մեկնարկին։",
-      flashSaved:"✅ Հասցեն պահպանվել է",
-      flashBadAddr:"⚠️ Մուտքագրեք ճիշտ TON հասցե (սկսվում է EQ կամ UQ-ով)։",
-      flashMine:"+20 T21 ավելացվեց Ձեր մնացորդին։",
-      flashAd:"+5 T21՝ գովազդի դիտման համար։",
-      flashAdStart:"Գովազդը մեկնարկեց — սպասեք 30 վայրկյան…",
-      modalAdTitle:"Գովազդային բոնուս",
-      modalAdText:"+5 T21 կստանաք 30 վայրկյան դիտումից հետո։",
-      modalBtnClose:"Փակել",
-      modalBtnGet:"Ստանալ",
-      needOnline:"Եթե share պատուհանը չբացվեց, պատճենեք հղումը։"
-    }
-  };
-
-  // ---------- state ----------
-  // ВАЖНО: язык всегда по умолчанию EN, не берем из localStorage
-  var lang = "en";
+  // State
   var balance = Number(localStorage.getItem("t21m_balance") || "0");
   var lastMine = Number(localStorage.getItem("t21m_lastMine") || "0");
   var wallet = localStorage.getItem("t21m_wallet") || "";
   var adsDate = localStorage.getItem("t21m_adsDate") || "";
   var adsUsed = Number(localStorage.getItem("t21m_adsUsed") || "0");
 
-  // ---------- dom ----------
+  // DOM
   var $ = function(id){return document.getElementById(id);};
-  var langSel = $("langSel");
-  var subtitle = $("subtitle");
-  var mainTitle = $("mainTitle");
-  var subNote = $("subNote");
   var balanceValue = $("balanceValue");
-  var balLabel = $("balLabel");
-  var rateLabel = $("rateLabel");
-  var rateValue = $("rateValue");
-  var adRateLabel = $("adRateLabel");
-  var adRateValue = $("adRateValue");
-  var virtualTag = $("virtualTag");
-  var noPayoutYet = $("noPayoutYet");
   var mineBtn = $("mineBtn");
   var mineTimer = $("mineTimer");
   var adBtn = $("adBtn");
   var adInfo = $("adInfo");
-  var walletTitle = $("walletTitle");
-  var walletText1 = $("walletText1");
-  var walletText2 = $("walletText2");
-  var walletNote = $("walletNote");
   var walletInput = $("walletInput");
   var saveWalletBtn = $("saveWalletBtn");
-  var shareTitle = $("shareTitle");
-  var shareText = $("shareText");
   var shareBtn = $("shareBtn");
-  var footerText = $("footerText");
   var flash = $("flash");
 
   var adModal = $("adModal");
   var adBar = $("adBar");
   var adCountdownText = $("adCountdownText");
-  var adModalTitle = $("adModalTitle");
-  var adModalText = $("adModalText");
   var adCloseBtn = $("adCloseBtn");
   var adClaimBtn = $("adClaimBtn");
 
   var tgBtn = $("tgBtn");
   var partnersBtn = $("partnersBtn");
 
-  var adContext = null; // only "ad" now
+  var notifyBtn = $("notifyBtn");
+  var notifyStatus = $("notifyStatus");
+
   var adTimer = null;
 
-  // ---------- backend helpers ----------
+  // Backend helpers
   async function apiGetUser(){
     try{
       const res = await fetch(API + "/user?id=" + encodeURIComponent(userId));
@@ -674,9 +453,7 @@
       });
       if(res.ok){
         const data = await res.json().catch(()=>null);
-        if(data && typeof data.balance === "number"){
-          balance = data.balance;
-        }
+        if(data && typeof data.balance === "number") balance = data.balance;
         if(data && typeof data.adsToday === "number"){
           adsUsed = data.adsToday;
           adsDate = todayKey();
@@ -707,7 +484,7 @@
     updateMineUI();
   }
 
-  // ---------- helpers ----------
+  // Helpers
   function todayKey(){
     return (new Date()).toISOString().slice(0,10);
   }
@@ -752,22 +529,102 @@
     return /^EQ/.test(a) || /^UQ/.test(a);
   }
 
-  // ---------- notifications ----------
-  function askNotificationPermission() {
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      Notification.requestPermission().catch(function(){});
+  // UI updates
+  function updateBalanceUI(){
+    balanceValue.textContent = balance.toFixed(2).replace(/\.00$/,"");
+  }
+
+  function updateAdInfo(){
+    ensureAdDay();
+    adInfo.textContent = "Ad bonus: " + adsUsed + " / " + MAX_ADS_PER_DAY + " used today";
+    adBtn.disabled = adsUsed >= MAX_ADS_PER_DAY;
+  }
+
+  function updateMineUI(){
+    var now = Date.now();
+    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
+    if(!lastMine || left <= 0){
+      mineBtn.disabled = false;
+      mineTimer.textContent = "Daily bonus is available now.";
+    }else{
+      mineBtn.disabled = true;
+      mineTimer.textContent = "Next daily bonus in " + humanLeft(left);
     }
   }
 
-  function showDailyNotificationIfNeeded() {
-    if (!("Notification" in window)) return;
-    if (Notification.permission !== "granted") return;
+  setInterval(updateMineUI, 1000);
+
+  // Notifications (permission only by user click)
+  function notificationsSupported(){
+    return ("Notification" in window);
+  }
+
+  function getNotifyEnabled(){
+    return localStorage.getItem(NOTIFY_ENABLED_KEY) === "1";
+  }
+
+  function setNotifyEnabled(v){
+    localStorage.setItem(NOTIFY_ENABLED_KEY, v ? "1" : "0");
+  }
+
+  function updateNotifyUI(){
+    if(!notifyBtn || !notifyStatus) return;
+
+    if(!notificationsSupported()){
+      notifyBtn.disabled = true;
+      notifyBtn.textContent = "🔔 Notifications not supported";
+      notifyStatus.textContent = "Your browser does not support notifications.";
+      return;
+    }
+
+    const enabled = getNotifyEnabled();
+    const perm = Notification.permission;
+
+    if(enabled && perm === "granted"){
+      notifyBtn.textContent = "🔔 Notifications enabled";
+      notifyBtn.disabled = true;
+      notifyStatus.textContent = "We will remind you once per day to come back and claim your bonus.";
+    } else if(perm === "denied"){
+      notifyBtn.textContent = "🔔 Notifications blocked";
+      notifyBtn.disabled = true;
+      notifyStatus.textContent = "Notifications are blocked in browser settings. Allow them manually to enable.";
+    } else {
+      notifyBtn.textContent = "🔔 Enable notifications";
+      notifyBtn.disabled = false;
+      notifyStatus.textContent = "Enable to receive one reminder per day to come back and claim the bonus.";
+    }
+  }
+
+  async function enableNotifications(){
+    if(!notificationsSupported()) return;
+
+    try{
+      const perm = await Notification.requestPermission();
+      if(perm === "granted"){
+        setNotifyEnabled(true);
+        localStorage.setItem(NOTIFY_KEY, String(Date.now()));
+        new Notification("T21 Mining", {
+          body: "Notifications enabled! We'll remind you once per day.",
+          icon: "https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"
+        });
+      } else {
+        setNotifyEnabled(false);
+      }
+    }catch(e){
+      setNotifyEnabled(false);
+    }
+    updateNotifyUI();
+  }
+
+  function showDailyNotificationIfNeeded(){
+    if(!notificationsSupported()) return;
+    if(!getNotifyEnabled()) return;
+    if(Notification.permission !== "granted") return;
 
     var last = Number(localStorage.getItem(NOTIFY_KEY) || "0");
     var now = Date.now();
 
-    if (!last || now - last >= DAY_MS) {
+    if(!last || now - last >= DAY_MS){
       new Notification("T21 Mining", {
         body: "Your daily +20 T21 bonus may be ready. Come back and claim it!",
         icon: "https://raw.githubusercontent.com/ton21-official/ton21_official/main/logo.png"
@@ -776,65 +633,8 @@
     }
   }
 
-  function applyLang(){
-    var tr = T[lang] || T.en;
-    document.documentElement.lang = lang === "cn" ? "zh" : lang;
-    subtitle.textContent = tr.subtitle;
-    mainTitle.textContent = tr.mainTitle;
-    subNote.textContent = tr.subNote;
-    balLabel.textContent = tr.balLabel;
-    rateLabel.textContent = tr.rateLabel;
-    rateValue.textContent = tr.rateValue;
-    adRateLabel.textContent = tr.adRateLabel;
-    adRateValue.textContent = tr.adRateValue;
-    virtualTag.textContent = tr.virtualTag;
-    noPayoutYet.textContent = tr.noPayoutYet;
-    adBtn.textContent = tr.adBtn;
-    shareTitle.textContent = tr.shareTitle;
-    shareText.textContent = tr.shareText;
-    shareBtn.textContent = "🔗 " + tr.shareTitle;
-    adCloseBtn.textContent = tr.modalBtnClose;
-    adClaimBtn.textContent = tr.modalBtnGet;
-    footerText.textContent = "Powered by Ton21 Project • v0.3 Early Mining Phase • Balance stored locally + synced with backend";
-    updateAdInfo();
-    updateMineUI();
-  }
-
-  function updateBalanceUI(){
-    balanceValue.textContent = balance.toFixed(2).replace(/\.00$/,"");
-  }
-
-  function updateAdInfo(){
-    ensureAdDay();
-    var tr = T[lang] || T.en;
-    if(typeof tr.adInfo === "function"){
-      adInfo.textContent = tr.adInfo(adsUsed);
-    }else{
-      adInfo.textContent = tr.adInfo;
-    }
-    adBtn.disabled = adsUsed >= MAX_ADS_PER_DAY;
-  }
-
-  function updateMineUI(){
-    var tr = T[lang] || T.en;
-    var now = Date.now();
-    var left = lastMine ? (lastMine + DAY_MS - now) : -1;
-    if(!lastMine || left <= 0){
-      mineBtn.disabled = false;
-      mineBtn.textContent = tr.mineBtnReady;
-      mineTimer.textContent = tr.mineReady;
-    }else{
-      mineBtn.disabled = true;
-      mineBtn.textContent = tr.mineBtnReady;
-      mineTimer.textContent = tr.mineNext + " " + humanLeft(left);
-    }
-  }
-
-  setInterval(updateMineUI, 1000);
-
-  // ---------- rewards ----------
+  // Rewards
   function rewardDaily(){
-    var tr = T[lang] || T.en;
     var now = Date.now();
     var left = lastMine ? (lastMine + DAY_MS - now) : -1;
     if(lastMine && left > 0){
@@ -846,12 +646,11 @@
     saveState();
     updateBalanceUI();
     updateMineUI();
-    flashMsg(tr.flashMine, 2200);
+    flashMsg("+20 T21 added to your balance.", 2200);
     apiAddMining();
   }
 
   function rewardAd(){
-    var tr = T[lang] || T.en;
     ensureAdDay();
     if(adsUsed >= MAX_ADS_PER_DAY){
       updateAdInfo();
@@ -862,31 +661,25 @@
     saveState();
     updateBalanceUI();
     updateAdInfo();
-    flashMsg(tr.flashAd, 2000);
+    flashMsg("+5 T21 added for watching the ad.", 2000);
     apiAddAdReward();
   }
 
-  // ---------- fake ad flow (fallback) ----------
+  // Fake ad flow (fallback)
   function startAdFlow(){
     ensureAdDay();
-    var tr = T[lang] || T.en;
-
     if(adsUsed >= MAX_ADS_PER_DAY){
-      flashMsg(tr.adLimit, 2000);
+      flashMsg("Daily ad limit reached (10 / 10).", 2000);
       return;
     }
 
-    adContext = "ad";
     adBar.style.width = "0%";
     adCountdownText.textContent = "00:"+fmt2(AD_SECONDS);
     adCloseBtn.disabled = true;
     adClaimBtn.disabled = true;
 
-    adModalTitle.textContent = tr.modalAdTitle;
-    adModalText.textContent = tr.modalAdText;
-
     adModal.style.display = "flex";
-    flashMsg(tr.flashAdStart, 1600);
+    flashMsg("Ad started — please wait 30 seconds…", 1600);
 
     var elapsed = 0;
     if(adTimer){ clearInterval(adTimer); }
@@ -914,17 +707,11 @@
 
   function finishAdReward(){
     closeAdModal();
-    if(adContext === "ad"){
-      rewardAd();
-    }
-    adContext = null;
+    rewardAd();
   }
 
-  // ---------- wrapper for external ads + fallback ----------
+  // Wrapper for external ads + fallback
   function startAd(){
-    var tr = T[lang] || T.en;
-
-    // Try GameMonetize banner (for SDK validation)
     try{
       if (typeof window.sdk !== "undefined" && typeof window.sdk.showBanner !== "undefined") {
         window.sdk.showBanner();
@@ -935,64 +722,40 @@
       console.warn("GameMonetize error:", e);
     }
 
-    // If TonPlay rewarded ad exists – use it
     if (window.TonPlay && typeof TonPlay.showRewardedAd === "function") {
-      flashMsg(tr.flashAdStart, 1600);
+      flashMsg("Ad started — please wait 30 seconds…", 1600);
       try{
         TonPlay.showRewardedAd()
-          .then(function(){
-            rewardAd();
-          })
-          .catch(function(err){
-            console.warn("TonPlay ad error, fallback to fake timer", err);
-            startAdFlow();
-          });
+          .then(function(){ rewardAd(); })
+          .catch(function(){ startAdFlow(); });
       }catch(e){
-        console.warn("TonPlay exception, fallback to fake timer", e);
         startAdFlow();
       }
     } else {
-      // No external rewarded ad – use local timer
       startAdFlow();
     }
   }
 
-  // ---------- events ----------
-  langSel.value = "en";
-  langSel.addEventListener("change", function(){
-    lang = langSel.value;
-    applyLang();
-  });
-
+  // Events
   walletInput.value = wallet;
 
   saveWalletBtn.addEventListener("click", function(){
-    var tr = T[lang] || T.en;
     var v = walletInput.value.trim();
     if(!isValidTon(v)){
-      flashMsg(tr.flashBadAddr, 2200);
+      flashMsg("⚠️ Enter a valid TON address (starts with EQ or UQ).", 2200);
       return;
     }
     wallet = v;
     saveState();
     apiSaveAddress(wallet);
-    flashMsg(tr.flashSaved, 1800);
+    flashMsg("✅ Address saved", 1800);
   });
 
-  // DAILY REWARD — БЕЗ РЕКЛАМЫ
-  mineBtn.addEventListener("click", function(){
-    rewardDaily();
-  });
-
-  // РЕКЛАМА ТОЛЬКО НА ОТДЕЛЬНОЙ КНОПКЕ
-  adBtn.addEventListener("click", function(){
-    startAd();
-  });
-
+  mineBtn.addEventListener("click", rewardDaily);
+  adBtn.addEventListener("click", startAd);
   adCloseBtn.addEventListener("click", closeAdModal);
   adClaimBtn.addEventListener("click", finishAdReward);
 
-  // Telegram / Partners
   tgBtn.addEventListener("click", function(){
     window.open("https://t.me/Ton21_Army", "_blank");
   });
@@ -1001,23 +764,11 @@
     window.open("https://tonplay.fo/hUWcgtAr3L3x3W?click_id=%7Bclick_id%7D", "_blank");
   });
 
-  // SHARE (clean link, no tgWebAppData)
   shareBtn.addEventListener("click", function(){
-    var tr = T[lang] || T.en;
-
     const cleanUrl = "https://ton21-official.github.io/ton21-playzone/";
-
-    const shareTextMap = {
-      en: "Join T21 Mining — early access before payouts in 2026!",
-      ru: "Присоединяйся к T21 Mining — ранний доступ до выплат 2026!",
-      cn: "加入 T21 Mining——2026 前的早期挖矿！",
-      am: "Միացիր T21 Mining — վաղ մայնինգ մինչև 2026!",
-      in: "T21 Mining में शामिल हों — 2026 से पहले!"
-    };
-
     const shareData = {
       title: "T21 Play Zone — Mining",
-      text: shareTextMap[lang] || "T21 Mining is live!",
+      text: "Join T21 Mining — early access before payouts in 2026!",
       url: cleanUrl
     };
 
@@ -1029,21 +780,34 @@
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(cleanUrl)
         .then(()=> flashMsg("🔗 Link copied", 1800))
-        .catch(()=> flashMsg(tr.needOnline, 1800));
+        .catch(()=> flashMsg("If sharing does not open, copy the link manually.", 1800));
       return;
     }
 
-    flashMsg(tr.needOnline, 1800);
+    flashMsg("If sharing does not open, copy the link manually.", 1800);
   });
 
-  // ---------- init ----------
+  if(notifyBtn){
+    notifyBtn.addEventListener("click", enableNotifications);
+  }
+
+  // Init
   function init(){
     ensureAdDay();
     updateBalanceUI();
-    applyLang();       // сразу применяем EN
+    updateAdInfo();
+    updateMineUI();
+    updateNotifyUI();
     syncFromServer();
-    askNotificationPermission();
+
+    // show daily notification only if user enabled it earlier
     showDailyNotificationIfNeeded();
+
+    document.addEventListener("visibilitychange", function(){
+      if(!document.hidden){
+        showDailyNotificationIfNeeded();
+      }
+    });
   }
 
   init();
